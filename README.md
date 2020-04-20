@@ -8,6 +8,12 @@
 - https://www.tonymacx86.com/threads/guide-how-to-patch-dsdt-for-working-battery-status.116102/
 - https://www.insanelymac.com/forum/topic/305030-guide-how-to-fix-brightness-hotkeys-in-dsdt/
 
+## 특이사항
+
+- 무슨 짓을 해도 사운드 안 잡힘(AppleALC + Lilu, VoodooHDA + AppleHDADisabler, Rename HDAS to HDEF 등 관련 패치 전부 작동 안 함)
+- 오픈코어로 윈도우 부팅 시 절전모드 비정상 작동함
+
+
 ## 사양
 
 - NT950XCR-G58A
