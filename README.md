@@ -4,9 +4,9 @@
 
 참고한 글들:
 
-https://dortania.github.io/OpenCore-Desktop-Guide/
-https://www.tonymacx86.com/threads/guide-how-to-patch-dsdt-for-working-battery-status.116102/
-https://www.insanelymac.com/forum/topic/305030-guide-how-to-fix-brightness-hotkeys-in-dsdt/
+- https://dortania.github.io/OpenCore-Desktop-Guide/
+- https://www.tonymacx86.com/threads/guide-how-to-patch-dsdt-for-working-battery-status.116102/
+- https://www.insanelymac.com/forum/topic/305030-guide-how-to-fix-brightness-hotkeys-in-dsdt/
 
 ## 사양
 
