@@ -2,7 +2,7 @@
  Samsung Galaxy Book Ion OpenCore EFI Firmware
 
 
-참고한 글들:
+참고한 글:
 
 - https://dortania.github.io/OpenCore-Desktop-Guide/
 - https://www.tonymacx86.com/threads/guide-how-to-patch-dsdt-for-working-battery-status.116102/
@@ -12,7 +12,7 @@
 
 - NT950XCR-G58A
 - Intel Core i5-10210u
-- Intel UHD Graphics 630
+- Intel UHD Graphics 620
 - NVIDIA Geforce MX250 (비활성화)
 - 1 x Samsung 8GB DDR4 ????MHz (온보드)
 - 1 x Samsung pm981a NVMe M.2 SSD 256 GB (윈도우용)
@@ -52,10 +52,7 @@
 
 ## BIOS 설정
 
-<details>
-
-```
-
-```
-
-</details>
+- TPM Device: Off
+- Secure Boot Control: Off
+- Fast BIOS Mode: Off
+- USB LAN PXE OPROM: Off
