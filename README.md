@@ -6,6 +6,7 @@
 
 https://dortania.github.io/OpenCore-Desktop-Guide/
 https://www.tonymacx86.com/threads/guide-how-to-patch-dsdt-for-working-battery-status.116102/
+https://www.insanelymac.com/forum/topic/305030-guide-how-to-fix-brightness-hotkeys-in-dsdt/
 
 ## 사양
 
@@ -28,6 +29,7 @@ https://www.tonymacx86.com/threads/guide-how-to-patch-dsdt-for-working-battery-s
 - 화면 밝기 조절
 - 화면 커버 인식
 - 전면 카메라
+- 밝기 조절/볼륨 핫키
 
 
 ## 안 되는 것
@@ -35,12 +37,11 @@ https://www.tonymacx86.com/threads/guide-how-to-patch-dsdt-for-working-battery-s
 - 잠자기
 - 소리
 - WiFi
-- 밝기 조절 핫키
 - 지문인식
 - 트랙패드 무선충전
 
 
-## 확인하지 않은 것
+## 확인되지 않은 것
 
 - SD/UFS 슬롯
 - HDMI 출력
