@@ -57439,11 +57439,12 @@ D8XH (Zero, 0x54)
 
         Method (_Q66, 0, Serialized)  // _Qxx: EC Query, xx=0x00-0xFF
         {
-Notify (BAT1, 0x80) // Status Change
-            Local0 = B1B4(BRR0,BRR1,BRR2,BRR3) /* \_SB_.PCI0.LPCB.EC__.B1RR */
-            Local0 >>= 0x08
-            Local0 &= 0xFF
-            Local0 %= 0x0A
+            Notify (BAT1, 0x80) // Status Change
+            //Local0 = B1B4(BRR0,BRR1,BRR2,BRR3) /* \_SB_.PCI0.LPCB.EC__.B1RR */
+            //Local0 >>= 0x08
+            //Local0 &= 0xFF
+            //Local0 %= 0x0A
+            Local0 = BRR1 % 0x0A
             If ((Local0 == Zero))
             {
                 NTCA (0x61)
@@ -57842,12 +57843,13 @@ Notify (BAT1, 0x80) // Status Change
                         BIXP [0x07] = Zero
                     }
 
-                    Local0 = B1B2(YLC0,YLC1) /* \_SB_.PCI0.LPCB.EC__.CYLC */
-                    Local0 &= 0xFFFF
-                    Local1 = (Local0 << 0x08)
-                    Local1 &= 0xFF00
-                    Local0 >>= 0x08
-                    Local0 |= Local1
+                    //Local0 = B1B2(YLC0,YLC1) /* \_SB_.PCI0.LPCB.EC__.CYLC */
+                    //Local0 &= 0xFFFF
+                    //Local1 = (Local0 << 0x08)
+                    //Local1 &= 0xFF00
+                    //Local0 >>= 0x08
+                    //Local0 |= Local1
+                    Local0 = B1B2(YLC1,YLC0)
                     If ((Local0 == 0xFFFF))
                     {
                         BIXP [0x08] = Zero
@@ -57950,8 +57952,9 @@ Notify (BAT1, 0x80) // Status Change
                 Else
                 {
                     Local3 = B1B4(BRR0,BRR1,BRR2,BRR3) /* \_SB_.PCI0.LPCB.EC__.B1RR */
-                    Local0 = Local3
-                    Local0 &= 0xFF
+                    //Local0 = Local3
+                    //Local0 &= 0xFF
+                    Local0 = BRR0
                     If (((Local0 != Zero) && (Local0 != 0x05)))
                     {
                         If ((PWRS == One))
@@ -57990,12 +57993,13 @@ Notify (BAT1, 0x80) // Status Change
 
                     Sleep (0x64)
                     Local4 = B1B4(BPV0,BPV1,BPV2,BPV3) /* \_SB_.PCI0.LPCB.EC__.B1PV */
-                    Local0 = Local4
-                    Local0 &= 0xFFFF
-                    Local1 = (Local0 << 0x08)
-                    Local1 &= 0xFF00
-                    Local0 >>= 0x08
-                    Local0 |= Local1
+                    //Local0 = Local4
+                    //Local0 &= 0xFFFF
+                    //Local1 = (Local0 << 0x08)
+                    //Local1 &= 0xFF00
+                    //Local0 >>= 0x08
+                    //Local0 |= Local1
+                    Local0 = B1B2(BPV1,BPV0)
                     If ((Local0 == 0xFFFF))
                     {
                         STAT [One] = 0xFFFFFFFF
@@ -58044,13 +58048,17 @@ Notify (BAT1, 0x80) // Status Change
                 Else
                 {
                     Local0 &= 0xFFFF
-                    Local1 = (Local0 << 0x08)
-                    Local1 &= 0xFF00
-                    Local0 >>= 0x08
-                    Local0 |= Local1
-                    //BTPC = Local0
-                    TPC1 = (Local0 >> 0x08)
-                    TPC0 = Local0 - (TPC1 << 0x08)
+                    TPC0 = Local0 >> 0x08
+                    TPC1 = Local0
+                    TPC1 &= 0xFF
+                    //Local0 &= 0xFFFF
+                    //Local1 = (Local0 << 0x08)
+                    //Local1 &= 0xFF00
+                    //Local0 >>= 0x08
+                    //Local0 |= Local1
+                    ////BTPC = Local0
+                    //TPC1 = (Local0 >> 0x08)
+                    //TPC0 = Local0 - (TPC1 << 0x08)
                 }
             }
 
