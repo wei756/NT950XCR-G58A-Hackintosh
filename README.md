@@ -12,17 +12,19 @@
 - 무슨 짓을 해도 사운드 안 잡힘(AppleALC + Lilu, VoodooHDA + AppleHDADisabler, Rename HDAS to HDEF 등 관련 패치 전부 작동 안 함)
 - 오픈코어로 윈도우 부팅 시 절전모드 비정상 작동함
 
-### 참고한 글
+### 참고자료
 
 - https://dortania.github.io/OpenCore-Desktop-Guide/
 - https://www.tonymacx86.com/threads/guide-how-to-patch-dsdt-for-working-battery-status.116102/
 - https://www.insanelymac.com/forum/topic/305030-guide-how-to-fix-brightness-hotkeys-in-dsdt/
+- https://github.com/daliansky/XiaoXinPro-13-hackintosh
 
 ### Kexts
 
 - ACPIBatteryManager v2018-1005
 - AppleALC v1.4.8 : audio fix (not working)
-- IntelBluetoothFirmware : bluetooth fix
+- IntelBluetoothFirmware v1.0.3 : bluetooth fix
+- IntelBluetoothInjector v1.0.3 : bluetooth fix
 - Lilu v1.4.3
 - NVMeFix v1.0.2 : pm981a fix
 - SMCBatteryManager v1.1.2
@@ -76,6 +78,7 @@
 - 전면 카메라
 - 밝기 조절/볼륨 핫키
 - SD/UFS 슬롯(UFS 작동확인 안 함)
+- QE/CI
 
 
 ## 안 되는 것
