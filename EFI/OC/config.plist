@@ -307,7 +307,7 @@
 			<key>PciRoot(0x0)/Pci(0x1F,0x3)</key>
 			<dict>
 				<key>layout-id</key>
-				<integer>29</integer>
+				<integer>99</integer>
 			</dict>
 		</dict>
 		<key>Block</key>
@@ -392,11 +392,25 @@
 				<true/>
 				<key>MinKernel</key>
 				<string></string>
-				<key>ExecutablePath</key>
-				<string>Contents/MacOS/IntelBluetoothFirmware</string>
 				<key>BundlePath</key>
-				<string>IntelBluetoothFirmware.kext</string>
+				<string>IntelBluetoothInjector.kext</string>
 			</dict>
+                        <dict>
+                                <key>Comment</key>
+                                <string></string>
+                                <key>MaxKernel</key>
+                                <string></string>
+                                <key>PlistPath</key>
+                                <string>Contents/Info.plist</string>
+                                <key>Enabled</key>
+                                <true/>
+                                <key>MinKernel</key>
+                                <string></string>
+                                <key>ExecutablePath</key>
+                                <string>Contents/MacOS/IntelBluetoothFirmware</string>
+                                <key>BundlePath</key>
+                                <string>IntelBluetoothFirmware.kext</string>
+                        </dict>
 			<dict>
 				<key>Comment</key>
 				<string></string>
