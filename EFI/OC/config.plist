@@ -196,20 +196,6 @@
 				<key>Replace</key>
 				<data>RUNfXw==</data>
 			</dict>
-			<dict>
-				<key>Comment</key>
-				<string>Rename HDAS to HDEF</string>
-				<key>Enabled</key>
-				<true/>
-				<key>Count</key>
-				<integer>0</integer>
-				<key>Limit</key>
-				<integer>0</integer>
-				<key>Find</key>
-				<data>SERBUw==</data>
-				<key>Replace</key>
-				<data>SERFRg==</data>
-			</dict>
 		</array>
 		<key>Quirks</key>
 		<dict>
@@ -327,7 +313,9 @@
 			<key>PciRoot(0x0)/Pci(0x1F,0x3)</key>
 			<dict>
 				<key>layout-id</key>
-				<integer>99</integer>
+				<integer>28</integer>
+				<key>codec</key>
+				<data>EOwCmA==</data>
 			</dict>
 		</dict>
 		<key>Block</key>

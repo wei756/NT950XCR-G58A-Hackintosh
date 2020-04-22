@@ -67,9 +67,9 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
     External (_SB_.PCI0.GFX0.PDRD, MethodObj)    // 0 Arguments
     External (_SB_.PCI0.GFX0.STAT, UnknownObj)
     External (_SB_.PCI0.GFX0.TCHE, UnknownObj)
-    External (_SB_.PCI0.HDAS.PPMS, MethodObj)    // 1 Arguments
-    External (_SB_.PCI0.HDAS.PS0X, MethodObj)    // 0 Arguments
-    External (_SB_.PCI0.HDAS.PS3X, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.HDEF.PPMS, MethodObj)    // 1 Arguments
+    External (_SB_.PCI0.HDEF.PS0X, MethodObj)    // 0 Arguments
+    External (_SB_.PCI0.HDEF.PS3X, MethodObj)    // 0 Arguments
     External (_SB_.PCI0.HIDW, MethodObj)    // 4 Arguments
     External (_SB_.PCI0.HIWC, MethodObj)    // 1 Arguments
     External (_SB_.PCI0.LPCB.EC__.CHRG, DeviceObj)
@@ -144,7 +144,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
     External (_SB_.PCI0.RP11.PON_, MethodObj)    // 0 Arguments
     External (_SB_.PCI0.RP11.PPBA, MethodObj)    // 1 Arguments
     External (_SB_.PCI0.RP11.PPRW, MethodObj)    // 0 Arguments
-    External (_SB_.PCI0.RP11.PXSX, DeviceObj)
     External (_SB_.PCI0.RP11.UPRD, MethodObj)    // 1 Arguments
     External (_SB_.PCI0.RP12.PINI, MethodObj)    // 0 Arguments
     External (_SB_.PCI0.RP12.PON_, MethodObj)    // 0 Arguments
@@ -1537,6 +1536,297 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         Release (MSEC)
         CreateDWordField (Local0, Zero, PAMD)
         Return (PAMD) /* \GSSD.PAMD */
+    }
+    
+    Name (_S0, Package (0x04)  // _S0_: S0 System State
+    {
+        Zero, 
+        Zero, 
+        Zero, 
+        Zero
+    })
+    Name (_S3, Package (0x04)  // _S3_: S3 System State
+    {
+        0x05, 
+        Zero, 
+        Zero, 
+        Zero
+    })
+    Name (_S4, Package (0x04)  // _S4_: S4 System State
+    {
+        0x06, 
+        Zero, 
+        Zero, 
+        Zero
+    })
+    Name (_S5, Package (0x04)  // _S5_: S5 System State
+    {
+        0x07, 
+        Zero, 
+        Zero, 
+        Zero
+    })
+    Method (_PTS, 1, NotSerialized)  // _PTS: Prepare To Sleep
+    {
+        If (Arg0)
+        {
+            \_SB.PTS1 (Arg0)
+            \_SB.SPTS (Arg0)
+            \_SB.TPM.TPTS (Arg0)
+            RPTS (Arg0)
+            \_SB.PCI0.LPCB.SPTS (Arg0)
+            \_SB.PCI0.NPTS (Arg0)
+        }
+    }
+
+    Method (_WAK, 1, NotSerialized)  // _WAK: Wake
+    {
+        \_SB.PCI0.NWAK (Arg0)
+        \_SB.PCI0.LPCB.SWAK (Arg0)
+        RWAK (Arg0)
+        \_SB.SWAK (Arg0)
+        \_SB.WAK1 (Arg0)
+        Return (AM00) /* \AM00 */
+    }
+
+    Name (PNVB, 0x84A54A98)
+    Name (PNVL, 0x022A)
+    OperationRegion (PNVA, SystemMemory, PNVB, PNVL)
+    Field (PNVA, AnyAcc, Lock, Preserve)
+    {
+        PCHS,   16, 
+        PCHG,   16, 
+        PSTP,   16, 
+        RPA1,   32, 
+        RPA2,   32, 
+        RPA3,   32, 
+        RPA4,   32, 
+        RPA5,   32, 
+        RPA6,   32, 
+        RPA7,   32, 
+        RPA8,   32, 
+        RPA9,   32, 
+        RPAA,   32, 
+        RPAB,   32, 
+        RPAC,   32, 
+        RPAD,   32, 
+        RPAE,   32, 
+        RPAF,   32, 
+        RPAG,   32, 
+        RPAH,   32, 
+        RPAI,   32, 
+        RPAJ,   32, 
+        RPAK,   32, 
+        RPAL,   32, 
+        RPAM,   32, 
+        RPAN,   32, 
+        RPAO,   32, 
+        NHLA,   64, 
+        NHLL,   32, 
+        ADFM,   32, 
+        SWQ0,   8, 
+        SWQ1,   8, 
+        SWQ2,   8, 
+        SWQ3,   8, 
+        SBRG,   32, 
+        GEI0,   8, 
+        GEI1,   8, 
+        GEI2,   8, 
+        GED0,   8, 
+        GED1,   8, 
+        GED2,   8, 
+        PML1,   16, 
+        PML2,   16, 
+        PML3,   16, 
+        PML4,   16, 
+        PML5,   16, 
+        PML6,   16, 
+        PML7,   16, 
+        PML8,   16, 
+        PML9,   16, 
+        PMLA,   16, 
+        PMLB,   16, 
+        PMLC,   16, 
+        PMLD,   16, 
+        PMLE,   16, 
+        PMLF,   16, 
+        PMLG,   16, 
+        PMLH,   16, 
+        PMLI,   16, 
+        PMLJ,   16, 
+        PMLK,   16, 
+        PMLL,   16, 
+        PMLM,   16, 
+        PMLN,   16, 
+        PMLO,   16, 
+        PNL1,   16, 
+        PNL2,   16, 
+        PNL3,   16, 
+        PNL4,   16, 
+        PNL5,   16, 
+        PNL6,   16, 
+        PNL7,   16, 
+        PNL8,   16, 
+        PNL9,   16, 
+        PNLA,   16, 
+        PNLB,   16, 
+        PNLC,   16, 
+        PNLD,   16, 
+        PNLE,   16, 
+        PNLF,   16, 
+        PNLG,   16, 
+        PNLH,   16, 
+        PNLI,   16, 
+        PNLJ,   16, 
+        PNLK,   16, 
+        PNLL,   16, 
+        PNLM,   16, 
+        PNLN,   16, 
+        PNLO,   16, 
+        XHPC,   8, 
+        XRPC,   8, 
+        XSPC,   8, 
+        XSPA,   8, 
+        HPTB,   32, 
+        HPTE,   8, 
+        SM00,   8, 
+        SM01,   8, 
+        SM02,   8, 
+        SC00,   64, 
+        SC01,   64, 
+        SC02,   64, 
+        IM00,   8, 
+        IM01,   8, 
+        IM02,   8, 
+        IM03,   8, 
+        IM04,   8, 
+        IM05,   8, 
+        IC00,   64, 
+        IC01,   64, 
+        IC02,   64, 
+        IC03,   64, 
+        IC04,   64, 
+        IC05,   64, 
+        UM00,   8, 
+        UM01,   8, 
+        UM02,   8, 
+        UC00,   64, 
+        UC01,   64, 
+        UC02,   64, 
+        UD00,   8, 
+        UD01,   8, 
+        UD02,   8, 
+        UP00,   8, 
+        UP01,   8, 
+        UP02,   8, 
+        UI00,   8, 
+        UI01,   8, 
+        UI02,   8, 
+        SGIR,   8, 
+        GPHD,   8, 
+        NIT1,   8, 
+        NIT2,   8, 
+        NIT3,   8, 
+        NPM1,   8, 
+        NPM2,   8, 
+        NPM3,   8, 
+        NPC1,   8, 
+        NPC2,   8, 
+        NPC3,   8, 
+        NL11,   16, 
+        NL12,   16, 
+        NL13,   16, 
+        ND21,   8, 
+        ND22,   8, 
+        ND23,   8, 
+        ND11,   32, 
+        ND12,   32, 
+        ND13,   32, 
+        NLR1,   16, 
+        NLR2,   16, 
+        NLR3,   16, 
+        NLD1,   32, 
+        NLD2,   32, 
+        NLD3,   32, 
+        NEA1,   16, 
+        NEA2,   16, 
+        NEA3,   16, 
+        NEB1,   16, 
+        NEB2,   16, 
+        NEB3,   16, 
+        NEC1,   16, 
+        NEC2,   16, 
+        NEC3,   16, 
+        NRA1,   16, 
+        NRA2,   16, 
+        NRA3,   16, 
+        NMB1,   32, 
+        NMB2,   32, 
+        NMB3,   32, 
+        NMV1,   32, 
+        NMV2,   32, 
+        NMV3,   32, 
+        NPB1,   32, 
+        NPB2,   32, 
+        NPB3,   32, 
+        NPV1,   32, 
+        NPV2,   32, 
+        NPV3,   32, 
+        NRP1,   32, 
+        NRP2,   32, 
+        NRP3,   32, 
+        EMH4,   8, 
+        EMDS,   8, 
+        CSKU,   8, 
+        ITA0,   16, 
+        ITA1,   16, 
+        ITA2,   16, 
+        ITA3,   16, 
+        ITS0,   8, 
+        ITS1,   8, 
+        ITS2,   8, 
+        ITS3,   8, 
+        PMBS,   16, 
+        PWRM,   32, 
+        CNVI,   8, 
+        CBTC,   8, 
+        CBTA,   8, 
+        RMRC,   32, 
+        VMRC,   8, 
+        VM70,   8, 
+        VM75,   8, 
+        PTHM,   8, 
+        PSON,   8, 
+        TWMB,   32, 
+        LTR1,   8, 
+        LTR2,   8, 
+        LTR3,   8, 
+        LTR4,   8, 
+        LTR5,   8, 
+        LTR6,   8, 
+        LTR7,   8, 
+        LTR8,   8, 
+        LTR9,   8, 
+        LTRA,   8, 
+        LTRB,   8, 
+        LTRC,   8, 
+        LTRD,   8, 
+        LTRE,   8, 
+        LTRF,   8, 
+        LTRG,   8, 
+        LTRH,   8, 
+        LTRI,   8, 
+        LTRJ,   8, 
+        LTRK,   8, 
+        LTRL,   8, 
+        LTRM,   8, 
+        LTRN,   8, 
+        LTRO,   8, 
+        GBES,   8, 
+        SPPR,   8, 
+        SDPH,   8, 
+        EMCE,   8, 
+        SDCE,   8
     }
 
     Scope (_SB)
@@ -4121,15 +4411,46 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 0x12
             }
         })
-    }
-
-    Scope (_SB)
-    {
         Device (PCI0)
         {
             Name (_HID, EisaId ("PNP0A08") /* PCI Express Bus */)  // _HID: Hardware ID
             Name (_CID, EisaId ("PNP0A03") /* PCI Bus */)  // _CID: Compatible ID
             Name (_ADR, Zero)  // _ADR: Address
+            Device (SRRE)
+            {
+                Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
+                Name (_UID, "SARESV")  // _UID: Unique ID
+                Method (_STA, 0, Serialized)  // _STA: Status
+                {
+                    If ((TLUD >= 0x0404))
+                    {
+                        Return (0x03)
+                    }
+                    Else
+                    {
+                        Return (Zero)
+                    }
+                }
+
+                Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+                {
+                    Name (BUF0, ResourceTemplate ()
+                    {
+                        Memory32Fixed (ReadOnly,
+                            0x40000000,         // Address Base
+                            0x00400000,         // Address Length
+                            )
+                    })
+                    If ((TLUD >= 0x0404))
+                    {
+                        Return (BUF0) /* \_SB_.PCI0.SRRE._CRS.BUF0 */
+                    }
+                    Else
+                    {
+                        Return (Buffer (Zero){})
+                    }
+                }
+            }
             Method (^BN00, 0, NotSerialized)
             {
                 Return (Zero)
@@ -4370,41 +4691,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                     0x02000000,         // Length
                     ,, , AddressRangeMemory, TypeStatic)
             })
-            Device (SRRE)
-            {
-                Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
-                Name (_UID, "SARESV")  // _UID: Unique ID
-                Method (_STA, 0, Serialized)  // _STA: Status
-                {
-                    If ((TLUD >= 0x0404))
-                    {
-                        Return (0x03)
-                    }
-                    Else
-                    {
-                        Return (Zero)
-                    }
-                }
-
-                Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-                {
-                    Name (BUF0, ResourceTemplate ()
-                    {
-                        Memory32Fixed (ReadOnly,
-                            0x40000000,         // Address Base
-                            0x00400000,         // Address Length
-                            )
-                    })
-                    If ((TLUD >= 0x0404))
-                    {
-                        Return (BUF0) /* \_SB_.PCI0.SRRE._CRS.BUF0 */
-                    }
-                    Else
-                    {
-                        Return (Buffer (Zero){})
-                    }
-                }
-            }
 
             Name (EP_B, Zero)
             Name (MH_B, Zero)
@@ -4735,10 +5021,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 {
                     Name (_ADR, 0x00050000)  // _ADR: Address
                 }
-            }
-
-            Scope (\_SB.PCI0)
-            {
                 Name (PALK, Zero)
                 Name (PA0H, Zero)
                 Name (PA1H, Zero)
@@ -5231,301 +5513,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 }
             }
         }
-    }
-
-    Name (_S0, Package (0x04)  // _S0_: S0 System State
-    {
-        Zero, 
-        Zero, 
-        Zero, 
-        Zero
-    })
-    Name (_S3, Package (0x04)  // _S3_: S3 System State
-    {
-        0x05, 
-        Zero, 
-        Zero, 
-        Zero
-    })
-    Name (_S4, Package (0x04)  // _S4_: S4 System State
-    {
-        0x06, 
-        Zero, 
-        Zero, 
-        Zero
-    })
-    Name (_S5, Package (0x04)  // _S5_: S5 System State
-    {
-        0x07, 
-        Zero, 
-        Zero, 
-        Zero
-    })
-    Method (_PTS, 1, NotSerialized)  // _PTS: Prepare To Sleep
-    {
-        If (Arg0)
-        {
-            \_SB.PTS1 (Arg0)
-            \_SB.SPTS (Arg0)
-            \_SB.TPM.TPTS (Arg0)
-            RPTS (Arg0)
-            \_SB.PCI0.LPCB.SPTS (Arg0)
-            \_SB.PCI0.NPTS (Arg0)
-        }
-    }
-
-    Method (_WAK, 1, NotSerialized)  // _WAK: Wake
-    {
-        \_SB.PCI0.NWAK (Arg0)
-        \_SB.PCI0.LPCB.SWAK (Arg0)
-        RWAK (Arg0)
-        \_SB.SWAK (Arg0)
-        \_SB.WAK1 (Arg0)
-        Return (AM00) /* \AM00 */
-    }
-
-    Name (PNVB, 0x84A54A98)
-    Name (PNVL, 0x022A)
-    OperationRegion (PNVA, SystemMemory, PNVB, PNVL)
-    Field (PNVA, AnyAcc, Lock, Preserve)
-    {
-        PCHS,   16, 
-        PCHG,   16, 
-        PSTP,   16, 
-        RPA1,   32, 
-        RPA2,   32, 
-        RPA3,   32, 
-        RPA4,   32, 
-        RPA5,   32, 
-        RPA6,   32, 
-        RPA7,   32, 
-        RPA8,   32, 
-        RPA9,   32, 
-        RPAA,   32, 
-        RPAB,   32, 
-        RPAC,   32, 
-        RPAD,   32, 
-        RPAE,   32, 
-        RPAF,   32, 
-        RPAG,   32, 
-        RPAH,   32, 
-        RPAI,   32, 
-        RPAJ,   32, 
-        RPAK,   32, 
-        RPAL,   32, 
-        RPAM,   32, 
-        RPAN,   32, 
-        RPAO,   32, 
-        NHLA,   64, 
-        NHLL,   32, 
-        ADFM,   32, 
-        SWQ0,   8, 
-        SWQ1,   8, 
-        SWQ2,   8, 
-        SWQ3,   8, 
-        SBRG,   32, 
-        GEI0,   8, 
-        GEI1,   8, 
-        GEI2,   8, 
-        GED0,   8, 
-        GED1,   8, 
-        GED2,   8, 
-        PML1,   16, 
-        PML2,   16, 
-        PML3,   16, 
-        PML4,   16, 
-        PML5,   16, 
-        PML6,   16, 
-        PML7,   16, 
-        PML8,   16, 
-        PML9,   16, 
-        PMLA,   16, 
-        PMLB,   16, 
-        PMLC,   16, 
-        PMLD,   16, 
-        PMLE,   16, 
-        PMLF,   16, 
-        PMLG,   16, 
-        PMLH,   16, 
-        PMLI,   16, 
-        PMLJ,   16, 
-        PMLK,   16, 
-        PMLL,   16, 
-        PMLM,   16, 
-        PMLN,   16, 
-        PMLO,   16, 
-        PNL1,   16, 
-        PNL2,   16, 
-        PNL3,   16, 
-        PNL4,   16, 
-        PNL5,   16, 
-        PNL6,   16, 
-        PNL7,   16, 
-        PNL8,   16, 
-        PNL9,   16, 
-        PNLA,   16, 
-        PNLB,   16, 
-        PNLC,   16, 
-        PNLD,   16, 
-        PNLE,   16, 
-        PNLF,   16, 
-        PNLG,   16, 
-        PNLH,   16, 
-        PNLI,   16, 
-        PNLJ,   16, 
-        PNLK,   16, 
-        PNLL,   16, 
-        PNLM,   16, 
-        PNLN,   16, 
-        PNLO,   16, 
-        XHPC,   8, 
-        XRPC,   8, 
-        XSPC,   8, 
-        XSPA,   8, 
-        HPTB,   32, 
-        HPTE,   8, 
-        SM00,   8, 
-        SM01,   8, 
-        SM02,   8, 
-        SC00,   64, 
-        SC01,   64, 
-        SC02,   64, 
-        IM00,   8, 
-        IM01,   8, 
-        IM02,   8, 
-        IM03,   8, 
-        IM04,   8, 
-        IM05,   8, 
-        IC00,   64, 
-        IC01,   64, 
-        IC02,   64, 
-        IC03,   64, 
-        IC04,   64, 
-        IC05,   64, 
-        UM00,   8, 
-        UM01,   8, 
-        UM02,   8, 
-        UC00,   64, 
-        UC01,   64, 
-        UC02,   64, 
-        UD00,   8, 
-        UD01,   8, 
-        UD02,   8, 
-        UP00,   8, 
-        UP01,   8, 
-        UP02,   8, 
-        UI00,   8, 
-        UI01,   8, 
-        UI02,   8, 
-        SGIR,   8, 
-        GPHD,   8, 
-        NIT1,   8, 
-        NIT2,   8, 
-        NIT3,   8, 
-        NPM1,   8, 
-        NPM2,   8, 
-        NPM3,   8, 
-        NPC1,   8, 
-        NPC2,   8, 
-        NPC3,   8, 
-        NL11,   16, 
-        NL12,   16, 
-        NL13,   16, 
-        ND21,   8, 
-        ND22,   8, 
-        ND23,   8, 
-        ND11,   32, 
-        ND12,   32, 
-        ND13,   32, 
-        NLR1,   16, 
-        NLR2,   16, 
-        NLR3,   16, 
-        NLD1,   32, 
-        NLD2,   32, 
-        NLD3,   32, 
-        NEA1,   16, 
-        NEA2,   16, 
-        NEA3,   16, 
-        NEB1,   16, 
-        NEB2,   16, 
-        NEB3,   16, 
-        NEC1,   16, 
-        NEC2,   16, 
-        NEC3,   16, 
-        NRA1,   16, 
-        NRA2,   16, 
-        NRA3,   16, 
-        NMB1,   32, 
-        NMB2,   32, 
-        NMB3,   32, 
-        NMV1,   32, 
-        NMV2,   32, 
-        NMV3,   32, 
-        NPB1,   32, 
-        NPB2,   32, 
-        NPB3,   32, 
-        NPV1,   32, 
-        NPV2,   32, 
-        NPV3,   32, 
-        NRP1,   32, 
-        NRP2,   32, 
-        NRP3,   32, 
-        EMH4,   8, 
-        EMDS,   8, 
-        CSKU,   8, 
-        ITA0,   16, 
-        ITA1,   16, 
-        ITA2,   16, 
-        ITA3,   16, 
-        ITS0,   8, 
-        ITS1,   8, 
-        ITS2,   8, 
-        ITS3,   8, 
-        PMBS,   16, 
-        PWRM,   32, 
-        CNVI,   8, 
-        CBTC,   8, 
-        CBTA,   8, 
-        RMRC,   32, 
-        VMRC,   8, 
-        VM70,   8, 
-        VM75,   8, 
-        PTHM,   8, 
-        PSON,   8, 
-        TWMB,   32, 
-        LTR1,   8, 
-        LTR2,   8, 
-        LTR3,   8, 
-        LTR4,   8, 
-        LTR5,   8, 
-        LTR6,   8, 
-        LTR7,   8, 
-        LTR8,   8, 
-        LTR9,   8, 
-        LTRA,   8, 
-        LTRB,   8, 
-        LTRC,   8, 
-        LTRD,   8, 
-        LTRE,   8, 
-        LTRF,   8, 
-        LTRG,   8, 
-        LTRH,   8, 
-        LTRI,   8, 
-        LTRJ,   8, 
-        LTRK,   8, 
-        LTRL,   8, 
-        LTRM,   8, 
-        LTRN,   8, 
-        LTRO,   8, 
-        GBES,   8, 
-        SPPR,   8, 
-        SDPH,   8, 
-        EMCE,   8, 
-        SDCE,   8
-    }
-
-    Scope (_SB)
-    {
+        
         OperationRegion (ICLK, SystemMemory, (SBRG + 0x00AD8000), 0x82)
         Field (ICLK, AnyAcc, Lock, Preserve)
         {
@@ -5574,10 +5562,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
 
             }
         }
-    }
-
-    Scope (_SB)
-    {
         Name (GPCL, Package (0x0F)
         {
             Package (0x07)
@@ -5950,10 +5934,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
             Buffer (0x10){}, 
             Buffer (0x28){}
         })
-    }
-
-    Scope (_SB)
-    {
         Method (GINF, 2, NotSerialized)
         {
             If ((PCHS == PCHL))
@@ -6412,10 +6392,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 RCFG = Local3
             }
         }
-    }
-
-    Scope (_SB)
-    {
         Method (PSD3, 1, Serialized)
         {
             Switch ((Zero + Arg0--))
@@ -6847,10 +6823,5571 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
 
             }
         }
+
+        Device (URSC)
+        {
+            Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
+            Name (_STA, 0x03)  // _STA: Status
+            Name (_UID, 0x05)  // _UID: Unique ID
+            Method (UARB, 2, Serialized)
+            {
+                Local0 = Buffer (0x02)
+                    {
+                         0x79, 0x00                                       // y.
+                    }
+                If (((Arg0 == 0x02) || (Arg0 == 0x03)))
+                {
+                    OperationRegion (UACF, SystemMemory, Arg1, 0x20)
+                    Field (UACF, DWordAcc, NoLock, Preserve)
+                    {
+                        Offset (0x10), 
+                        BAR0,   64, 
+                        BAR1,   64
+                    }
+
+                    Name (BUF1, ResourceTemplate ()
+                    {
+                        Memory32Fixed (ReadWrite,
+                            0x00000000,         // Address Base
+                            0x00000FF8,         // Address Length
+                            _Y20)
+                    })
+                    Name (BUF2, ResourceTemplate ()
+                    {
+                        Memory32Fixed (ReadWrite,
+                            0x00000000,         // Address Base
+                            0x00001000,         // Address Length
+                            _Y21)
+                    })
+                    CreateDWordField (BUF1, \_SB.URSC.UARB._Y20._BAS, ADR1)  // _BAS: Base Address
+                    CreateDWordField (BUF2, \_SB.URSC.UARB._Y21._BAS, ADR2)  // _BAS: Base Address
+                    Local1 = (BAR0 & 0xFFFFFFFFFFFFF000)
+                    ADR1 = (Local1 + 0x08)
+                    ADR2 = (BAR1 & 0xFFFFFFFFFFFFF000)
+                    ConcatenateResTemplate (BUF1, BUF2, Local0)
+                }
+
+                Return (Local0)
+            }
+
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                Local0 = ResourceTemplate ()
+                    {
+                        Memory32Fixed (ReadWrite,
+                            0xFE038000,         // Address Base
+                            0x00001000,         // Address Length
+                            )
+                    }
+                ConcatenateResTemplate (Local0, UARB (UM00, UC00), Local1)
+                Local0 = Local1
+                ConcatenateResTemplate (Local0, UARB (UM01, UC01), Local1)
+                Local0 = Local1
+                ConcatenateResTemplate (Local0, UARB (UM02, UC02), Local1)
+                Local0 = Local1
+                Return (Local0)
+            }
+        }
+
+        Method (UARH, 2, Serialized)
+        {
+            OperationRegion (UACF, SystemMemory, Arg0, 0x18)
+            Field (UACF, DWordAcc, NoLock, Preserve)
+            {
+                Offset (0x10), 
+                BAR0,   64
+            }
+
+            Name (BUF0, ResourceTemplate ()
+            {
+                Memory32Fixed (ReadWrite,
+                    0x00000000,         // Address Base
+                    0x00000008,         // Address Length
+                    _Y22)
+            })
+            Name (IBUF, ResourceTemplate ()
+            {
+                Interrupt (ResourceConsumer, Level, ActiveLow, Shared, ,, _Y23)
+                {
+                    0x00000014,
+                }
+            })
+            CreateDWordField (BUF0, \_SB.UARH._Y22._BAS, ADR0)  // _BAS: Base Address
+            CreateDWordField (IBUF, \_SB.UARH._Y23._INT, IRQN)  // _INT: Interrupts
+            Local0 = (BAR0 & 0xFFFFFFFFFFFFF000)
+            ADR0 = Local0
+            IRQN = Arg1
+            ConcatenateResTemplate (BUF0, IBUF, Local1)
+            Return (Local1)
+        }
+
+        Method (UAPG, 3, Serialized)
+        {
+            If ((Arg1 != 0x02))
+            {
+                Return (Arg1)
+            }
+
+            OperationRegion (UACF, SystemMemory, Arg2, 0x18)
+            Field (UACF, DWordAcc, NoLock, Preserve)
+            {
+                Offset (0x10), 
+                BAR0,   64
+            }
+
+            OperationRegion (UAB0, SystemMemory, (BAR0 & 0xFFFFFFFFFFFFF000), 0x10)
+            Field (UAB0, ByteAcc, Lock, Preserve)
+            {
+                DLL,    8, 
+                DLH,    8, 
+                FCR,    8, 
+                LCR,    8
+            }
+
+            Local0 = LCR /* \_SB_.UAPG.LCR_ */
+            If ((Local0 && 0x7F))
+            {
+                Return (Zero)
+            }
+
+            Return (One)
+        }
+
+        Method (UHID, 1, Serialized)
+        {
+            If ((Arg0 == 0x03))
+            {
+                Return (0x0105D041)
+            }
+
+            Return (0x020CD041)
+        }
+
+        Method (UPS3, 2, Serialized)
+        {
+            Name (STMP, Zero)
+            If ((Arg0 == One))
+            {
+                OperationRegion (UACF, SystemMemory, Arg1, 0x88)
+                Field (UACF, DWordAcc, NoLock, Preserve)
+                {
+                    Offset (0x10), 
+                    BAR0,   64
+                }
+
+                Field (UACF, ByteAcc, NoLock, Preserve)
+                {
+                    Offset (0x84), 
+                    PMEC,   8
+                }
+
+                OperationRegion (UAB0, SystemMemory, (BAR0 & 0xFFFFFFFFFFFFF000), 0x82)
+                Field (UAB0, ByteAcc, NoLock, Preserve)
+                {
+                    Offset (0x81), 
+                    PPRR,   8
+                }
+
+                PPRR = Zero
+                PMEC = 0x03
+                STMP = PMEC /* \_SB_.UPS3.PMEC */
+            }
+        }
+
+        Method (UPS0, 2, Serialized)
+        {
+            Name (STMP, Zero)
+            If ((Arg0 == One))
+            {
+                OperationRegion (UACF, SystemMemory, Arg1, 0x88)
+                Field (UACF, DWordAcc, NoLock, Preserve)
+                {
+                    Offset (0x10), 
+                    BAR0,   64
+                }
+
+                Field (UACF, ByteAcc, NoLock, Preserve)
+                {
+                    Offset (0x84), 
+                    PMEC,   8
+                }
+
+                PMEC = Zero
+                STMP = PMEC /* \_SB_.UPS0.PMEC */
+                OperationRegion (UAB0, SystemMemory, (BAR0 & 0xFFFFFFFFFFFFF000), 0x82)
+                Field (UAB0, ByteAcc, NoLock, Preserve)
+                {
+                    Offset (0x81), 
+                    PPRR,   8
+                }
+
+                PPRR = 0x07
+            }
+        }
+
+        Method (UPSC, 1, Serialized)
+        {
+            OperationRegion (UACF, SystemMemory, (Arg0 + 0x84), 0x04)
+            Field (UACF, ByteAcc, NoLock, Preserve)
+            {
+                PMEC,   8
+            }
+
+            Return ((PMEC & 0x03))
+        }
+
+        If (((UM00 == 0x02) || (UM00 == 0x03)))
+        {
+            Device (UAH0)
+            {
+                Name (_DDN, "SerialIoUart0")  // _DDN: DOS Device Name
+                Name (_UID, "SerialIoUart0")  // _UID: Unique ID
+                Method (_HID, 0, NotSerialized)  // _HID: Hardware ID
+                {
+                    Return (UHID (UM00))
+                }
+
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (UARH (UC00, UI00))
+                }
+
+                Method (_STA, 0, NotSerialized)  // _STA: Status
+                {
+                    If ((UM00 == 0x03))
+                    {
+                        If ((UP00 == 0x02))
+                        {
+                            UP00 = UAPG (UM00, UP00, UC00)
+                        }
+
+                        Return (0x0F)
+                    }
+
+                    Return (0x03)
+                }
+
+                If ((UM00 == 0x03))
+                {
+                    Method (_PSC, 0, NotSerialized)  // _PSC: Power State Current
+                    {
+                        Return (UPSC (UC00))
+                    }
+
+                    Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                    {
+                        UPS3 (UP00, UC00)
+                    }
+
+                    Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                    {
+                        UPS0 (UP00, UC00)
+                    }
+                }
+            }
+        }
+
+        If (((UM01 == 0x02) || (UM01 == 0x03)))
+        {
+            Device (UAH1)
+            {
+                Name (_DDN, "SerialIoUart1")  // _DDN: DOS Device Name
+                Name (_UID, "SerialIoUart1")  // _UID: Unique ID
+                Method (_HID, 0, NotSerialized)  // _HID: Hardware ID
+                {
+                    Return (UHID (UM01))
+                }
+
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (UARH (UC01, UI01))
+                }
+
+                Method (_STA, 0, NotSerialized)  // _STA: Status
+                {
+                    If ((UM01 == 0x03))
+                    {
+                        If ((UP01 == 0x02))
+                        {
+                            UP01 = UAPG (UM01, UP01, UC01)
+                        }
+
+                        Return (0x0F)
+                    }
+
+                    Return (0x03)
+                }
+
+                If ((UM01 == 0x03))
+                {
+                    Method (_PSC, 0, NotSerialized)  // _PSC: Power State Current
+                    {
+                        Return (UPSC (UC01))
+                    }
+
+                    Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                    {
+                        UPS3 (UP01, UC01)
+                    }
+
+                    Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                    {
+                        UPS0 (UP01, UC01)
+                    }
+                }
+            }
+        }
+
+        If (((UM02 == 0x02) || (UM02 == 0x03)))
+        {
+            Device (UAH2)
+            {
+                Name (_DDN, "SerialIoUart2")  // _DDN: DOS Device Name
+                Name (_UID, "SerialIoUart2")  // _UID: Unique ID
+                Method (_HID, 0, NotSerialized)  // _HID: Hardware ID
+                {
+                    Return (UHID (UM02))
+                }
+
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (UARH (UC02, UI02))
+                }
+
+                Method (_STA, 0, NotSerialized)  // _STA: Status
+                {
+                    If ((UM02 == 0x03))
+                    {
+                        If ((UP02 == 0x02))
+                        {
+                            UP02 = UAPG (UM02, UP02, UC02)
+                        }
+
+                        Return (0x0F)
+                    }
+
+                    Return (0x03)
+                }
+
+                If ((UM02 == 0x03))
+                {
+                    Method (_PSC, 0, NotSerialized)  // _PSC: Power State Current
+                    {
+                        Return (UPSC (UC02))
+                    }
+
+                    Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                    {
+                        UPS3 (UP02, UC02)
+                    }
+
+                    Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                    {
+                        UPS0 (UP02, UC02)
+                    }
+                }
+            }
+        }
+
+        Method (THDR, 3, Serialized)
+        {
+            ADBG ("THDR")
+            CAGS (Arg0)
+            Sleep (0x64)
+            \_GPE.XTBT (Arg1, Arg2)
+        }
+
+        Method (CGWR, 2, Serialized)
+        {
+            If (CondRefOf (\_SB.SGOV))
+            {
+                SGOV (Arg0, Arg1)
+            }
+        }
+
+        Method (CGRD, 2, Serialized)
+        {
+            Local0 = One
+            If ((Arg1 == Zero))
+            {
+                If (CondRefOf (\_SB.GGOV))
+                {
+                    Local0 = GGOV (Arg0)
+                }
+            }
+            ElseIf ((Arg1 == One))
+            {
+                If (CondRefOf (\_SB.GGIV))
+                {
+                    Local0 = GGIV (Arg0)
+                }
+            }
+
+            Return (Local0)
+        }
+
+        Method (WRGP, 2, Serialized)
+        {
+            Local0 = Arg0
+            Local1 = Arg0
+            Local0 &= 0xFFFFFFFF
+            Local1 >>= 0x20
+            If (((Local0 & 0xFF) == One))
+            {
+                CGWR (Local1, Arg1)
+            }
+        }
+
+        Method (RDGP, 2, Serialized)
+        {
+            Local7 = One
+            Local0 = Arg0
+            Local1 = Arg0
+            Local0 &= 0xFFFFFFFF
+            Local1 >>= 0x20
+            If (((Local0 & 0xFF) == One))
+            {
+                Local7 = CGRD (Local1, Arg1)
+            }
+
+            Return (Local7)
+        }
+
+        Method (TBFP, 2, NotSerialized)
+        {
+            If (Arg0)
+            {
+                If ((Arg1 == One))
+                {
+                    CGWR (FPG0, FP0L)
+                }
+                Else
+                {
+                    CGWR (FPG1, FP1L)
+                }
+            }
+            ElseIf ((Arg1 == One))
+            {
+                CGWR (FPG0, !FP0L)
+            }
+            Else
+            {
+                CGWR (FPG1, !FP1L)
+            }
+        }
+
+        Device (WMTF)
+        {
+            Name (_HID, "PNP0C14" /* Windows Management Instrumentation Device */)  // _HID: Hardware ID
+            Name (_UID, "TBFP")  // _UID: Unique ID
+            Name (_WDG, Buffer (0x14)
+            {
+                /* 0000 */  0x48, 0xFD, 0xCC, 0x86, 0x5E, 0x20, 0x77, 0x4A,  // H...^ wJ
+                /* 0008 */  0x9C, 0x48, 0x20, 0x21, 0xCB, 0xED, 0xE3, 0x41,  // .H !...A
+                /* 0010 */  0x54, 0x46, 0x01, 0x02                           // TF..
+            })
+            Method (WMTF, 3, NotSerialized)
+            {
+                CreateByteField (Arg2, Zero, FP)
+                If (FP)
+                {
+                    TBFP (One, One)
+                }
+                Else
+                {
+                    TBFP (Zero, One)
+                }
+            }
+        }
+
+        Method (PERB, 5, Serialized)
+        {
+            ADBG ("PERB")
+            Local7 = Arg0
+            Local7 |= (Arg1 << 0x14)
+            Local7 |= (Arg2 << 0x0F)
+            Local7 |= (Arg3 << 0x0C)
+            Local7 |= Arg4
+            OperationRegion (PCI0, SystemMemory, Local7, One)
+            Field (PCI0, ByteAcc, NoLock, Preserve)
+            {
+                TEMP,   8
+            }
+
+            Return (TEMP) /* \_SB_.PERB.TEMP */
+        }
+
+        Method (PEWB, 6, Serialized)
+        {
+            ADBG ("PEWB")
+            Local7 = Arg0
+            Local7 |= (Arg1 << 0x14)
+            Local7 |= (Arg2 << 0x0F)
+            Local7 |= (Arg3 << 0x0C)
+            Local7 |= Arg4
+            OperationRegion (PCI0, SystemMemory, Local7, One)
+            Field (PCI0, ByteAcc, NoLock, Preserve)
+            {
+                TEMP,   8
+            }
+
+            TEMP = Arg5
+        }
+
+        Method (PERW, 5, Serialized)
+        {
+            ADBG ("PERW")
+            Local7 = Arg0
+            Local7 |= (Arg1 << 0x14)
+            Local7 |= (Arg2 << 0x0F)
+            Local7 |= (Arg3 << 0x0C)
+            Local7 |= Arg4
+            OperationRegion (PCI0, SystemMemory, Local7, 0x02)
+            Field (PCI0, ByteAcc, NoLock, Preserve)
+            {
+                TEMP,   16
+            }
+
+            Return (TEMP) /* \_SB_.PERW.TEMP */
+        }
+
+        Method (PEWW, 6, Serialized)
+        {
+            ADBG ("PEWW")
+            Local7 = Arg0
+            Local7 |= (Arg1 << 0x14)
+            Local7 |= (Arg2 << 0x0F)
+            Local7 |= (Arg3 << 0x0C)
+            Local7 |= Arg4
+            OperationRegion (PCI0, SystemMemory, Local7, 0x02)
+            Field (PCI0, ByteAcc, NoLock, Preserve)
+            {
+                TEMP,   16
+            }
+
+            TEMP = Arg5
+        }
+
+        Method (PERD, 5, Serialized)
+        {
+            ADBG ("PERD")
+            Local7 = Arg0
+            Local7 |= (Arg1 << 0x14)
+            Local7 |= (Arg2 << 0x0F)
+            Local7 |= (Arg3 << 0x0C)
+            Local7 |= Arg4
+            OperationRegion (PCI0, SystemMemory, Local7, 0x04)
+            Field (PCI0, ByteAcc, NoLock, Preserve)
+            {
+                TEMP,   32
+            }
+
+            Return (TEMP) /* \_SB_.PERD.TEMP */
+        }
+
+        Method (PEWD, 6, Serialized)
+        {
+            ADBG ("PEWD")
+            Local7 = Arg0
+            Local7 |= (Arg1 << 0x14)
+            Local7 |= (Arg2 << 0x0F)
+            Local7 |= (Arg3 << 0x0C)
+            Local7 |= Arg4
+            OperationRegion (PCI0, SystemMemory, Local7, 0x04)
+            Field (PCI0, ByteAcc, NoLock, Preserve)
+            {
+                TEMP,   32
+            }
+
+            TEMP = Arg5
+        }
+
+        Method (STDC, 5, Serialized)
+        {
+            ADBG ("STDC")
+            Local7 = PERW (Arg0, Arg1, Arg2, Arg3, Zero)
+            If ((Local7 == 0xFFFF))
+            {
+                ADBG ("Referenced device is not present")
+                Return (Zero)
+            }
+
+            Local0 = PERW (Arg0, Arg1, Arg2, Arg3, 0x06)
+            If (((Local0 & 0x10) == Zero))
+            {
+                ADBG ("No Capabilities linked list is available")
+                Return (Zero)
+            }
+
+            Local2 = PERB (Arg0, Arg1, Arg2, Arg3, 0x34)
+            While (One)
+            {
+                Local2 &= 0xFC
+                If ((Local2 == Zero))
+                {
+                    ADBG ("Capability ID is not found")
+                    Return (Zero)
+                }
+
+                Local1 = PERB (Arg0, Arg1, Arg2, Arg3, Local2)
+                If ((Arg4 == Local1))
+                {
+                    ADBG ("Capability ID is found")
+                    ADBG ("Capability Offset : ")
+                    ADBG (Local2)
+                    Return (Local2)
+                }
+
+                Local2 = PERB (Arg0, Arg1, Arg2, Arg3, (Local2 + One))
+                Return (Zero)
+            }
+        }
+
+        OperationRegion (PBTL, SystemMemory, PWRM, 0x1E30)
+        Field (PBTL, DWordAcc, NoLock, Preserve)
+        {
+            Offset (0x1024), 
+            Offset (0x1025), 
+            PBTN,   8
+        }
+
+        Method (QPTS, 1, NotSerialized)
+        {
+            D8XH (Zero, Arg0)
+            If ((Arg0 == 0x03)){}
+            If ((Arg0 == 0x04)){}
+            If ((Arg0 == 0x05))
+            {
+                ^PCI0.LPCB.EC.BISF |= One
+            }
+
+            If (((Arg0 == 0x03) || (Arg0 == 0x04)))
+            {
+                Local0 = B1B4(^PCI0.LPCB.EC.BAF0,^PCI0.LPCB.EC.BAF1,^PCI0.LPCB.EC.BAF2,^PCI0.LPCB.EC.BAF3)//^PCI0.LPCB.EC.B1AF /* \_SB_.PCI0.LPCB.EC__.B1AF */
+                Local0 >>= 0x10
+                Local0 &= 0xFFFF
+                BFCC = Local0
+                
+            }
+
+            ^PCI0.LPCB.EC.CSMF = Zero
+            NVGF = Zero
+            SDCK = ^PCI0.LPCB.EC.DCBE /* \_SB_.PCI0.LPCB.EC__.DCBE */
+            Name (EBUF, Buffer (0x1E){})
+            If (((Arg0 == 0x04) || (Arg0 == 0x05)))
+            {
+                EBUF [Zero] = 0xE1
+                If ((Arg0 == 0x05))
+                {
+                    EBUF [One] = 0xBC
+                }
+                Else
+                {
+                    EBUF [One] = 0xF8
+                }
+
+                CMDD (0x9F, 0x02, EBUF)
+            }
+
+            While (!(PBTN & 0x02))
+            {
+                Sleep (0x64)
+            }
+        }
+
+        Method (QWAK, 1, NotSerialized)
+        {
+            If ((Arg0 == 0x03))
+            {
+                If ((RELT == 0xBA))
+                {
+                    Notify (PWRB, 0x02) // Device Wake
+                }
+            }
+
+            If ((Arg0 == 0x04))
+            {
+                Notify (PWRB, 0x02) // Device Wake
+            }
+
+            If ((^PCI0.LPCB.EC.ACEX != PWRS))
+            {
+                PWRS = ^PCI0.LPCB.EC.ACEX /* \_SB_.PCI0.LPCB.EC__.ACEX */
+                CCRN ()
+            }
+
+            If (((Arg0 == 0x03) || (Arg0 == 0x04)))
+            {
+                Local0 = One
+            }
+
+            If ((Local0 != LIDS))
+            {
+                LIDS = Local0
+                If (IGDS)
+                {
+                    If ((LIDS == Zero))
+                    {
+                        ^PCI0.GFX0.CLID = 0x80000000
+                    }
+
+                    If ((LIDS == One))
+                    {
+                        ^PCI0.GFX0.CLID = 0x80000003
+                    }
+                }
+
+                Notify (LID0, 0x80) // Status Change
+            }
+
+            Local0 = B1B4(^PCI0.LPCB.EC.BAF0,^PCI0.LPCB.EC.BAF1,^PCI0.LPCB.EC.BAF2,^PCI0.LPCB.EC.BAF3)//^PCI0.LPCB.EC.B1AF /* \_SB_.PCI0.LPCB.EC__.B1AF */
+            Local0 >>= 0x10
+            Local0 &= 0xFFFF
+            If ((Local0 != BFCC))
+            {
+                Notify (^PCI0.LPCB.EC.BAT1, One) // Device Check
+                Notify (^PCI0.LPCB.EC.BAT1, 0x81) // Information Change
+            }
+
+            If ((SDCK != ^PCI0.LPCB.EC.DCBE))
+            {
+                SDCK = ^PCI0.LPCB.EC.DCBE /* \_SB_.PCI0.LPCB.EC__.DCBE */
+            }
+
+            ^PCI0.LPCB.EC.TUBI = Zero
+            ^PCI0.LPCB.EC.TZCH (^PCI0.LPCB.EC.TIST)
+            Local0 = GPC0 (0x04010004)
+            Local1 = (Local0 & 0xFFFFFEFE)
+            SPC0 (0x04010004, Local1)
+            Sleep (0x32)
+            SPC0 (0x04010004, Local0)
+            D8XH (Zero, 0xAC)
+        }
+
+        Method (SPTS, 1, Serialized)
+        {
+            KPTS (Arg0)
+            UPTS (Arg0)
+            PTS2 (Arg0)
+            GPTS (Arg0)
+            QPTS (Arg0)
+        }
+
+        Method (SWAK, 1, Serialized)
+        {
+            KWAK (Arg0)
+            UWAK (Arg0)
+            WAK2 (Arg0)
+            GWAK (Arg0)
+            QWAK (Arg0)
+        }
+
+        Method (WAK1, 1, NotSerialized)
+        {
+            PWRS = ^PCI0.LPCB.EC.ACEX /* \_SB_.PCI0.LPCB.EC__.ACEX */
+            GSSM (0x9A, PWRS)
+        }
+
+        Method (PTS1, 1, NotSerialized)
+        {
+        }
+
+        Name (PDAT, Zero)
+        Name (DSSI, Zero)
+        Method (DSSV, 0, Serialized)
+        {
+            PDAT = SDAB /* \SDAB */
+            PDAT <<= 0x10
+            PDAT |= SDAA /* \_SB_.PDAT */
+        }
+
+        Device (WFDE)
+        {
+            Name (_HID, "PNP0C14" /* Windows Management Instrumentation Device */)  // _HID: Hardware ID
+            Name (_UID, "SampleDev")  // _UID: Unique ID
+            Name (_WDG, Buffer (0x3C)
+            {
+                /* 0000 */  0xEF, 0x9D, 0xC4, 0x2B, 0x15, 0x7B, 0x05, 0x4F,  // ...+.{.O
+                /* 0008 */  0x8B, 0xB7, 0xEE, 0x37, 0xB9, 0x54, 0x7C, 0x0B,  // ...7.T|.
+                /* 0010 */  0x44, 0x45, 0x01, 0x02, 0x3E, 0xA3, 0xFE, 0xA6,  // DE..>...
+                /* 0018 */  0xBF, 0xDA, 0xF5, 0x46, 0xBF, 0xC8, 0x46, 0x0D,  // ...F..F.
+                /* 0020 */  0x96, 0x1B, 0xEC, 0x9F, 0xD0, 0x00, 0x01, 0x08,  // ........
+                /* 0028 */  0x21, 0x12, 0x90, 0x05, 0x66, 0xD5, 0xD1, 0x11,  // !...f...
+                /* 0030 */  0xB2, 0xF0, 0x00, 0xA0, 0xC9, 0x06, 0x29, 0x10,  // ......).
+                /* 0038 */  0x43, 0x43, 0x01, 0x00                           // CC..
+            })
+            Method (WMDE, 3, NotSerialized)
+            {
+                If ((Arg1 == One))
+                {
+                    Return (One)
+                }
+
+                If ((Arg1 == 0x02))
+                {
+                    If ((DSSI == Zero))
+                    {
+                        DSSV ()
+                        DSSI = One
+                    }
+
+                    Return (One)
+                }
+
+                If ((Arg1 == 0x03))
+                {
+                    Return (PDAT) /* \_SB_.PDAT */
+                }
+            }
+
+            Method (_WED, 1, NotSerialized)  // _Wxx: Wake Event, xx=0x00-0xFF
+            {
+                If ((Arg0 == 0xD0))
+                {
+                    Return (PDAT) /* \_SB_.PDAT */
+                }
+
+                Return (Zero)
+            }
+
+            Name (WQCC, Buffer (0x043D)
+            {
+                /* 0000 */  0x46, 0x4F, 0x4D, 0x42, 0x01, 0x00, 0x00, 0x00,  // FOMB....
+                /* 0008 */  0x2D, 0x04, 0x00, 0x00, 0xB4, 0x0F, 0x00, 0x00,  // -.......
+                /* 0010 */  0x44, 0x53, 0x00, 0x01, 0x1A, 0x7D, 0xDA, 0x54,  // DS...}.T
+                /* 0018 */  0x28, 0xCE, 0x87, 0x00, 0x01, 0x06, 0x18, 0x42,  // (......B
+                /* 0020 */  0x10, 0x07, 0x10, 0x22, 0x21, 0x04, 0x12, 0x01,  // ..."!...
+                /* 0028 */  0xA1, 0xC8, 0x2C, 0x0C, 0x86, 0x10, 0x38, 0x2E,  // ..,...8.
+                /* 0030 */  0x24, 0x15, 0x07, 0x85, 0x12, 0x02, 0xA1, 0xFE,  // $.......
+                /* 0038 */  0x04, 0xF2, 0x2B, 0x00, 0xA1, 0x43, 0x01, 0x32,  // ..+..C.2
+                /* 0040 */  0x05, 0x18, 0x14, 0xE0, 0x14, 0x41, 0x04, 0xBD,  // .....A..
+                /* 0048 */  0x0A, 0xB0, 0x29, 0xC0, 0xA4, 0x00, 0x8B, 0x02,  // ..).....
+                /* 0050 */  0xB4, 0x0B, 0xB0, 0x2C, 0x40, 0xB7, 0x00, 0xE9,  // ...,@...
+                /* 0058 */  0xB0, 0x44, 0x24, 0x38, 0x4A, 0x0C, 0x38, 0x4A,  // .D$8J.8J
+                /* 0060 */  0x27, 0xB6, 0x70, 0xC3, 0x06, 0x2F, 0x14, 0x45,  // '.p../.E
+                /* 0068 */  0x33, 0x88, 0x92, 0xA0, 0x72, 0x01, 0xBE, 0x11,  // 3...r...
+                /* 0070 */  0x04, 0x5E, 0xAE, 0x00, 0xC9, 0x13, 0x90, 0x66,  // .^.....f
+                /* 0078 */  0x01, 0x86, 0x05, 0x58, 0x17, 0x20, 0x7B, 0x08,  // ...X. {.
+                /* 0080 */  0x54, 0xEA, 0x10, 0x50, 0x72, 0x86, 0x80, 0x1A,  // T..Pr...
+                /* 0088 */  0x40, 0xAB, 0x13, 0x10, 0x7E, 0xA5, 0x53, 0x42,  // @...~.SB
+                /* 0090 */  0x12, 0x84, 0x33, 0x56, 0xF1, 0xF8, 0x9A, 0x45,  // ..3V...E
+                /* 0098 */  0xD3, 0x73, 0x92, 0x73, 0x0C, 0x39, 0x1E, 0x17,  // .s.s.9..
+                /* 00A0 */  0x7A, 0x10, 0x3C, 0x84, 0x04, 0x10, 0x26, 0x7B,  // z.<...&{
+                /* 00A8 */  0xC8, 0x92, 0x0D, 0x83, 0xD2, 0x30, 0x16, 0xEA,  // .....0..
+                /* 00B0 */  0x62, 0xD4, 0xA8, 0x91, 0xB2, 0x01, 0x19, 0xA2,  // b.......
+                /* 00B8 */  0x24, 0x38, 0xD4, 0xA8, 0x3D, 0xBB, 0xE6, 0xC7,  // $8..=...
+                /* 00C0 */  0xA1, 0xD9, 0xB5, 0x3D, 0x16, 0x02, 0xC9, 0xA4,  // ...=....
+                /* 00C8 */  0x0D, 0x05, 0x25, 0x05, 0x42, 0xC2, 0x67, 0x4A,  // ..%.B.gJ
+                /* 00D0 */  0x66, 0x14, 0xF1, 0x48, 0x0D, 0x93, 0xC0, 0xA3,  // f..H....
+                /* 00D8 */  0x88, 0xEC, 0x19, 0x46, 0x63, 0xD0, 0xD8, 0x61,  // ...Fc..a
+                /* 00E0 */  0x78, 0x98, 0xC1, 0x0E, 0xE2, 0x30, 0x8E, 0x39,  // x....0.9
+                /* 00E8 */  0x72, 0x02, 0x4F, 0xE8, 0x48, 0x8F, 0xBC, 0xB0,  // r.O.H...
+                /* 00F0 */  0x79, 0x0A, 0x35, 0x46, 0x73, 0x50, 0x04, 0xFF,  // y.5FsP..
+                /* 00F8 */  0x51, 0x00, 0x2B, 0x11, 0x56, 0xA3, 0x8D, 0x7D,  // Q.+.V..}
+                /* 0100 */  0xBE, 0x1E, 0xCD, 0xC1, 0xC6, 0x38, 0x82, 0xE3,  // .....8..
+                /* 0108 */  0x4A, 0xF0, 0xFF, 0x0F, 0x13, 0xA4, 0xF7, 0xE9,  // J.......
+                /* 0110 */  0x10, 0x41, 0x78, 0x12, 0x3D, 0x0B, 0x61, 0xF5,  // .Ax.=.a.
+                /* 0118 */  0x0C, 0x24, 0x9C, 0x10, 0xC7, 0xCD, 0x61, 0x0E,  // .$....a.
+                /* 0120 */  0x58, 0x83, 0x40, 0xC9, 0x80, 0x10, 0xE4, 0x33,  // X.@....3
+                /* 0128 */  0xC1, 0xD1, 0x99, 0xC0, 0xEE, 0x8F, 0x02, 0xD2,  // ........
+                /* 0130 */  0x26, 0x40, 0xE3, 0x1D, 0x40, 0x20, 0x9D, 0x21,  // &@..@ .!
+                /* 0138 */  0x08, 0xA4, 0xAD, 0xC1, 0x08, 0xA6, 0x42, 0x28,  // ......B(
+                /* 0140 */  0xA1, 0x1C, 0x55, 0x38, 0x5B, 0x43, 0x11, 0x90,  // ..U8[C..
+                /* 0148 */  0x6F, 0x05, 0xAF, 0x0F, 0xA1, 0xD8, 0xD4, 0x42,  // o......B
+                /* 0150 */  0x1E, 0x5B, 0x90, 0xC6, 0xC0, 0x84, 0x1C, 0x2C,  // .[.....,
+                /* 0158 */  0x4C, 0xBC, 0xF6, 0x17, 0xC2, 0x1E, 0x12, 0x3A,  // L......:
+                /* 0160 */  0x0B, 0x38, 0xD2, 0x68, 0x50, 0x07, 0x05, 0x9F,  // .8.hP...
+                /* 0168 */  0x07, 0x7C, 0x16, 0x78, 0x3E, 0xF0, 0xA8, 0x0E,  // .|.x>...
+                /* 0170 */  0xCD, 0x83, 0x3B, 0xB0, 0xC7, 0x87, 0x07, 0x01,  // ..;.....
+                /* 0178 */  0x0F, 0x99, 0xDD, 0x10, 0x7C, 0xAE, 0xF0, 0xC9,  // ....|...
+                /* 0180 */  0x00, 0xEF, 0x1A, 0x50, 0x57, 0x82, 0x07, 0x02,  // ...PW...
+                /* 0188 */  0x36, 0x46, 0xC3, 0xF1, 0x21, 0x7A, 0xB8, 0xE1,  // 6F..!z..
+                /* 0190 */  0x4E, 0xE0, 0x10, 0x19, 0xA0, 0x67, 0xF5, 0x2C,  // N....g.,
+                /* 0198 */  0x80, 0x1D, 0xD6, 0xC9, 0x3C, 0x08, 0xBC, 0x4B,  // ....<..K
+                /* 01A0 */  0x34, 0x7B, 0x8B, 0x20, 0x04, 0xC7, 0xE3, 0x0B,  // 4{. ....
+                /* 01A8 */  0x04, 0x9B, 0x70, 0x02, 0xCB, 0x1F, 0x04, 0x6A,  // ..p....j
+                /* 01B0 */  0x64, 0x86, 0xF6, 0x74, 0x4F, 0xEB, 0x45, 0xC0,  // d..tO.E.
+                /* 01B8 */  0x07, 0x00, 0x13, 0x58, 0x2C, 0x84, 0x14, 0x40,  // ...X,..@
+                /* 01C0 */  0x68, 0x3C, 0xE0, 0x57, 0x7C, 0xE8, 0x20, 0xB7,  // h<.W|. .
+                /* 01C8 */  0x05, 0xCF, 0xD7, 0x47, 0x13, 0xE6, 0x64, 0x3C,  // ...G..d<
+                /* 01D0 */  0xA8, 0x51, 0xF8, 0x14, 0x10, 0xEE, 0xBC, 0x4D,  // .Q.....M
+                /* 01D8 */  0xE0, 0xC0, 0x10, 0xFA, 0x5F, 0x58, 0xD4, 0x31,  // ...._X.1
+                /* 01E0 */  0x85, 0x9F, 0x26, 0xE8, 0x41, 0x82, 0xA1, 0xB2,  // ..&.A...
+                /* 01E8 */  0xFF, 0x3F, 0xC4, 0x91, 0x9C, 0x90, 0x3F, 0x2B,  // .?....?+
+                /* 01F0 */  0x1E, 0x18, 0x7C, 0xC1, 0xA7, 0x08, 0x20, 0x03,  // ..|... .
+                /* 01F8 */  0x83, 0xBB, 0x42, 0xB0, 0x01, 0xC3, 0xBF, 0x4C,  // ..B....L
+                /* 0200 */  0x18, 0xD8, 0x17, 0x89, 0xCA, 0x20, 0xC9, 0x91,  // ..... ..
+                /* 0208 */  0xE3, 0x89, 0x06, 0x0C, 0xE8, 0x7D, 0x0E, 0x56,  // .....}.V
+                /* 0210 */  0x87, 0x16, 0x83, 0xF9, 0x3E, 0x13, 0xEC, 0xE5,  // ....>...
+                /* 0218 */  0xA1, 0x47, 0x20, 0xDD, 0x59, 0xAC, 0x15, 0x42,  // .G .Y..B
+                /* 0220 */  0x38, 0xAF, 0x30, 0x3E, 0xD6, 0x00, 0x93, 0x51,  // 8.0>...Q
+                /* 0228 */  0x3F, 0xD6, 0x80, 0xED, 0xE4, 0x03, 0x67, 0x00,  // ?.....g.
+                /* 0230 */  0x3C, 0x8E, 0x09, 0x10, 0x26, 0xFA, 0x5D, 0x20,  // <...&.] 
+                /* 0238 */  0x29, 0x0F, 0x04, 0x0A, 0xE3, 0x23, 0x0D, 0x70,  // )....#.p
+                /* 0240 */  0xF9, 0xFF, 0x1F, 0x69, 0x80, 0xDF, 0xC9, 0x00,  // ...i....
+                /* 0248 */  0x77, 0x7A, 0x00, 0xCF, 0x84, 0x5E, 0x2B, 0xD8,  // wz...^+.
+                /* 0250 */  0xFD, 0xC1, 0xE3, 0x08, 0x12, 0x38, 0xC2, 0x13,  // .....8..
+                /* 0258 */  0x11, 0x39, 0xD1, 0x40, 0x3E, 0x35, 0x3C, 0xC2,  // .9.@>5<.
+                /* 0260 */  0x3C, 0x07, 0x9C, 0xCE, 0xE1, 0x1C, 0xC9, 0x43,  // <......C
+                /* 0268 */  0xC0, 0xEB, 0x8C, 0xBD, 0x21, 0xE9, 0x1E, 0xF3,  // ....!...
+                /* 0270 */  0x3A, 0x63, 0xAC, 0x40, 0x27, 0x15, 0xC5, 0xF7,  // :c.@'...
+                /* 0278 */  0x99, 0x50, 0x11, 0xA2, 0x45, 0x09, 0x19, 0xE1,  // .P..E...
+                /* 0280 */  0x15, 0x22, 0xA4, 0x91, 0xA3, 0x45, 0x8C, 0x12,  // ."...E..
+                /* 0288 */  0x3F, 0x64, 0x9C, 0x27, 0x1A, 0x16, 0xEB, 0x28,  // ?d.'...(
+                /* 0290 */  0xA0, 0xF3, 0x87, 0x4F, 0x34, 0x80, 0xDF, 0xFF,  // ...O4...
+                /* 0298 */  0xFF, 0x89, 0x06, 0xFC, 0xF2, 0x4E, 0x24, 0xA0,  // .....N$.
+                /* 02A0 */  0x3B, 0x36, 0x79, 0x0E, 0x21, 0x9E, 0x46, 0x80,  // ;6y.!.F.
+                /* 02A8 */  0x8B, 0xF4, 0x47, 0x87, 0x4E, 0x75, 0x64, 0xA1,  // ..G.Nud.
+                /* 02B0 */  0xB2, 0xB1, 0x50, 0x0F, 0x82, 0x0A, 0x3F, 0x21,  // ..P...?!
+                /* 02B8 */  0xE8, 0xAC, 0x12, 0x37, 0xE6, 0xAB, 0xCA, 0x6B,  // ...7...k
+                /* 02C0 */  0x84, 0x4F, 0x6B, 0xBE, 0x4B, 0xB0, 0x41, 0x0B,  // .Ok.K.A.
+                /* 02C8 */  0x4E, 0xA7, 0x3D, 0x2E, 0x93, 0x42, 0x22, 0x21,  // N.=..B"!
+                /* 02D0 */  0x34, 0x20, 0xC3, 0x59, 0x16, 0x1C, 0x05, 0xF1,  // 4 .Y....
+                /* 02D8 */  0xE8, 0x7D, 0xE2, 0xF3, 0x51, 0x08, 0x6E, 0xC4,  // .}..Q.n.
+                /* 02E0 */  0xA3, 0x10, 0x3D, 0x2D, 0xE0, 0xC7, 0x72, 0x64,  // ..=-..rd
+                /* 02E8 */  0x27, 0xE6, 0x59, 0xF8, 0x70, 0x87, 0x3B, 0x72,  // '.Y.p.;r
+                /* 02F0 */  0xC0, 0x1D, 0x1C, 0x5B, 0xE1, 0xF1, 0xFB, 0x02,  // ...[....
+                /* 02F8 */  0x10, 0xE4, 0x7C, 0x83, 0x9D, 0xAC, 0x51, 0x5E,  // ..|...Q^
+                /* 0300 */  0x11, 0x3C, 0x42, 0xEC, 0x60, 0x7C, 0x4C, 0xE2,  // .<B.`|L.
+                /* 0308 */  0xE3, 0xF0, 0xD5, 0xE0, 0x7D, 0xC6, 0x04, 0xEC,  // ....}...
+                /* 0310 */  0x0C, 0x04, 0x9E, 0xFF, 0xFF, 0x19, 0x88, 0x0B,  // ........
+                /* 0318 */  0x3C, 0x22, 0x80, 0x02, 0xC8, 0x97, 0x02, 0x1F,  // <"......
+                /* 0320 */  0x11, 0x1E, 0x0C, 0xD8, 0x1C, 0x9E, 0x12, 0x7C,  // .......|
+                /* 0328 */  0xC4, 0x61, 0xF0, 0x3C, 0xDA, 0xA8, 0xA8, 0xAC,  // .a.<....
+                /* 0330 */  0x71, 0xA1, 0x06, 0xEB, 0x33, 0x0C, 0xC3, 0x3E,  // q...3..>
+                /* 0338 */  0x4F, 0x5F, 0x9A, 0x8E, 0xD2, 0xC7, 0x29, 0x0C,  // O_....).
+                /* 0340 */  0xAC, 0x87, 0xCF, 0x61, 0x8D, 0x16, 0xF6, 0xA8,  // ...a....
+                /* 0348 */  0x9F, 0x24, 0x7C, 0x0B, 0xF1, 0xCC, 0x8C, 0x11,  // .$|.....
+                /* 0350 */  0xD6, 0x47, 0x00, 0x20, 0x76, 0x7C, 0x40, 0x9D,  // .G. v|@.
+                /* 0358 */  0x79, 0x7C, 0x6E, 0xF0, 0x88, 0x22, 0x9E, 0xE7,  // y|n.."..
+                /* 0360 */  0xDB, 0x8F, 0x2F, 0x1B, 0xA7, 0xE4, 0x01, 0x59,  // ../....Y
+                /* 0368 */  0xE2, 0xE9, 0x01, 0x25, 0x8E, 0x42, 0xD2, 0x4E,  // ...%.B.N
+                /* 0370 */  0x0F, 0x28, 0x31, 0x70, 0x14, 0xC4, 0xA7, 0x07,  // .(1p....
+                /* 0378 */  0x07, 0x3D, 0x3D, 0x40, 0x0F, 0x76, 0x7A, 0x00,  // .==@.vz.
+                /* 0380 */  0xC5, 0xA9, 0x00, 0x37, 0x56, 0xB8, 0x63, 0xF3,  // ...7V.c.
+                /* 0388 */  0x21, 0xCC, 0x73, 0xC3, 0x1E, 0x1C, 0xC0, 0xF2,  // !.s.....
+                /* 0390 */  0xFF, 0x3F, 0x38, 0x00, 0xDF, 0xE1, 0xFA, 0xE0,  // .?8.....
+                /* 0398 */  0x00, 0xAE, 0x33, 0x80, 0x0F, 0x0E, 0xE0, 0x3A,  // ..3....:
+                /* 03A0 */  0x6E, 0x82, 0x67, 0xF4, 0xEC, 0x08, 0xF3, 0x88,  // n.g.....
+                /* 03A8 */  0x63, 0xAC, 0x73, 0x7D, 0xE4, 0xF1, 0x09, 0x00,  // c.s}....
+                /* 03B0 */  0x8E, 0x98, 0x73, 0x03, 0x6A, 0xB8, 0x96, 0x7B,  // ..s.j..{
+                /* 03B8 */  0x8A, 0x41, 0xDC, 0x11, 0x30, 0x07, 0x18, 0x1F,  // .A..0...
+                /* 03C0 */  0x1B, 0xB8, 0x40, 0x0A, 0xC9, 0x3B, 0x36, 0xA0,  // ..@..;6.
+                /* 03C8 */  0x04, 0xC1, 0x51, 0x10, 0x8F, 0xD1, 0x61, 0x8F,  // ..Q...a.
+                /* 03D0 */  0x0D, 0xD0, 0xC3, 0x1D, 0x1B, 0x40, 0x71, 0xFC,  // .....@q.
+                /* 03D8 */  0xC1, 0x9F, 0x38, 0xE0, 0x9F, 0xC3, 0xE0, 0x1C,  // ..8.....
+                /* 03E0 */  0x1C, 0xF8, 0xFF, 0xFF, 0xE0, 0x00, 0xF8, 0x08,  // ........
+                /* 03E8 */  0x75, 0x70, 0x00, 0x1D, 0x2C, 0x3F, 0x38, 0x80,  // up..,?8.
+                /* 03F0 */  0x67, 0xFC, 0xC0, 0x43, 0xA1, 0x4D, 0x9F, 0x1A,  // g..C.M..
+                /* 03F8 */  0x8D, 0x5A, 0x35, 0x28, 0x53, 0xA3, 0x4C, 0x83,  // .Z5(S.L.
+                /* 0400 */  0x5A, 0x7D, 0x2A, 0x35, 0x66, 0xCC, 0xC6, 0x91,  // Z}*5f...
+                /* 0408 */  0x01, 0x25, 0x64, 0x55, 0x1A, 0x96, 0x63, 0x80,  // .%dU..c.
+                /* 0410 */  0xF0, 0x47, 0x82, 0x40, 0x1C, 0xD5, 0x02, 0x20,  // .G.@... 
+                /* 0418 */  0x8B, 0xE2, 0x01, 0x88, 0x09, 0x59, 0x92, 0x40,  // .....Y.@
+                /* 0420 */  0x1C, 0xEF, 0xA8, 0x28, 0x23, 0xE7, 0x06, 0x83,  // ...(#...
+                /* 0428 */  0x08, 0xC8, 0x71, 0xD7, 0x28, 0x20, 0x87, 0x07,  // ..q.( ..
+                /* 0430 */  0x11, 0x90, 0xE3, 0xAF, 0x43, 0x40, 0x16, 0xA3,  // ....C@..
+                /* 0438 */  0x03, 0x88, 0xFD, 0xFF, 0x01                     // .....
+            })
+        }
+
+        Device (WFTE)
+        {
+            Name (_HID, "PNP0C14" /* Windows Management Instrumentation Device */)  // _HID: Hardware ID
+            Name (_UID, "TestDev")  // _UID: Unique ID
+            Name (_WDG, Buffer (0x28)
+            {
+                /* 0000 */  0x7F, 0xAB, 0x13, 0x1F, 0x20, 0x62, 0x10, 0x42,  // .... b.B
+                /* 0008 */  0x8F, 0x8E, 0x8B, 0xB5, 0xE7, 0x1E, 0xE9, 0x69,  // .......i
+                /* 0010 */  0x44, 0x45, 0x01, 0x02, 0x21, 0x12, 0x90, 0x05,  // DE..!...
+                /* 0018 */  0x66, 0xD5, 0xD1, 0x11, 0xB2, 0xF0, 0x00, 0xA0,  // f.......
+                /* 0020 */  0xC9, 0x06, 0x29, 0x10, 0x43, 0x43, 0x01, 0x00   // ..).CC..
+            })
+            Method (WMDE, 3, NotSerialized)
+            {
+                If ((Arg1 == One))
+                {
+                    PDAT = Arg2
+                    Notify (WFDE, 0xD0) // Hardware-Specific
+                    Return (PDAT) /* \_SB_.PDAT */
+                }
+            }
+
+            Name (WQCC, Buffer (0x02F1)
+            {
+                /* 0000 */  0x46, 0x4F, 0x4D, 0x42, 0x01, 0x00, 0x00, 0x00,  // FOMB....
+                /* 0008 */  0xE1, 0x02, 0x00, 0x00, 0xC2, 0x06, 0x00, 0x00,  // ........
+                /* 0010 */  0x44, 0x53, 0x00, 0x01, 0x1A, 0x7D, 0xDA, 0x54,  // DS...}.T
+                /* 0018 */  0xA8, 0x5D, 0x83, 0x00, 0x01, 0x06, 0x18, 0x42,  // .].....B
+                /* 0020 */  0x20, 0x14, 0x03, 0x89, 0xC0, 0xA2, 0x69, 0x24,  //  .....i$
+                /* 0028 */  0xC7, 0x01, 0x0C, 0x86, 0xCB, 0x72, 0x20, 0xE4,  // .....r .
+                /* 0030 */  0x82, 0x89, 0x09, 0x10, 0x01, 0x21, 0xAF, 0x02,  // .....!..
+                /* 0038 */  0x6C, 0x0A, 0x30, 0x09, 0xA2, 0xFE, 0xFD, 0x21,  // l.0....!
+                /* 0040 */  0x4A, 0x82, 0x43, 0x09, 0x81, 0x90, 0x64, 0x01,  // J.C...d.
+                /* 0048 */  0xE6, 0x05, 0xE8, 0x16, 0x60, 0x58, 0x80, 0x6D,  // ....`X.m
+                /* 0050 */  0x01, 0xA6, 0x05, 0x38, 0x86, 0xA4, 0xD2, 0xC0,  // ...8....
+                /* 0058 */  0x29, 0x81, 0xA5, 0x40, 0x48, 0xB8, 0x00, 0xE5,  // )..@H...
+                /* 0060 */  0x02, 0x7C, 0x0B, 0xD0, 0x8E, 0x28, 0xDC, 0x96,  // .|...(..
+                /* 0068 */  0x61, 0x44, 0xE0, 0x51, 0x44, 0xB6, 0x50, 0x34,  // aD.QD.P4
+                /* 0070 */  0x0A, 0x8D, 0x1D, 0x86, 0x65, 0x82, 0x69, 0x10,  // ....e.i.
+                /* 0078 */  0x87, 0x51, 0x36, 0xB2, 0x08, 0x3C, 0xA1, 0x4E,  // .Q6..<.N
+                /* 0080 */  0x05, 0xC8, 0x15, 0x20, 0x4C, 0x80, 0x78, 0x54,  // ... L.xT
+                /* 0088 */  0x61, 0x34, 0x07, 0x45, 0x20, 0x43, 0x63, 0xC4,  // a4.E Cc.
+                /* 0090 */  0x40, 0x48, 0x22, 0xAC, 0x9C, 0x63, 0x6B, 0x14,  // @H"..ck.
+                /* 0098 */  0xA7, 0x71, 0x34, 0xA5, 0x63, 0x68, 0x04, 0xC7,  // .q4.ch..
+                /* 00A0 */  0x75, 0x40, 0x06, 0xE9, 0x7D, 0x3A, 0x44, 0xD0,  // u@..}:D.
+                /* 00A8 */  0x84, 0x34, 0x8A, 0x68, 0x21, 0xA2, 0x04, 0x3D,  // .4.h!..=
+                /* 00B0 */  0x8E, 0x20, 0x81, 0x23, 0x24, 0x30, 0xCC, 0x31,  // . .#$0.1
+                /* 00B8 */  0x60, 0x64, 0x40, 0xC8, 0xB3, 0x00, 0xEB, 0x83,  // `d@.....
+                /* 00C0 */  0x23, 0x04, 0x76, 0x2F, 0xC0, 0x98, 0x00, 0x8D,  // #.v/....
+                /* 00C8 */  0x10, 0x72, 0x26, 0xC0, 0xA0, 0x00, 0x85, 0x02,  // .r&.....
+                /* 00D0 */  0xBC, 0xC1, 0xC8, 0x96, 0x00, 0x6D, 0x02, 0x94,  // .....m..
+                /* 00D8 */  0x21, 0x68, 0x4A, 0x51, 0x0E, 0x2A, 0x48, 0xB8,  // !hJQ.*H.
+                /* 00E0 */  0x28, 0x16, 0x87, 0x26, 0x88, 0x16, 0x51, 0x08,  // (..&..Q.
+                /* 00E8 */  0x68, 0x84, 0xD6, 0x60, 0x84, 0x1B, 0x2E, 0x46,  // h..`...F
+                /* 00F0 */  0x84, 0x93, 0x8B, 0x1C, 0xA2, 0xFD, 0x41, 0x90,  // ......A.
+                /* 00F8 */  0x68, 0x47, 0x01, 0x49, 0x00, 0x51, 0xA4, 0xD1,  // hG.I.Q..
+                /* 0100 */  0xA0, 0x86, 0x9F, 0xE0, 0x71, 0xC0, 0x47, 0x81,  // ....q.G.
+                /* 0108 */  0x93, 0x3B, 0xA9, 0x13, 0x33, 0xC8, 0x89, 0x1D,  // .;..3...
+                /* 0110 */  0x5D, 0x9D, 0xE7, 0x00, 0x32, 0x62, 0x86, 0x95,  // ]...2b..
+                /* 0118 */  0xE0, 0xD7, 0xC0, 0x07, 0x03, 0xBC, 0x6B, 0x40,  // ......k@
+                /* 0120 */  0xDD, 0x08, 0x9E, 0x07, 0xD8, 0x30, 0xC3, 0x61,  // .....0.a
+                /* 0128 */  0x86, 0xE8, 0xD1, 0x86, 0xFB, 0xFF, 0x9F, 0xC0,  // ........
+                /* 0130 */  0x21, 0x32, 0x40, 0x0F, 0xED, 0x51, 0x00, 0xEB,  // !2@..Q..
+                /* 0138 */  0x70, 0x32, 0x3A, 0x07, 0x94, 0x2A, 0xC0, 0xEC,  // p2:..*..
+                /* 0140 */  0x99, 0x40, 0x33, 0x4B, 0x70, 0x3C, 0x3E, 0x00,  // .@3Kp<>.
+                /* 0148 */  0x78, 0x3E, 0x27, 0x9C, 0xC0, 0xF2, 0x07, 0x81,  // x>'.....
+                /* 0150 */  0x1A, 0x99, 0xA1, 0x3D, 0xE3, 0xD3, 0x7A, 0x0F,  // ...=..z.
+                /* 0158 */  0xF0, 0xF1, 0xE0, 0xB0, 0x98, 0x58, 0x08, 0x29,  // .....X.)
+                /* 0160 */  0x80, 0xD0, 0x78, 0xC0, 0xAF, 0xF8, 0x68, 0x20,  // ..x...h 
+                /* 0168 */  0x84, 0x97, 0x05, 0xCF, 0xD7, 0x87, 0x04, 0x03,  // ........
+                /* 0170 */  0x63, 0x07, 0x64, 0xBF, 0x02, 0x10, 0x82, 0xBF,  // c.d.....
+                /* 0178 */  0x2E, 0x1C, 0xD1, 0x43, 0x43, 0x84, 0x04, 0x2F,  // ...CC../
+                /* 0180 */  0x03, 0x47, 0x50, 0x29, 0xBE, 0xB0, 0x0E, 0x21,  // .GP)...!
+                /* 0188 */  0x46, 0xA4, 0x18, 0x51, 0x82, 0xD4, 0x0A, 0xA1,  // F..Q....
+                /* 0190 */  0xE9, 0x87, 0x49, 0x50, 0xE4, 0xC9, 0x01, 0x3D,  // ..IP...=
+                /* 0198 */  0x02, 0x8E, 0x77, 0x02, 0xC7, 0x13, 0xD9, 0xE3,  // ..w.....
+                /* 01A0 */  0x89, 0x72, 0x12, 0x07, 0xE4, 0x33, 0x85, 0x11,  // .r...3..
+                /* 01A8 */  0x4E, 0xF3, 0x51, 0xE2, 0xD1, 0xC2, 0x9A, 0x67,  // N.Q....g
+                /* 01B0 */  0xA4, 0x13, 0xC3, 0x39, 0xBD, 0x0D, 0x98, 0xA0,  // ...9....
+                /* 01B8 */  0xB2, 0xE7, 0x80, 0x8E, 0x1F, 0x56, 0x05, 0x22,  // .....V."
+                /* 01C0 */  0x1B, 0x4B, 0xF5, 0x39, 0x83, 0x6A, 0x5E, 0xAE,  // .K.9.j^.
+                /* 01C8 */  0x46, 0x74, 0xCC, 0xC7, 0xEA, 0x11, 0x9C, 0xB4,  // Ft......
+                /* 01D0 */  0xA7, 0x17, 0xD9, 0x4A, 0xC1, 0x04, 0xEC, 0x61,  // ...J...a
+                /* 01D8 */  0x5B, 0x23, 0x85, 0xD4, 0xD0, 0x68, 0x3C, 0x06,  // [#...h<.
+                /* 01E0 */  0x77, 0xFE, 0x13, 0x09, 0x05, 0x31, 0xA0, 0xC3,  // w....1..
+                /* 01E8 */  0x41, 0xC8, 0xC9, 0x49, 0x00, 0xA5, 0x62, 0xBC,  // A..I..b.
+                /* 01F0 */  0xE4, 0x68, 0xC1, 0x08, 0xA6, 0x81, 0xD0, 0xDD,  // .h......
+                /* 01F8 */  0xC1, 0xF3, 0xF3, 0x3D, 0x80, 0xDF, 0x4C, 0x7C,  // ...=..L|
+                /* 0200 */  0x32, 0x30, 0xB0, 0xEF, 0x13, 0x6F, 0x1C, 0xF0,  // 20...o..
+                /* 0208 */  0xFF, 0xFF, 0x37, 0x0E, 0x36, 0x09, 0x8C, 0x9A,  // ..7.6...
+                /* 0210 */  0x23, 0x04, 0x9D, 0x02, 0xBF, 0x00, 0xBC, 0x0A,  // #.......
+                /* 0218 */  0x98, 0xC0, 0xBA, 0x2E, 0x06, 0xD0, 0x4F, 0x1D,  // ......O.
+                /* 0220 */  0x1E, 0xA8, 0xAF, 0x1C, 0x67, 0x63, 0x7D, 0x07,  // ....gc}.
+                /* 0228 */  0x03, 0x50, 0x00, 0xF9, 0x22, 0xE0, 0x93, 0xC1,  // .P.."...
+                /* 0230 */  0xC3, 0x00, 0xBB, 0x19, 0x18, 0x26, 0x9A, 0xD1,  // .....&..
+                /* 0238 */  0xB9, 0xA8, 0x69, 0xA3, 0x64, 0xC0, 0x68, 0xDA,  // ..i.d.h.
+                /* 0240 */  0x06, 0xF1, 0xB4, 0x1D, 0x71, 0xDA, 0x68, 0x68,  // ....q.hh
+                /* 0248 */  0x5F, 0x05, 0x7C, 0x11, 0x70, 0xA8, 0x61, 0xD3,  // _.|.p.a.
+                /* 0250 */  0x3B, 0x07, 0x7E, 0xAE, 0x67, 0x16, 0xD0, 0x93,  // ;.~.g...
+                /* 0258 */  0xF0, 0x91, 0xE4, 0xB8, 0xC1, 0x32, 0x0A, 0x06,  // .....2..
+                /* 0260 */  0x1E, 0x24, 0x8E, 0x47, 0xC1, 0x26, 0xCE, 0x07,  // .$.G.&..
+                /* 0268 */  0xE0, 0x89, 0xF3, 0x71, 0xF9, 0x86, 0x01, 0x7F,  // ...q....
+                /* 0270 */  0xE4, 0x58, 0x82, 0x02, 0x67, 0x0E, 0x72, 0x78,  // .X..g.rx
+                /* 0278 */  0x4C, 0xB0, 0x51, 0x51, 0x59, 0xE3, 0x42, 0x8D,  // L.QQY.B.
+                /* 0280 */  0xD2, 0x57, 0x20, 0x86, 0x7D, 0x82, 0x16, 0x3D,  // .W .}..=
+                /* 0288 */  0x48, 0x9D, 0x2F, 0x0E, 0xEA, 0x69, 0xC4, 0x63,  // H./..i.c
+                /* 0290 */  0x33, 0xAC, 0xC7, 0xFD, 0xFF, 0x0F, 0x8B, 0x41,  // 3......A
+                /* 0298 */  0x0B, 0x7B, 0xB8, 0x2F, 0x22, 0x3E, 0xC5, 0x78,  // .{./">.x
+                /* 02A0 */  0x66, 0xC6, 0x08, 0xEB, 0xB1, 0x7B, 0x40, 0x8F,  // f....{@.
+                /* 02A8 */  0x10, 0xE0, 0x01, 0x7B, 0x35, 0x39, 0xD3, 0x07,  // ...{59..
+                /* 02B0 */  0x97, 0x3F, 0x8E, 0xEA, 0x20, 0x74, 0xDF, 0xE0,  // .?.. t..
+                /* 02B8 */  0x28, 0x21, 0x1E, 0x38, 0x30, 0x04, 0x15, 0xDA,  // (!.80...
+                /* 02C0 */  0xF4, 0xA9, 0xD1, 0xA8, 0x55, 0x83, 0x32, 0x35,  // ....U.25
+                /* 02C8 */  0xCA, 0x34, 0xA8, 0xD5, 0xA7, 0x52, 0x63, 0xC6,  // .4...Rc.
+                /* 02D0 */  0x3C, 0x5C, 0x8E, 0xE8, 0x41, 0x81, 0xBC, 0x13,  // <\..A...
+                /* 02D8 */  0x34, 0x42, 0x87, 0x00, 0xA1, 0x42, 0x9E, 0x08,  // 4B...B..
+                /* 02E0 */  0x32, 0x72, 0x0F, 0x31, 0x88, 0x80, 0xAC, 0xCC,  // 2r.1....
+                /* 02E8 */  0x02, 0x10, 0xD3, 0x09, 0x22, 0x20, 0xFF, 0xFF,  // ...." ..
+                /* 02F0 */  0x01                                             // .
+            })
+        }
+
+        Method (USSV, 1, Serialized)
+        {
+            PDAT = Arg0
+        }
+
+        Method (GSSV, 0, Serialized)
+        {
+            Return (PDAT) /* \_SB_.PDAT */
+        }
+
+        Name (OSCI, Zero)
+        Name (OSCO, Zero)
+        Name (OSCP, Zero)
+        Method (_OSC, 4, Serialized)  // _OSC: Operating System Capabilities
+        {
+            CreateDWordField (Arg3, Zero, STS0)
+            CreateDWordField (Arg3, 0x04, CAP0)
+            If ((Arg0 == ToUUID ("0811b06e-4a27-44f9-8d60-3cbbc22e7b48") /* Platform-wide Capabilities */))
+            {
+                If ((Arg1 == One))
+                {
+                    OSCP = CAP0 /* \_SB_._OSC.CAP0 */
+                    If ((CAP0 & 0x04))
+                    {
+                        OSCO = 0x04
+                        If (((SGMD & 0x0F) != 0x02))
+                        {
+                            If ((RTD3 == Zero))
+                            {
+                                CAP0 &= 0x3B
+                                STS0 |= 0x10
+                            }
+                        }
+                    }
+                }
+                Else
+                {
+                    STS0 &= 0xFFFFFF00
+                    STS0 |= 0x0A
+                }
+            }
+            Else
+            {
+                STS0 &= 0xFFFFFF00
+                STS0 |= 0x06
+            }
+
+            Return (Arg3)
+        }
+
+        Device (EPC)
+        {
+            Name (_HID, EisaId ("INT0E0C"))  // _HID: Hardware ID
+            Name (_STR, Unicode ("Enclave Page Cache 1.0"))  // _STR: Description String
+            Name (_MLS, Package (0x01)  // _MLS: Multiple Language String
+            {
+                Package (0x02)
+                {
+                    "en", 
+                    Unicode ("Enclave Page Cache 1.0")
+                }
+            })
+            Name (RBUF, ResourceTemplate ()
+            {
+                QWordMemory (ResourceConsumer, PosDecode, MinNotFixed, MaxNotFixed, NonCacheable, ReadWrite,
+                    0x0000000000000000, // Granularity
+                    0x0000000000000000, // Range Minimum
+                    0x0000000000000000, // Range Maximum
+                    0x0000000000000000, // Translation Offset
+                    0x0000000000000001, // Length
+                    ,, _Y26, AddressRangeMemory, TypeStatic)
+            })
+            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+            {
+                CreateQWordField (RBUF, \_SB.EPC._Y26._MIN, EMIN)  // _MIN: Minimum Base Address
+                CreateQWordField (RBUF, \_SB.EPC._Y26._MAX, EMAX)  // _MAX: Maximum Base Address
+                CreateQWordField (RBUF, \_SB.EPC._Y26._LEN, ELEN)  // _LEN: Length
+                EMIN = EMNA /* External reference */
+                ELEN = ELNG /* External reference */
+                EMAX = ((EMNA + ELNG) - One)
+                Return (RBUF) /* \_SB_.EPC_.RBUF */
+            }
+
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((EPCS != Zero))
+                {
+                    Return (0x0F)
+                }
+
+                Return (Zero)
+            }
+        }
+
+        Device (COEX)
+        {
+            Name (_HID, EisaId ("INT3519"))  // _HID: Hardware ID
+            Name (_STR, Unicode ("CoExistence Manager"))  // _STR: Description String
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((COEM == One))
+                {
+                    Return (0x0F)
+                }
+                Else
+                {
+                    Return (Zero)
+                }
+            }
+        }
+
+        Device (PAGD)
+        {
+            Name (_HID, "ACPI000C" /* Processor Aggregator Device */)  // _HID: Hardware ID
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If (_OSI ("Processor Aggregator Device"))
+                {
+                    Return (0x0F)
+                }
+                Else
+                {
+                    Return (Zero)
+                }
+            }
+
+            Name (_PUR, Package (0x02)  // _PUR: Processor Utilization Request
+            {
+                One, 
+                Zero
+            })
+        }
+
+        Processor (PR00, 0x01, 0x00001810, 0x06)
+        {
+            Name (CPC2, Package (0x15)
+            {
+                0x15, 
+                0x02, 
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x0000000000000771, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x08,               // Bit Offset
+                        0x00000000000000CE, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x10,               // Bit Offset
+                        0x0000000000000771, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x18,               // Bit Offset
+                        0x0000000000000771, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x08,               // Bit Offset
+                        0x0000000000000771, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x10,               // Bit Offset
+                        0x0000000000000774, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x0000000000000774, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x08,               // Bit Offset
+                        0x0000000000000774, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (SystemMemory, 
+                        0x00,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x0000000000000000, // Address
+                        ,)
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (SystemMemory, 
+                        0x00,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x0000000000000000, // Address
+                        ,)
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (SystemMemory, 
+                        0x00,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x0000000000000000, // Address
+                        ,)
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x40,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x00000000000000E7, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x40,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x00000000000000E8, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x02,               // Bit Width
+                        0x01,               // Bit Offset
+                        0x0000000000000777, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x01,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x0000000000000770, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                One, 
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x0A,               // Bit Width
+                        0x20,               // Bit Offset
+                        0x0000000000000774, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x18,               // Bit Offset
+                        0x0000000000000774, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                Zero
+            })
+            Name (CPOC, Package (0x15)
+            {
+                0x15, 
+                0x02, 
+                0xFF, 
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x08,               // Bit Offset
+                        0x00000000000000CE, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x10,               // Bit Offset
+                        0x0000000000000771, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x18,               // Bit Offset
+                        0x0000000000000771, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x08,               // Bit Offset
+                        0x0000000000000771, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x10,               // Bit Offset
+                        0x0000000000000774, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x0000000000000774, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x08,               // Bit Offset
+                        0x0000000000000774, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (SystemMemory, 
+                        0x00,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x0000000000000000, // Address
+                        ,)
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (SystemMemory, 
+                        0x00,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x0000000000000000, // Address
+                        ,)
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (SystemMemory, 
+                        0x00,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x0000000000000000, // Address
+                        ,)
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x40,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x00000000000000E7, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x40,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x00000000000000E8, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x02,               // Bit Width
+                        0x01,               // Bit Offset
+                        0x0000000000000777, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x01,               // Bit Width
+                        0x00,               // Bit Offset
+                        0x0000000000000770, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                One, 
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x0A,               // Bit Width
+                        0x20,               // Bit Offset
+                        0x0000000000000774, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                ResourceTemplate ()
+                {
+                    Register (FFixedHW, 
+                        0x08,               // Bit Width
+                        0x18,               // Bit Offset
+                        0x0000000000000774, // Address
+                        0x04,               // Access Size
+                        )
+                }, 
+
+                Zero
+            })
+
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR00 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR00 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR00 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR01, 0x02, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR01 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR01 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR01 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR02, 0x03, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR02 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR02 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR02 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR03, 0x04, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR03 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR03 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR03 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR04, 0x05, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR04 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR04 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR04 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR05, 0x06, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR05 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR05 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR05 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR06, 0x07, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR06 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR06 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR06 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR07, 0x08, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR07 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR07 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR07 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR08, 0x09, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR08 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR08 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR08 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR09, 0x0A, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR09 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR09 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR09 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR10, 0x0B, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR10 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR10 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR10 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR11, 0x0C, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR11 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR11 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR11 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR12, 0x0D, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR12 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR12 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR12 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR13, 0x0E, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR13 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR13 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR13 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR14, 0x0F, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR14 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR14 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR14 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR15, 0x10, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR15 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR15 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR15 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR16, 0x11, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR16 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR16 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR16 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR17, 0x12, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR17 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR17 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR17 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR18, 0x13, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR18 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR18 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR18 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Processor (PR19, 0x14, 0x00001810, 0x06)
+        {
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                ADBG ("PR19 DEP Call")
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    ADBG ("PR19 DEP")
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    ADBG ("PR19 DEP NULL")
+                    Return (Package (0x00){})
+                }
+            }
+        }
+        Device (PEPD)
+        {
+            Name (_HID, "INT33A1" /* Intel Power Engine */)  // _HID: Hardware ID
+            Name (_CID, EisaId ("PNP0D80") /* Windows-compatible System Power Management Controller */)  // _CID: Compatible ID
+            Name (_UID, One)  // _UID: Unique ID
+            Name (PPD0, Package (0x03)
+            {
+                "\\_SB.PCI0.SAT0", 
+                Zero, 
+                Package (0x02)
+                {
+                    Zero, 
+                    Package (0x03)
+                    {
+                        0xFF, 
+                        Zero, 
+                        0x81
+                    }
+                }
+            })
+            Name (PPD3, Package (0x03)
+            {
+                "\\_SB.PCI0.SAT0", 
+                Zero, 
+                Package (0x02)
+                {
+                    Zero, 
+                    Package (0x02)
+                    {
+                        0xFF, 
+                        0x03
+                    }
+                }
+            })
+            Name (WWD3, Package (0x03)
+            {
+                "\\_SB.PCI0.RP02", 
+                Zero, 
+                Package (0x02)
+                {
+                    Zero, 
+                    Package (0x02)
+                    {
+                        0xFF, 
+                        0x03
+                    }
+                }
+            })
+            Name (DEVY, Package (0x4A)
+            {
+                Package (0x03)
+                {
+                    "\\_SB.PR00", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR01", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR02", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR03", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR04", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR05", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR06", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR07", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.GFX0", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.SAT0", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.UA00", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.UA01", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.I2C0", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.I2C1", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.XHC", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.HDEF", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.PEMC", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.PSDC", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.I2C2", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.I2C3", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.UA02", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.SPI0", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.SPI1", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP01.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP02.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP03.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP04.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP05.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP06.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP07.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP08.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP09.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP10.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP11.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP12.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP13.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP14.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP15.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP16.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP17.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP18.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP19.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP20.PXSX", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.SAT0.VOL0", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR08", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR09", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR10", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR11", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR12", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR13", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR14", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR15", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.IPU0", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.HECI", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.GLAN", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.PEG0", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "USB\\VID_8087&PID_0AC9&MI*", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x02
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.SAT0.PRT0", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.SAT0.PRT1", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.SAT0.PRT2", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.SAT0.PRT3", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.SAT0.PRT4", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.SAT0.PRT5", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "Reserved For TBT RP0", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "Reserved For TBT RP1", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR16", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR17", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR18", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PR19", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            Zero
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.I2C4", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.I2C5", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.SPI2", 
+                    One, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.CNVW", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x03)
+                        {
+                            0xFF, 
+                            Zero, 
+                            0x81
+                        }
+                    }
+                }, 
+
+                Package (0x03)
+                {
+                    "\\_SB.PCI0.RP02", 
+                    Zero, 
+                    Package (0x02)
+                    {
+                        Zero, 
+                        Package (0x02)
+                        {
+                            0xFF, 
+                            0x03
+                        }
+                    }
+                }
+            })
+            Method (_DSD, 0, NotSerialized)  // _DSD: Device-Specific Data
+            {
+                Name (PSID, ToUUID ("bf60df52-56cd-454f-9a23-cb4dcfae77f8"))
+                Name (PSEN, Package (0x02)
+                {
+                    "CecPsOnSwitchingEnabledInS0", 
+                    One
+                })
+                Name (PSDS, Package (0x02)
+                {
+                    "CecPsOnSwitchingEnabledInS0", 
+                    Zero
+                })
+                If (PSON)
+                {
+                    Return (Package (0x02)
+                    {
+                        PSID, 
+                        PSEN
+                    })
+                }
+                Else
+                {
+                    Return (Package (0x02)
+                    {
+                        PSID, 
+                        PSDS
+                    })
+                }
+            }
+
+            Method (SPDE, 0, Serialized)
+            {
+                If (!ESPC)
+                {
+                    Return (Zero)
+                }
+
+                If (^^PCI0.SAT0.PRT0.PRES ())
+                {
+                    DerefOf (DEVY [0x39]) [One] = One
+                }
+
+                If (^^PCI0.SAT0.PRT1.PRES ())
+                {
+                    DerefOf (DEVY [0x3A]) [One] = One
+                }
+
+                If (^^PCI0.SAT0.PRT2.PRES ())
+                {
+                    DerefOf (DEVY [0x3B]) [One] = One
+                }
+
+                If (^^PCI0.SAT0.PRT3.PRES ())
+                {
+                    DerefOf (DEVY [0x3C]) [One] = One
+                }
+
+                If (^^PCI0.SAT0.PRT4.PRES ())
+                {
+                    DerefOf (DEVY [0x3D]) [One] = One
+                }
+
+                If (^^PCI0.SAT0.PRT5.PRES ())
+                {
+                    DerefOf (DEVY [0x3E]) [One] = One
+                }
+            }
+
+            Name (BCCD, Package (0x19)
+            {
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.SAT0", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x3E80
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.SAT0.PRT0", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x3E80
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.SAT0.PRT1", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x3E80
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.SAT0.PRT2", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x3E80
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.SAT0.PRT3", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x3E80
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP01.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP02.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP03.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP04.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP05.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP06.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP07.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP08.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP09.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP10.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP11.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP12.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP13.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP14.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP15.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP16.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP17.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP18.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP19.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }, 
+
+                Package (0x02)
+                {
+                    "\\_SB.PCI0.RP20.PXSX", 
+                    Package (0x01)
+                    {
+                        Package (0x03)
+                        {
+                            Package (0x05)
+                            {
+                                One, 
+                                0x08, 
+                                Zero, 
+                                One, 
+                                0xB2
+                            }, 
+
+                            Package (0x03)
+                            {
+                                Zero, 
+                                0xCD, 
+                                One
+                            }, 
+
+                            0x000186A0
+                        }
+                    }
+                }
+            })
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If (((OSYS >= 0x07DF) || ((OSYS >= 0x07DC) && (
+                    S0ID == One))))
+                {
+                    Return (0x0F)
+                }
+
+                Return (Zero)
+            }
+
+            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+            {
+                ADBG (Concatenate ("PEPC = ", ToHexString (PEPC)))
+                If ((Arg0 == ToUUID ("c4eb40a0-6cd2-11e2-bcfd-0800200c9a66")))
+                {
+                    If ((Arg2 == Zero))
+                    {
+                        Return (Buffer (One)
+                        {
+                             0x7F                                             // .
+                        })
+                    }
+
+                    If ((Arg2 == One))
+                    {
+                        If ((S0ID == Zero))
+                        {
+                            Return (Package (0x00){})
+                        }
+
+                        SPDE ()
+                        If (((PEPC & One) == One))
+                        {
+                            If (((PEPC & 0x03) == One))
+                            {
+                                DEVY [0x09] = PPD0 /* \_SB_.PEPD.PPD0 */
+                            }
+                            ElseIf (((PEPC & 0x03) == 0x03))
+                            {
+                                DEVY [0x09] = PPD3 /* \_SB_.PEPD.PPD3 */
+                            }
+
+                            DerefOf (DEVY [0x09]) [One] = One
+                        }
+                        ElseIf (((PEPC & 0x03) == 0x02))
+                        {
+                            DerefOf (DEVY [0x2B]) [One] = One
+                        }
+
+                        If (((PEPC & 0x10) == 0x10))
+                        {
+                            If (CondRefOf (\_SB.PCI0.RP01.PXSX))
+                            {
+                                If ((^^PCI0.RP01.PXSX.PAHC () || ^^PCI0.RP01.PXSX.PNVM ()))
+                                {
+                                    DerefOf (DEVY [0x17]) [One] = One
+                                }
+                            }
+
+                            If ((^^PCI0.RP02.PXSX.PAHC () || ^^PCI0.RP02.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x18]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP03.PXSX.PAHC () || ^^PCI0.RP03.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x19]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP04.PXSX.PAHC () || ^^PCI0.RP04.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x1A]) [One] = One
+                            }
+
+                            If (CondRefOf (\_SB.PCI0.RP05.PXSX))
+                            {
+                                If ((^^PCI0.RP05.PXSX.PAHC () || ^^PCI0.RP05.PXSX.PNVM ()))
+                                {
+                                    DerefOf (DEVY [0x1B]) [One] = One
+                                }
+                            }
+
+                            If ((^^PCI0.RP06.PXSX.PAHC () || ^^PCI0.RP06.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x1C]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP07.PXSX.PAHC () || ^^PCI0.RP07.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x1D]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP08.PXSX.PAHC () || ^^PCI0.RP08.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x1E]) [One] = One
+                            }
+
+                            If (CondRefOf (\_SB.PCI0.RP09.PXSX))
+                            {
+                                If ((^^PCI0.RP09.PXSX.PAHC () || ^^PCI0.RP09.PXSX.PNVM ()))
+                                {
+                                    DerefOf (DEVY [0x1F]) [One] = One
+                                }
+                            }
+
+                            If ((^^PCI0.RP10.PXSX.PAHC () || ^^PCI0.RP10.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x20]) [One] = One
+                            }
+                            
+                            If (CondRefOf (\_SB.PCI0.RP11.PXSX))
+                            {
+                                If ((^^PCI0.RP11.PXSX.PAHC () || ^^PCI0.RP11.PXSX.PNVM ()))
+                                {
+                                    DerefOf (DEVY [0x21]) [One] = One
+                                }
+                            }
+
+                            If ((^^PCI0.RP12.PXSX.PAHC () || ^^PCI0.RP12.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x22]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP13.PXSX.PAHC () || ^^PCI0.RP13.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x23]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP14.PXSX.PAHC () || ^^PCI0.RP14.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x24]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP15.PXSX.PAHC () || ^^PCI0.RP15.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x25]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP16.PXSX.PAHC () || ^^PCI0.RP16.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x26]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP17.PXSX.PAHC () || ^^PCI0.RP17.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x27]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP18.PXSX.PAHC () || ^^PCI0.RP18.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x28]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP19.PXSX.PAHC () || ^^PCI0.RP19.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x29]) [One] = One
+                            }
+
+                            If ((^^PCI0.RP20.PXSX.PAHC () || ^^PCI0.RP20.PXSX.PNVM ()))
+                            {
+                                DerefOf (DEVY [0x2A]) [One] = One
+                            }
+                        }
+
+                        If (((OSYS >= 0x07DF) && (WRTO != Zero)))
+                        {
+                            If (^^PCI0.RP02.PXSX.WWST ())
+                            {
+                                If ((WRTO == 0x03))
+                                {
+                                    WWD3 [Zero] = "\\_SB.PCI0.RP02"
+                                    DEVY [0x49] = WWD3 /* \_SB_.PEPD.WWD3 */
+                                    DerefOf (DEVY [0x49]) [One] = One
+                                }
+
+                                If ((WRTO == One))
+                                {
+                                    DerefOf (DEVY [0x38]) [One] = One
+                                }
+                            }
+
+                            If (^^PCI0.RP13.PXSX.WWST ())
+                            {
+                                If ((WRTO == 0x03))
+                                {
+                                    WWD3 [Zero] = "\\_SB.PCI0.RP13"
+                                    DEVY [0x49] = WWD3 /* \_SB_.PEPD.WWD3 */
+                                    DerefOf (DEVY [0x49]) [One] = One
+                                }
+
+                                If ((WRTO == One))
+                                {
+                                    DerefOf (DEVY [0x38]) [One] = One
+                                }
+                            }
+                        }
+
+                        If (((PEPC & 0x04) == Zero))
+                        {
+                            DerefOf (DEVY [0x0A]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x08) == Zero))
+                        {
+                            DerefOf (DEVY [0x0B]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x10) == Zero)){}
+                        If (((PEPC & 0x20) == Zero))
+                        {
+                            DerefOf (DEVY [0x0C]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x40) == Zero))
+                        {
+                            DerefOf (DEVY [0x0D]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x80) == Zero))
+                        {
+                            DerefOf (DEVY [0x0E]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x0100) == Zero))
+                        {
+                            DerefOf (DEVY [0x0F]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x0200) == Zero))
+                        {
+                            DerefOf (DEVY [0x08]) [One] = Zero
+                        }
+
+                        If ((TCNT >= One))
+                        {
+                            DerefOf (DEVY [Zero]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x02))
+                        {
+                            DerefOf (DEVY [One]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x03))
+                        {
+                            DerefOf (DEVY [0x02]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x04))
+                        {
+                            DerefOf (DEVY [0x03]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x05))
+                        {
+                            DerefOf (DEVY [0x04]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x06))
+                        {
+                            DerefOf (DEVY [0x05]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x07))
+                        {
+                            DerefOf (DEVY [0x06]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x08))
+                        {
+                            DerefOf (DEVY [0x07]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x09))
+                        {
+                            DerefOf (DEVY [0x2C]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x0A))
+                        {
+                            DerefOf (DEVY [0x2D]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x0B))
+                        {
+                            DerefOf (DEVY [0x2E]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x0C))
+                        {
+                            DerefOf (DEVY [0x2F]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x0D))
+                        {
+                            DerefOf (DEVY [0x30]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x0E))
+                        {
+                            DerefOf (DEVY [0x31]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x0F))
+                        {
+                            DerefOf (DEVY [0x32]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x10))
+                        {
+                            DerefOf (DEVY [0x33]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x11))
+                        {
+                            DerefOf (DEVY [0x41]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x12))
+                        {
+                            DerefOf (DEVY [0x42]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x13))
+                        {
+                            DerefOf (DEVY [0x43]) [One] = One
+                        }
+
+                        If ((TCNT >= 0x14))
+                        {
+                            DerefOf (DEVY [0x44]) [One] = One
+                        }
+
+                        If (((PEPC & 0x0400) == Zero))
+                        {
+                            DerefOf (DEVY [Zero]) [One] = Zero
+                            DerefOf (DEVY [One]) [One] = Zero
+                            DerefOf (DEVY [0x02]) [One] = Zero
+                            DerefOf (DEVY [0x03]) [One] = Zero
+                            DerefOf (DEVY [0x04]) [One] = Zero
+                            DerefOf (DEVY [0x05]) [One] = Zero
+                            DerefOf (DEVY [0x06]) [One] = Zero
+                            DerefOf (DEVY [0x07]) [One] = Zero
+                            DerefOf (DEVY [0x2C]) [One] = Zero
+                            DerefOf (DEVY [0x2D]) [One] = Zero
+                            DerefOf (DEVY [0x2E]) [One] = Zero
+                            DerefOf (DEVY [0x2F]) [One] = Zero
+                            DerefOf (DEVY [0x30]) [One] = Zero
+                            DerefOf (DEVY [0x31]) [One] = Zero
+                            DerefOf (DEVY [0x32]) [One] = Zero
+                            DerefOf (DEVY [0x33]) [One] = Zero
+                            DerefOf (DEVY [0x41]) [One] = Zero
+                            DerefOf (DEVY [0x42]) [One] = Zero
+                            DerefOf (DEVY [0x43]) [One] = Zero
+                            DerefOf (DEVY [0x44]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x0800) == Zero))
+                        {
+                            DerefOf (DEVY [0x10]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x1000) == Zero))
+                        {
+                            DerefOf (DEVY [0x11]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x2000) == Zero))
+                        {
+                            DerefOf (DEVY [0x12]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x4000) == Zero))
+                        {
+                            DerefOf (DEVY [0x13]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x8000) == Zero))
+                        {
+                            DerefOf (DEVY [0x45]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x00010000) == Zero))
+                        {
+                            DerefOf (DEVY [0x46]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x00020000) == Zero))
+                        {
+                            DerefOf (DEVY [0x14]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x00040000) == Zero))
+                        {
+                            DerefOf (DEVY [0x15]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x00080000) == Zero))
+                        {
+                            DerefOf (DEVY [0x16]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x00100000) == Zero))
+                        {
+                            DerefOf (DEVY [0x47]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x00200000) == Zero))
+                        {
+                            DerefOf (DEVY [0x34]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x00400000) == Zero))
+                        {
+                            DerefOf (DEVY [0x35]) [One] = Zero
+                        }
+
+                        If ((((PEPC & 0x00800000) == Zero) || (GBES == Zero)))
+                        {
+                            DerefOf (DEVY [0x36]) [One] = Zero
+                        }
+
+                        If (((PEPC & 0x01000000) != Zero))
+                        {
+                            DerefOf (DEVY [0x37]) [One] = One
+                        }
+
+                        If (((PEPC & 0x02000000) != Zero))
+                        {
+                            If (STPC (0x3F, 0x41))
+                            {
+                                ADBG ("TBT PEP Constraint is successfully SET")
+                            }
+                            Else
+                            {
+                                ADBG ("TBT PEP Constraint is Failed to SET")
+                            }
+                        }
+
+                        If ((OSYS >= 0x07DF))
+                        {
+                            If (CondRefOf (\_SB.PCI0.RP01.PXSX))
+                            {
+                                If (^^PCI0.RP01.PXSX.WIST ())
+                                {
+                                    DerefOf (DerefOf (DerefOf (DEVY [0x17]) [0x02]
+                                        ) [One]) [One] = 0x03
+                                    DerefOf (DerefOf (DerefOf (DEVY [0x17]) [0x02]
+                                        ) [One]) [0x02] = Zero
+                                    DerefOf (DEVY [0x17]) [One] = One
+                                }
+                            }
+
+                            If (^^PCI0.RP02.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x18]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x18]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x18]) [One] = One
+                            }
+
+                            If (^^PCI0.RP03.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x19]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x19]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x19]) [One] = One
+                            }
+
+                            If (^^PCI0.RP04.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x1A]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x1A]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x1A]) [One] = One
+                            }
+
+                            If (CondRefOf (\_SB.PCI0.RP05.PXSX))
+                            {
+                                If (^^PCI0.RP05.PXSX.WIST ())
+                                {
+                                    DerefOf (DerefOf (DerefOf (DEVY [0x1B]) [0x02]
+                                        ) [One]) [One] = 0x03
+                                    DerefOf (DerefOf (DerefOf (DEVY [0x1B]) [0x02]
+                                        ) [One]) [0x02] = Zero
+                                    DerefOf (DEVY [0x1B]) [One] = One
+                                }
+                            }
+
+                            If (^^PCI0.RP06.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x1C]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x1C]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x1C]) [One] = One
+                            }
+
+                            If (^^PCI0.RP07.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x1D]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x1D]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x1D]) [One] = One
+                            }
+
+                            If (^^PCI0.RP08.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x1E]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x1E]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x1E]) [One] = One
+                            }
+
+                            If (CondRefOf (\_SB.PCI0.RP09.PXSX))
+                            {
+                                If (^^PCI0.RP09.PXSX.WIST ())
+                                {
+                                    DerefOf (DerefOf (DerefOf (DEVY [0x1F]) [0x02]
+                                        ) [One]) [One] = 0x03
+                                    DerefOf (DerefOf (DerefOf (DEVY [0x1F]) [0x02]
+                                        ) [One]) [0x02] = Zero
+                                    DerefOf (DEVY [0x1F]) [One] = One
+                                }
+                            }
+
+                            If (^^PCI0.RP10.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x20]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x20]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x20]) [One] = One
+                            }
+                            
+                            If (CondRefOf (\_SB.PCI0.RP11.PXSX))
+                            {
+                                If (^^PCI0.RP11.PXSX.WIST ())
+                                {
+                                    DerefOf (DerefOf (DerefOf (DEVY [0x21]) [0x02]
+                                        ) [One]) [One] = 0x03
+                                    DerefOf (DerefOf (DerefOf (DEVY [0x21]) [0x02]
+                                        ) [One]) [0x02] = Zero
+                                    DerefOf (DEVY [0x21]) [One] = One
+                                }
+                            }
+
+                            If (^^PCI0.RP12.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x22]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x22]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x22]) [One] = One
+                            }
+
+                            If (^^PCI0.RP13.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x23]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x23]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x23]) [One] = One
+                            }
+
+                            If (^^PCI0.RP14.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x24]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x24]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x24]) [One] = One
+                            }
+
+                            If (^^PCI0.RP15.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x25]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x25]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x25]) [One] = One
+                            }
+
+                            If (^^PCI0.RP16.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x26]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x26]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x26]) [One] = One
+                            }
+
+                            If (^^PCI0.RP17.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x27]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x27]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x27]) [One] = One
+                            }
+
+                            If (^^PCI0.RP18.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x28]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x28]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x28]) [One] = One
+                            }
+
+                            If (^^PCI0.RP19.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x29]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x29]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x29]) [One] = One
+                            }
+
+                            If (^^PCI0.RP20.PXSX.WIST ())
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x2A]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x2A]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x2A]) [One] = One
+                            }
+
+                            If ((^^PCI0.CNVW.VDID != 0xFFFFFFFF))
+                            {
+                                DerefOf (DerefOf (DerefOf (DEVY [0x48]) [0x02]
+                                    ) [One]) [One] = 0x03
+                                DerefOf (DerefOf (DerefOf (DEVY [0x48]) [0x02]
+                                    ) [One]) [0x02] = Zero
+                                DerefOf (DEVY [0x48]) [One] = One
+                            }
+                        }
+
+                        Return (DEVY) /* \_SB_.PEPD.DEVY */
+                    }
+
+                    If ((Arg2 == 0x02))
+                    {
+                        Return (BCCD) /* \_SB_.PEPD.BCCD */
+                    }
+
+                    If ((Arg2 == 0x03))
+                    {
+                        If ((S0ID == One))
+                        {
+                            D8XH (Zero, 0xC5)
+                            D8XH (One, Zero)
+                            If (!^^PCI0.GFX0.PDRD ())
+                            {
+                                While (!(PBTN & 0x02))
+                                {
+                                    Sleep (0x64)
+                                }
+
+                                ^^PCI0.LPCB.EC.CSMF = One
+                            }
+                        }
+                    }
+
+                    If ((Arg2 == 0x04))
+                    {
+                        If ((S0ID == One))
+                        {
+                            D8XH (Zero, 0xC5)
+                            D8XH (One, 0xAB)
+                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP01.TBNF)))
+                            {
+                                ^^PCI0.RP01.TBNF ()
+                            }
+
+                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP05.TBNF)))
+                            {
+                                ^^PCI0.RP05.TBNF ()
+                            }
+
+                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP09.TBNF)))
+                            {
+                                ^^PCI0.RP09.TBNF ()
+                            }
+
+                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP13.TBNF)))
+                            {
+                                ^^PCI0.RP13.TBNF ()
+                            }
+
+                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP17.TBNF)))
+                            {
+                                ^^PCI0.RP17.TBNF ()
+                            }
+
+                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP21.TBNF)))
+                            {
+                                ^^PCI0.RP21.TBNF ()
+                            }
+
+                            ^^PCI0.LPCB.EC.CSMF = Zero
+                        }
+                    }
+
+                    If ((Arg2 == 0x05))
+                    {
+                        If ((S0ID == One))
+                        {
+                            GUAM (One)
+                        }
+
+                        ^^PCI0.LPCB.EC.CSMF = 0x03
+                    }
+
+                    If ((Arg2 == 0x06))
+                    {
+                        If ((S0ID == One))
+                        {
+                            GUAM (Zero)
+                        }
+
+                        ^^PCI0.LPCB.EC.CSMF = One
+                    }
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+        }
+
+        Method (CHOV, 2, Serialized)
+        {
+            Switch (ToInteger (Arg0))
+            {
+                Case (Zero)
+                {
+                    ODV0 = Arg1
+                }
+                Case (One)
+                {
+                    ODV1 = Arg1
+                }
+                Case (0x02)
+                {
+                    ODV2 = Arg1
+                }
+                Case (0x03)
+                {
+                    ODV3 = Arg1
+                }
+                Case (0x04)
+                {
+                    ODV4 = Arg1
+                }
+                Case (0x05)
+                {
+                    ODV5 = Arg1
+                }
+
+            }
+
+            Notify (IETM, 0x88) // Device-Specific
+        }
+
+        Method (GWAK, 1, NotSerialized)
+        {
+            If ((Arg0 == 0x04))
+            {
+                GOST ()
+            }
+        }
+
+        Method (GPTS, 1, NotSerialized)
+        {
+        }
+
+        Device (LID0)
+        {
+            Name (_HID, EisaId ("PNP0C0D") /* Lid Device */)  // _HID: Hardware ID
+            Method (_LID, 0, NotSerialized)  // _LID: Lid Status
+            {
+                Return (LIDS) /* External reference */
+            }
+        }
+
+        Device (PWRB)
+        {
+            Name (_HID, EisaId ("PNP0C0C") /* Power Button Device */)  // _HID: Hardware ID
+            Method (_PRW, 0, NotSerialized)  // _PRW: Power Resources for Wake
+            {
+                Name (PRWS, Package (0x02)
+                {
+                    Zero, 
+                    0x05
+                })
+                Local0 = GGPE (0x04010010)
+                PRWS [Zero] = Local0
+                Return (PRWS) /* \_SB_.PWRB._PRW.PRWS */
+            }
+        }
+
+        OperationRegion (ECMB, SystemIO, 0x0A00, 0x08)
+        Field (ECMB, ByteAcc, NoLock, Preserve)
+        {
+            ECM0,   8, 
+            ECM1,   8, 
+            ECM2,   8, 
+            ECM3,   8
+        }
+
+        Name (MBUF, Buffer (0x1E)
+        {
+            /* 0000 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // ........
+            /* 0008 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // ........
+            /* 0010 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // ........
+            /* 0018 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00               // ......
+        })
+        Method (RDMX, 1, NotSerialized)
+        {
+            Local0 = (Arg0 & 0xFF00)
+            Local0 >>= 0x08
+            ECM1 = Local0
+            Local0 = (Arg0 & 0xFF)
+            ECM2 = Local0
+            Local0 = ECM3 /* \_SB_.ECM3 */
+            Return (Local0)
+        }
+
+        Method (WTMX, 2, NotSerialized)
+        {
+            Local0 = (Arg0 & 0xFF00)
+            Local0 >>= 0x08
+            ECM1 = Local0
+            Local0 = (Arg0 & 0xFF)
+            ECM2 = Local0
+            ECM3 = Arg1
+        }
+
+        Method (CKID, 0, NotSerialized)
+        {
+            Local0 = Zero
+            While (One)
+            {
+                If ((RDMX (0xFF10) == Zero))
+                {
+                    Break
+                }
+
+                Stall (0x0A)
+                Local0++
+                If ((Local0 > 0x7530))
+                {
+                    Return (Zero)
+                }
+            }
+
+            Return (One)
+        }
+
+        Method (SNDA, 1, NotSerialized)
+        {
+            Local0 = Zero
+            Local1 = 0xF480
+            While ((Local0 < 0x1E))
+            {
+                If ((Local0 >= Arg0))
+                {
+                    Break
+                }
+
+                WTMX (Local1, DerefOf (MBUF [Local0]))
+                Local0++
+                Local1++
+            }
+        }
+
+        Method (RDDA, 1, NotSerialized)
+        {
+            Local0 = Zero
+            Local1 = 0xF480
+            While ((Local0 < 0x1E))
+            {
+                If ((Local0 >= Arg0))
+                {
+                    Break
+                }
+
+                MBUF [Local0] = RDMX (Local1)
+                Local0++
+                Local1++
+            }
+        }
+
+        Method (MCMD, 1, NotSerialized)
+        {
+            Local0 = Acquire (MSEC, 0x1388)
+            If ((Local0 == Zero))
+            {
+                If (ECON)
+                {
+                    If ((CKID () == Zero))
+                    {
+                        Release (MSEC)
+                        Return (Zero)
+                    }
+
+                    WTMX (0xFF10, Arg0)
+                    Release (MSEC)
+                    Return (One)
+                }
+                Else
+                {
+                    Release (MSEC)
+                }
+            }
+
+            Return (Zero)
+        }
+
+        Method (CMDD, 3, Serialized)
+        {
+            Local0 = Acquire (MSEC, 0x1388)
+            If ((Local0 == Zero))
+            {
+                If (ECON)
+                {
+                    If ((CKID () == Zero))
+                    {
+                        Release (MSEC)
+                        Return (Zero)
+                    }
+
+                    MBUF = Arg2
+                    SNDA (Arg1)
+                    WTMX (0xFF10, Arg0)
+                    Release (MSEC)
+                    Return (One)
+                }
+                Else
+                {
+                    Release (MSEC)
+                }
+            }
+
+            Return (Zero)
+        }
+
+        Method (CDRD, 4, Serialized)
+        {
+            Local0 = Acquire (MSEC, 0x1388)
+            If ((Local0 == Zero))
+            {
+                If (ECON)
+                {
+                    If ((CKID () == Zero))
+                    {
+                        Release (MSEC)
+                        Return (Buffer (One)
+                        {
+                             0x00                                             // .
+                        })
+                    }
+
+                    MBUF = Arg3
+                    SNDA (Arg1)
+                    WTMX (0xFF10, Arg0)
+                    If ((CKID () == Zero))
+                    {
+                        Release (MSEC)
+                        Return (Buffer (One)
+                        {
+                             0x00                                             // .
+                        })
+                    }
+
+                    MBUF = Zero
+                    RDDA (Arg2)
+                    Local0 = MBUF /* \_SB_.MBUF */
+                    Release (MSEC)
+                    Return (Local0)
+                }
+                Else
+                {
+                    Release (MSEC)
+                }
+            }
+
+            Return (Zero)
+        }
+
+        Device (ADP1)
+        {
+            Name (_HID, "ACPI0003" /* Power Source Device */)  // _HID: Hardware ID
+            Method (_PSR, 0, NotSerialized)  // _PSR: Power Source
+            {
+                Local0 = PWRS /* \PWRS */
+                Return (Local0)
+            }
+
+            Method (_PCL, 0, NotSerialized)  // _PCL: Power Consumer List
+            {
+                Return (_SB) /* \_SB_ */
+            }
+
+            Method (_STA, 0, Serialized)  // _STA: Status
+            {
+                If ((ECON == Zero))
+                {
+                    Local0 = 0x0F
+                }
+                ElseIf ((PWRS == Zero))
+                {
+                    Local0 = 0x1F
+                }
+                Else
+                {
+                    Local0 = 0x0F
+                }
+
+                Return (Local0)
+            }
+        }
+
+        Device (LNKA)
+        {
+            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
+            Name (_UID, One)  // _UID: Unique ID
+            Method (_STA, 0, Serialized)  // _STA: Status
+            {
+                Local0 = (PIRA & 0x80)
+                If (Local0)
+                {
+                    Return (0x09)
+                }
+                Else
+                {
+                    Return (0x0B)
+                }
+            }
+
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                Name (RTLA, ResourceTemplate ()
+                {
+                    IRQ (Level, ActiveLow, Shared, )
+                        {11}
+                })
+                CreateWordField (RTLA, One, IRQ0)
+                IRQ0 = PIRA /* \PIRA */
+                Return (RTLA) /* \_SB_.LNKA._CRS.RTLA */
+            }
+
+            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
+            {
+                PIRA |= 0x80
+            }
+
+            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
+            {
+                CreateWordField (Arg0, One, IRA)
+                FindSetRightBit (IRA, Local0)
+                Local0--
+                PIRA = Local0
+            }
+
+            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
+            {
+                Return (PRSA) /* \_SB_.PRSA */
+            }
+        }
+
+        Device (LNKB)
+        {
+            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
+            Name (_UID, 0x02)  // _UID: Unique ID
+            Method (_STA, 0, Serialized)  // _STA: Status
+            {
+                Local0 = (PIRB & 0x80)
+                If (Local0)
+                {
+                    Return (0x09)
+                }
+                Else
+                {
+                    Return (0x0B)
+                }
+            }
+
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                Name (RTLB, ResourceTemplate ()
+                {
+                    IRQ (Level, ActiveLow, Shared, )
+                        {10}
+                })
+                CreateWordField (RTLB, One, IRQ0)
+                IRQ0 = PIRB /* \PIRB */
+                Return (RTLB) /* \_SB_.LNKB._CRS.RTLB */
+            }
+
+            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
+            {
+                PIRB |= 0x80
+            }
+
+            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
+            {
+                CreateWordField (Arg0, One, IRA)
+                FindSetRightBit (IRA, Local0)
+                Local0--
+                PIRB = Local0
+            }
+
+            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
+            {
+                Return (PRSB) /* \_SB_.PRSB */
+            }
+        }
+
+        Device (LNKC)
+        {
+            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
+            Name (_UID, 0x03)  // _UID: Unique ID
+            Method (_STA, 0, Serialized)  // _STA: Status
+            {
+                Local0 = (PIRC & 0x80)
+                If (Local0)
+                {
+                    Return (0x09)
+                }
+                Else
+                {
+                    Return (0x0B)
+                }
+            }
+
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                Name (RTLC, ResourceTemplate ()
+                {
+                    IRQ (Level, ActiveLow, Shared, )
+                        {11}
+                })
+                CreateWordField (RTLC, One, IRQ0)
+                IRQ0 = PIRC /* \PIRC */
+                Return (RTLC) /* \_SB_.LNKC._CRS.RTLC */
+            }
+
+            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
+            {
+                PIRC |= 0x80
+            }
+
+            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
+            {
+                CreateWordField (Arg0, One, IRA)
+                FindSetRightBit (IRA, Local0)
+                Local0--
+                PIRC = Local0
+            }
+
+            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
+            {
+                Return (PRSC) /* \_SB_.PRSC */
+            }
+        }
+
+        Device (LNKD)
+        {
+            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
+            Name (_UID, 0x04)  // _UID: Unique ID
+            Method (_STA, 0, Serialized)  // _STA: Status
+            {
+                Local0 = (PIRD & 0x80)
+                If (Local0)
+                {
+                    Return (0x09)
+                }
+                Else
+                {
+                    Return (0x0B)
+                }
+            }
+
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                Name (RTLD, ResourceTemplate ()
+                {
+                    IRQ (Level, ActiveLow, Shared, )
+                        {11}
+                })
+                CreateWordField (RTLD, One, IRQ0)
+                IRQ0 = PIRD /* \PIRD */
+                Return (RTLD) /* \_SB_.LNKD._CRS.RTLD */
+            }
+
+            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
+            {
+                PIRD |= 0x80
+            }
+
+            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
+            {
+                CreateWordField (Arg0, One, IRA)
+                FindSetRightBit (IRA, Local0)
+                Local0--
+                PIRD = Local0
+            }
+
+            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
+            {
+                Return (PRSD) /* \_SB_.PRSD */
+            }
+        }
+
+        Device (LNKE)
+        {
+            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
+            Name (_UID, 0x05)  // _UID: Unique ID
+            Method (_STA, 0, Serialized)  // _STA: Status
+            {
+                Local0 = (PIRE & 0x80)
+                If (Local0)
+                {
+                    Return (0x09)
+                }
+                Else
+                {
+                    Return (0x0B)
+                }
+            }
+
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                Name (RTLE, ResourceTemplate ()
+                {
+                    IRQ (Level, ActiveLow, Shared, )
+                        {11}
+                })
+                CreateWordField (RTLE, One, IRQ0)
+                IRQ0 = PIRE /* \PIRE */
+                Return (RTLE) /* \_SB_.LNKE._CRS.RTLE */
+            }
+
+            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
+            {
+                PIRE |= 0x80
+            }
+
+            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
+            {
+                CreateWordField (Arg0, One, IRA)
+                FindSetRightBit (IRA, Local0)
+                Local0--
+                PIRE = Local0
+            }
+
+            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
+            {
+                Return (PRSE) /* \_SB_.PRSE */
+            }
+        }
+
+        Device (LNKF)
+        {
+            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
+            Name (_UID, 0x06)  // _UID: Unique ID
+            Method (_STA, 0, Serialized)  // _STA: Status
+            {
+                Local0 = (PIRF & 0x80)
+                If (Local0)
+                {
+                    Return (0x09)
+                }
+                Else
+                {
+                    Return (0x0B)
+                }
+            }
+
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                Name (RTLF, ResourceTemplate ()
+                {
+                    IRQ (Level, ActiveLow, Shared, )
+                        {11}
+                })
+                CreateWordField (RTLF, One, IRQ0)
+                IRQ0 = PIRF /* \PIRF */
+                Return (RTLF) /* \_SB_.LNKF._CRS.RTLF */
+            }
+
+            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
+            {
+                PIRF |= 0x80
+            }
+
+            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
+            {
+                CreateWordField (Arg0, One, IRA)
+                FindSetRightBit (IRA, Local0)
+                Local0--
+                PIRF = Local0
+            }
+
+            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
+            {
+                Return (PRSF) /* \_SB_.PRSF */
+            }
+        }
+
+        Device (LNKG)
+        {
+            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
+            Name (_UID, 0x07)  // _UID: Unique ID
+            Method (_STA, 0, Serialized)  // _STA: Status
+            {
+                Local0 = (PIRG & 0x80)
+                If (Local0)
+                {
+                    Return (0x09)
+                }
+                Else
+                {
+                    Return (0x0B)
+                }
+            }
+
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                Name (RTLG, ResourceTemplate ()
+                {
+                    IRQ (Level, ActiveLow, Shared, )
+                        {11}
+                })
+                CreateWordField (RTLG, One, IRQ0)
+                IRQ0 = PIRG /* \PIRG */
+                Return (RTLG) /* \_SB_.LNKG._CRS.RTLG */
+            }
+
+            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
+            {
+                PIRG |= 0x80
+            }
+
+            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
+            {
+                CreateWordField (Arg0, One, IRA)
+                FindSetRightBit (IRA, Local0)
+                Local0--
+                PIRG = Local0
+            }
+
+            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
+            {
+                Return (PRSG) /* \_SB_.PRSG */
+            }
+        }
+
+        Device (LNKH)
+        {
+            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
+            Name (_UID, 0x08)  // _UID: Unique ID
+            Method (_STA, 0, Serialized)  // _STA: Status
+            {
+                Local0 = (PIRH & 0x80)
+                If (Local0)
+                {
+                    Return (0x09)
+                }
+                Else
+                {
+                    Return (0x0B)
+                }
+            }
+
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                Name (RTLH, ResourceTemplate ()
+                {
+                    IRQ (Level, ActiveLow, Shared, )
+                        {11}
+                })
+                CreateWordField (RTLH, One, IRQ0)
+                IRQ0 = PIRH /* \PIRH */
+                Return (RTLH) /* \_SB_.LNKH._CRS.RTLH */
+            }
+
+            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
+            {
+                PIRH |= 0x80
+            }
+
+            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
+            {
+                CreateWordField (Arg0, One, IRA)
+                FindSetRightBit (IRA, Local0)
+                Local0--
+                PIRH = Local0
+            }
+
+            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
+            {
+                Return (PRSH) /* \_SB_.PRSH */
+            }
+        }
+
+        Device (AWAC)
+        {
+            Name (_HID, "ACPI000E" /* Time and Alarm Device */)  // _HID: Hardware ID
+            Name (WAST, Zero)
+            Name (WTTR, Zero)
+            Method (_PRW, 0, NotSerialized)  // _PRW: Power Resources for Wake
+            {
+                Return (GPRW (0x72, 0x04))
+            }
+
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((STAS == Zero))
+                {
+                    Return (0x0F)
+                }
+                Else
+                {
+                    Return (Zero)
+                }
+            }
+
+            Method (_GCP, 0, NotSerialized)  // _GCP: Get Capabilities
+            {
+                Return (0xB7)
+            }
+
+            OperationRegion (RTCM, SystemCMOS, Zero, 0x3F)
+            Field (RTCM, ByteAcc, Lock, Preserve)
+            {
+                SEC,    8, 
+                Offset (0x02), 
+                MIN,    8, 
+                Offset (0x04), 
+                HOR,    8, 
+                Offset (0x07), 
+                DAY,    8, 
+                MON,    8, 
+                YEAR,   8, 
+                Offset (0x32), 
+                CNTY,   8
+            }
+
+            Method (_GRT, 0, NotSerialized)  // _GRT: Get Real Time
+            {
+                Local0 = Buffer (0x10){}
+                CreateWordField (Local0, Zero, Y)
+                CreateByteField (Local0, 0x02, M)
+                CreateByteField (Local0, 0x03, D)
+                CreateByteField (Local0, 0x04, H)
+                CreateByteField (Local0, 0x05, MIN1)
+                CreateByteField (Local0, 0x06, S)
+                CreateByteField (Local0, 0x07, V)
+                CreateWordField (Local0, 0x0A, TZ)
+                CreateByteField (Local0, 0x0C, DL)
+                FromBCD (YEAR, Local5)
+                FromBCD (CNTY, Local6)
+                Y = ((Local6 * 0x64) + Local5)
+                FromBCD (MON, M) /* \_SB_.AWAC._GRT.M___ */
+                FromBCD (DAY, D) /* \_SB_.AWAC._GRT.D___ */
+                FromBCD (HOR, H) /* \_SB_.AWAC._GRT.H___ */
+                FromBCD (MIN, MIN1) /* \_SB_.AWAC._GRT.MIN1 */
+                FromBCD (SEC, S) /* \_SB_.AWAC._GRT.S___ */
+                TZ = 0x07FF
+                DL = Zero
+                V = One
+                Return (Local0)
+            }
+
+            Method (_SRT, 1, NotSerialized)  // _SRT: Set Real Time
+            {
+                CreateWordField (Arg0, Zero, Y)
+                CreateByteField (Arg0, 0x02, M)
+                CreateByteField (Arg0, 0x03, D)
+                CreateByteField (Arg0, 0x04, H)
+                CreateByteField (Arg0, 0x05, MIN1)
+                CreateByteField (Arg0, 0x06, S)
+                Divide (Y, 0x64, Local5, Local4)
+                ToBCD (Local4, CNTY) /* \_SB_.AWAC.CNTY */
+                ToBCD (Local5, YEAR) /* \_SB_.AWAC.YEAR */
+                ToBCD (M, MON) /* \_SB_.AWAC.MON_ */
+                ToBCD (D, DAY) /* \_SB_.AWAC.DAY_ */
+                ToBCD (H, HOR) /* \_SB_.AWAC.HOR_ */
+                ToBCD (MIN1, MIN) /* \_SB_.AWAC.MIN_ */
+                ToBCD (S, SEC) /* \_SB_.AWAC.SEC_ */
+                Return (Zero)
+            }
+
+            Method (_GWS, 1, Serialized)  // _GWS: Get Wake Status
+            {
+                Local0 = Zero
+                If ((Arg0 == Zero))
+                {
+                    If (((ACWA == 0xFFFFFFFF) && (One & WTTR)))
+                    {
+                        Local0 |= One
+                        WTTR ^= One /* \_SB_.AWAC.WTTR */
+                    }
+                }
+                ElseIf (((DCWA == 0xFFFFFFFF) && (0x02 & WTTR)))
+                {
+                    Local0 |= One
+                    WTTR ^= 0x02 /* \_SB_.AWAC.WTTR */
+                }
+
+                If (WAST)
+                {
+                    Local0 |= 0x02
+                    WAST = Zero
+                }
+
+                Return (Local0)
+            }
+
+            Method (_CWS, 1, NotSerialized)  // _CWS: Clear Wake Alarm Status
+            {
+                Return (Zero)
+            }
+
+            Method (_STP, 2, NotSerialized)  // _STP: Set Expired Timer Wake Policy
+            {
+                If ((Arg0 == Zero))
+                {
+                    ACET = Arg1
+                }
+                Else
+                {
+                    DCET = Arg1
+                }
+
+                Return (Zero)
+            }
+
+            Method (_STV, 2, Serialized)  // _STV: Set Timer Value
+            {
+                If ((Arg0 == Zero))
+                {
+                    ACWA = Arg1
+                    WTTR |= One /* \_SB_.AWAC.WTTR */
+                }
+                Else
+                {
+                    DCWA = Arg1
+                    WTTR |= 0x02 /* \_SB_.AWAC.WTTR */
+                }
+
+                Return (Zero)
+            }
+
+            Method (_TIP, 1, NotSerialized)  // _TIP: Expired Timer Wake Policy
+            {
+                If ((Arg0 == Zero))
+                {
+                    Return (ACET) /* \ACET */
+                }
+                Else
+                {
+                    Return (DCET) /* \DCET */
+                }
+            }
+
+            Method (_TIV, 1, NotSerialized)  // _TIV: Timer Values
+            {
+                If ((Arg0 == Zero))
+                {
+                    Return (ACWA) /* \ACWA */
+                }
+                Else
+                {
+                    Return (DCWA) /* \DCWA */
+                }
+            }
+        }
     }
 
     Scope (\)
     {
+        Device (CHUB)
+        {
+            Name (_HID, EisaId ("INT339B"))  // _HID: Hardware ID
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((CHEN == One))
+                {
+                    Return (0x0F)
+                }
+
+                Return (Zero)
+            }
+
+            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+            {
+                If ((Arg0 == ToUUID ("1730e71d-e5dd-4a34-be57-4d76b6a2fe37")))
+                {
+                    If ((ToInteger (Arg1) >= Zero))
+                    {
+                        Switch (ToInteger (Arg2))
+                        {
+                            Case (Zero)
+                            {
+                                Return (Buffer (One)
+                                {
+                                     0x03                                             // .
+                                })
+                            }
+                            Case (One)
+                            {
+                                Switch (ToInteger (DerefOf (Arg3 [Zero])))
+                                {
+                                    Case (Zero)
+                                    {
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                        Return (Zero)
+                    }
+
+                    Return (Zero)
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+        }
+
         Method (THEN, 0, Serialized)
         {
             OperationRegion (THBA, SystemMemory, 0xFE200000, 0x10)
@@ -6969,221 +12506,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         {
             THDS (ToDecimalString (Arg0))
         }
-    }
-
-    Name (PCHH, One)
-    Name (PCHL, 0x02)
-    Scope (_SB.PCI0)
-    {
-        Name (TEMP, Zero)
-        Device (PRRE)
-        {
-            Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
-            Name (_UID, "PCHRESV")  // _UID: Unique ID
-            Name (_STA, 0x03)  // _STA: Status
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-            {
-                Name (BUF0, ResourceTemplate ()
-                {
-                    Memory32Fixed (ReadWrite,
-                        0xFD000000,         // Address Base
-                        0x006A0000,         // Address Length
-                        )
-                    Memory32Fixed (ReadWrite,
-                        0x00000000,         // Address Base
-                        0x00000000,         // Address Length
-                        _Y11)
-                    Memory32Fixed (ReadWrite,
-                        0xFD6F0000,         // Address Base
-                        0x00910000,         // Address Length
-                        )
-                    Memory32Fixed (ReadWrite,
-                        0xFE000000,         // Address Base
-                        0x00020000,         // Address Length
-                        )
-                    Memory32Fixed (ReadWrite,
-                        0xFE200000,         // Address Base
-                        0x00600000,         // Address Length
-                        )
-                    Memory32Fixed (ReadOnly,
-                        0xFF000000,         // Address Base
-                        0x01000000,         // Address Length
-                        )
-                    IO (Decode16,
-                        0x0000,             // Range Minimum
-                        0x0000,             // Range Maximum
-                        0x01,               // Alignment
-                        0xFF,               // Length
-                        _Y10)
-                })
-                CreateWordField (BUF0, \_SB.PCI0.PRRE._CRS._Y10._MIN, AMIN)  // _MIN: Minimum Base Address
-                CreateWordField (BUF0, \_SB.PCI0.PRRE._CRS._Y10._MAX, AMAX)  // _MAX: Maximum Base Address
-                AMIN = PMBS /* \PMBS */
-                AMAX = PMBS /* \PMBS */
-                CreateDWordField (BUF0, \_SB.PCI0.PRRE._CRS._Y11._BAS, GBAS)  // _BAS: Base Address
-                CreateDWordField (BUF0, \_SB.PCI0.PRRE._CRS._Y11._LEN, GLEN)  // _LEN: Length
-                If ((PCHS == PCHH))
-                {
-                    GBAS = (SBRG + 0x006C0000)
-                    GLEN = 0x00010000
-                }
-                Else
-                {
-                    GBAS = (SBRG + 0x006B0000)
-                    GLEN = 0x00020000
-                }
-
-                Return (BUF0) /* \_SB_.PCI0.PRRE._CRS.BUF0 */
-            }
-        }
-
-        Device (IOTR)
-        {
-            Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
-            Name (_UID, "IoTraps")  // _UID: Unique ID
-            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-            {
-                Local0 = Buffer (0x02)
-                    {
-                         0x79, 0x00                                       // y.
-                    }
-                Name (BUF0, ResourceTemplate ()
-                {
-                    IO (Decode16,
-                        0x0000,             // Range Minimum
-                        0x0000,             // Range Maximum
-                        0x01,               // Alignment
-                        0xFF,               // Length
-                        _Y12)
-                })
-                Name (BUF1, ResourceTemplate ()
-                {
-                    IO (Decode16,
-                        0x0000,             // Range Minimum
-                        0x0000,             // Range Maximum
-                        0x01,               // Alignment
-                        0xFF,               // Length
-                        _Y13)
-                })
-                Name (BUF2, ResourceTemplate ()
-                {
-                    IO (Decode16,
-                        0x0000,             // Range Minimum
-                        0x0000,             // Range Maximum
-                        0x01,               // Alignment
-                        0xFF,               // Length
-                        _Y14)
-                })
-                Name (BUF3, ResourceTemplate ()
-                {
-                    IO (Decode16,
-                        0x0000,             // Range Minimum
-                        0x0000,             // Range Maximum
-                        0x01,               // Alignment
-                        0xFF,               // Length
-                        _Y15)
-                })
-                CreateWordField (BUF0, \_SB.PCI0.IOTR._CRS._Y12._MIN, AMI0)  // _MIN: Minimum Base Address
-                CreateWordField (BUF0, \_SB.PCI0.IOTR._CRS._Y12._MAX, AMA0)  // _MAX: Maximum Base Address
-                CreateWordField (BUF1, \_SB.PCI0.IOTR._CRS._Y13._MIN, AMI1)  // _MIN: Minimum Base Address
-                CreateWordField (BUF1, \_SB.PCI0.IOTR._CRS._Y13._MAX, AMA1)  // _MAX: Maximum Base Address
-                CreateWordField (BUF2, \_SB.PCI0.IOTR._CRS._Y14._MIN, AMI2)  // _MIN: Minimum Base Address
-                CreateWordField (BUF2, \_SB.PCI0.IOTR._CRS._Y14._MAX, AMA2)  // _MAX: Maximum Base Address
-                CreateWordField (BUF3, \_SB.PCI0.IOTR._CRS._Y15._MIN, AMI3)  // _MIN: Minimum Base Address
-                CreateWordField (BUF3, \_SB.PCI0.IOTR._CRS._Y15._MAX, AMA3)  // _MAX: Maximum Base Address
-                AMI0 = ITA0 /* \ITA0 */
-                AMA0 = ITA0 /* \ITA0 */
-                AMI1 = ITA1 /* \ITA1 */
-                AMA1 = ITA1 /* \ITA1 */
-                AMI2 = ITA2 /* \ITA2 */
-                AMA2 = ITA2 /* \ITA2 */
-                AMI3 = ITA3 /* \ITA3 */
-                AMA3 = ITA3 /* \ITA3 */
-                If ((ITS0 == One))
-                {
-                    ConcatenateResTemplate (Local0, BUF0, Local1)
-                    Local0 = Local1
-                }
-
-                If ((ITS1 == One))
-                {
-                    ConcatenateResTemplate (Local0, BUF1, Local1)
-                    Local0 = Local1
-                }
-
-                If ((ITS2 == One))
-                {
-                    ConcatenateResTemplate (Local0, BUF2, Local1)
-                    Local0 = Local1
-                }
-
-                If ((ITS3 == One))
-                {
-                    ConcatenateResTemplate (Local0, BUF3, Local1)
-                    Local0 = Local1
-                }
-
-                Return (Local0)
-            }
-        }
-    }
-
-    Scope (_SB.PCI0.LPCB)
-    {
-        Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-        {
-            If (PCIC (Arg0))
-            {
-                Return (PCID (Arg0, Arg1, Arg2, Arg3))
-            }
-
-            Return (Buffer (One)
-            {
-                 0x00                                             // .
-            })
-        }
-
-        OperationRegion (LPC, PCI_Config, Zero, 0x0100)
-        Field (LPC, AnyAcc, NoLock, Preserve)
-        {
-            Offset (0x02), 
-            CDID,   16, 
-            Offset (0x08), 
-            CRID,   8, 
-            Offset (0x80), 
-            IOD0,   8, 
-            IOD1,   8, 
-            Offset (0xA0), 
-                ,   9, 
-            PRBL,   1, 
-            Offset (0xDC), 
-                ,   2, 
-            ESPI,   1
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Device (SBUS)
-        {
-            Name (_ADR, 0x001F0004)  // _ADR: Address
-            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-            {
-                If (PCIC (Arg0))
-                {
-                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
-        }
-    }
-
-    Scope (\)
-    {
+        
         Method (IPCW, 7, Serialized)
         {
             IBF0 = Arg3
@@ -7428,10 +12751,359 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 Return (Zero)
             }
         }
+
+        Method (NHPG, 0, Serialized)
+        {
+            \_SB.PCI0.RP01.HPEX = Zero
+            \_SB.PCI0.RP02.HPEX = Zero
+            \_SB.PCI0.RP03.HPEX = Zero
+            \_SB.PCI0.RP04.HPEX = Zero
+            \_SB.PCI0.RP05.HPEX = Zero
+            \_SB.PCI0.RP06.HPEX = Zero
+            \_SB.PCI0.RP07.HPEX = Zero
+            \_SB.PCI0.RP08.HPEX = Zero
+            \_SB.PCI0.RP09.HPEX = Zero
+            \_SB.PCI0.RP10.HPEX = Zero
+            \_SB.PCI0.RP11.HPEX = Zero
+            \_SB.PCI0.RP12.HPEX = Zero
+            \_SB.PCI0.RP13.HPEX = Zero
+            \_SB.PCI0.RP14.HPEX = Zero
+            \_SB.PCI0.RP15.HPEX = Zero
+            \_SB.PCI0.RP16.HPEX = Zero
+            \_SB.PCI0.RP17.HPEX = Zero
+            \_SB.PCI0.RP18.HPEX = Zero
+            \_SB.PCI0.RP19.HPEX = Zero
+            \_SB.PCI0.RP20.HPEX = Zero
+            \_SB.PCI0.RP21.HPEX = Zero
+            \_SB.PCI0.RP22.HPEX = Zero
+            \_SB.PCI0.RP23.HPEX = Zero
+            \_SB.PCI0.RP24.HPEX = Zero
+            \_SB.PCI0.RP01.HPSX = One
+            \_SB.PCI0.RP02.HPSX = One
+            \_SB.PCI0.RP03.HPSX = One
+            \_SB.PCI0.RP04.HPSX = One
+            \_SB.PCI0.RP05.HPSX = One
+            \_SB.PCI0.RP06.HPSX = One
+            \_SB.PCI0.RP07.HPSX = One
+            \_SB.PCI0.RP08.HPSX = One
+            \_SB.PCI0.RP09.HPSX = One
+            \_SB.PCI0.RP10.HPSX = One
+            \_SB.PCI0.RP11.HPSX = One
+            \_SB.PCI0.RP12.HPSX = One
+            \_SB.PCI0.RP13.HPSX = One
+            \_SB.PCI0.RP14.HPSX = One
+            \_SB.PCI0.RP15.HPSX = One
+            \_SB.PCI0.RP16.HPSX = One
+            \_SB.PCI0.RP17.HPSX = One
+            \_SB.PCI0.RP18.HPSX = One
+            \_SB.PCI0.RP19.HPSX = One
+            \_SB.PCI0.RP20.HPSX = One
+            \_SB.PCI0.RP21.HPSX = One
+            \_SB.PCI0.RP22.HPSX = One
+            \_SB.PCI0.RP23.HPSX = One
+            \_SB.PCI0.RP24.HPSX = One
+        }
+
+        Method (NPME, 0, Serialized)
+        {
+            \_SB.PCI0.RP01.PMEX = Zero
+            \_SB.PCI0.RP02.PMEX = Zero
+            \_SB.PCI0.RP03.PMEX = Zero
+            \_SB.PCI0.RP04.PMEX = Zero
+            \_SB.PCI0.RP05.PMEX = Zero
+            \_SB.PCI0.RP06.PMEX = Zero
+            \_SB.PCI0.RP07.PMEX = Zero
+            \_SB.PCI0.RP08.PMEX = Zero
+            \_SB.PCI0.RP09.PMEX = Zero
+            \_SB.PCI0.RP10.PMEX = Zero
+            \_SB.PCI0.RP11.PMEX = Zero
+            \_SB.PCI0.RP12.PMEX = Zero
+            \_SB.PCI0.RP13.PMEX = Zero
+            \_SB.PCI0.RP14.PMEX = Zero
+            \_SB.PCI0.RP15.PMEX = Zero
+            \_SB.PCI0.RP16.PMEX = Zero
+            \_SB.PCI0.RP17.PMEX = Zero
+            \_SB.PCI0.RP18.PMEX = Zero
+            \_SB.PCI0.RP19.PMEX = Zero
+            \_SB.PCI0.RP20.PMEX = Zero
+            \_SB.PCI0.RP21.PMEX = Zero
+            \_SB.PCI0.RP22.PMEX = Zero
+            \_SB.PCI0.RP23.PMEX = Zero
+            \_SB.PCI0.RP24.PMEX = Zero
+            \_SB.PCI0.RP21.PMEX = Zero
+            \_SB.PCI0.RP22.PMEX = Zero
+            \_SB.PCI0.RP23.PMEX = Zero
+            \_SB.PCI0.RP24.PMEX = Zero
+            \_SB.PCI0.RP01.PMSX = One
+            \_SB.PCI0.RP02.PMSX = One
+            \_SB.PCI0.RP03.PMSX = One
+            \_SB.PCI0.RP04.PMSX = One
+            \_SB.PCI0.RP05.PMSX = One
+            \_SB.PCI0.RP06.PMSX = One
+            \_SB.PCI0.RP07.PMSX = One
+            \_SB.PCI0.RP08.PMSX = One
+            \_SB.PCI0.RP09.PMSX = One
+            \_SB.PCI0.RP10.PMSX = One
+            \_SB.PCI0.RP11.PMSX = One
+            \_SB.PCI0.RP12.PMSX = One
+            \_SB.PCI0.RP13.PMSX = One
+            \_SB.PCI0.RP14.PMSX = One
+            \_SB.PCI0.RP15.PMSX = One
+            \_SB.PCI0.RP16.PMSX = One
+            \_SB.PCI0.RP17.PMSX = One
+            \_SB.PCI0.RP18.PMSX = One
+            \_SB.PCI0.RP19.PMSX = One
+            \_SB.PCI0.RP20.PMSX = One
+            \_SB.PCI0.RP21.PMSX = One
+            \_SB.PCI0.RP22.PMSX = One
+            \_SB.PCI0.RP23.PMSX = One
+            \_SB.PCI0.RP24.PMSX = One
+        }
+
+        Name (PICM, Zero)
+        Name (PRWP, Package (0x02)
+        {
+            Zero, 
+            Zero
+        })
+        Method (GPRW, 2, NotSerialized)
+        {
+            PRWP [Zero] = Arg0
+            Local0 = (SS1 << One)
+            Local0 |= (SS2 << 0x02)
+            Local0 |= (SS3 << 0x03)
+            Local0 |= (SS4 << 0x04)
+            If (((One << Arg1) & Local0))
+            {
+                PRWP [One] = Arg1
+            }
+            Else
+            {
+                Local0 >>= One
+                FindSetLeftBit (Local0, PRWP [One])
+            }
+
+            Return (PRWP) /* \PRWP */
+        }
+
+        Name (KBFG, One)
+        Name (MSFG, One)
+        PowerResource (PIN, 0x00, 0x0000)
+        {
+            Method (STA, 1, Serialized)
+            {
+                If ((\_SB.GGOV (DerefOf (Arg0 [Zero])) == DerefOf (Arg0 [One]
+                    )))
+                {
+                    Return (One)
+                }
+                Else
+                {
+                    Return (Zero)
+                }
+            }
+
+            Method (ON, 1, Serialized)
+            {
+                ADBG (Concatenate ("PINH GPIO=", ToHexString (DerefOf (Arg0 [Zero]))))
+                \_SB.SGOV (DerefOf (Arg0 [Zero]), DerefOf (Arg0 [One]))
+            }
+
+            Method (OFF, 1, Serialized)
+            {
+                ADBG (Concatenate ("PINL GPIO=", ToHexString (DerefOf (Arg0 [Zero]))))
+                \_SB.SGOV (DerefOf (Arg0 [Zero]), ~DerefOf (Arg0 [One])
+                    )
+            }
+
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                Return (Zero)
+            }
+
+            Method (_ON, 0, NotSerialized)  // _ON_: Power On
+            {
+            }
+
+            Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
+            {
+            }
+        }
     }
 
+    Name (PCHH, One)
+    Name (PCHL, 0x02)
     Scope (_SB.PCI0)
     {
+        Name (TEMP, Zero)
+        Device (PRRE)
+        {
+            Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
+            Name (_UID, "PCHRESV")  // _UID: Unique ID
+            Name (_STA, 0x03)  // _STA: Status
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                Name (BUF0, ResourceTemplate ()
+                {
+                    Memory32Fixed (ReadWrite,
+                        0xFD000000,         // Address Base
+                        0x006A0000,         // Address Length
+                        )
+                    Memory32Fixed (ReadWrite,
+                        0x00000000,         // Address Base
+                        0x00000000,         // Address Length
+                        _Y11)
+                    Memory32Fixed (ReadWrite,
+                        0xFD6F0000,         // Address Base
+                        0x00910000,         // Address Length
+                        )
+                    Memory32Fixed (ReadWrite,
+                        0xFE000000,         // Address Base
+                        0x00020000,         // Address Length
+                        )
+                    Memory32Fixed (ReadWrite,
+                        0xFE200000,         // Address Base
+                        0x00600000,         // Address Length
+                        )
+                    Memory32Fixed (ReadOnly,
+                        0xFF000000,         // Address Base
+                        0x01000000,         // Address Length
+                        )
+                    IO (Decode16,
+                        0x0000,             // Range Minimum
+                        0x0000,             // Range Maximum
+                        0x01,               // Alignment
+                        0xFF,               // Length
+                        _Y10)
+                })
+                CreateWordField (BUF0, \_SB.PCI0.PRRE._CRS._Y10._MIN, AMIN)  // _MIN: Minimum Base Address
+                CreateWordField (BUF0, \_SB.PCI0.PRRE._CRS._Y10._MAX, AMAX)  // _MAX: Maximum Base Address
+                AMIN = PMBS /* \PMBS */
+                AMAX = PMBS /* \PMBS */
+                CreateDWordField (BUF0, \_SB.PCI0.PRRE._CRS._Y11._BAS, GBAS)  // _BAS: Base Address
+                CreateDWordField (BUF0, \_SB.PCI0.PRRE._CRS._Y11._LEN, GLEN)  // _LEN: Length
+                If ((PCHS == PCHH))
+                {
+                    GBAS = (SBRG + 0x006C0000)
+                    GLEN = 0x00010000
+                }
+                Else
+                {
+                    GBAS = (SBRG + 0x006B0000)
+                    GLEN = 0x00020000
+                }
+
+                Return (BUF0) /* \_SB_.PCI0.PRRE._CRS.BUF0 */
+            }
+        }
+
+        Device (IOTR)
+        {
+            Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
+            Name (_UID, "IoTraps")  // _UID: Unique ID
+            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+            {
+                Local0 = Buffer (0x02)
+                    {
+                         0x79, 0x00                                       // y.
+                    }
+                Name (BUF0, ResourceTemplate ()
+                {
+                    IO (Decode16,
+                        0x0000,             // Range Minimum
+                        0x0000,             // Range Maximum
+                        0x01,               // Alignment
+                        0xFF,               // Length
+                        _Y12)
+                })
+                Name (BUF1, ResourceTemplate ()
+                {
+                    IO (Decode16,
+                        0x0000,             // Range Minimum
+                        0x0000,             // Range Maximum
+                        0x01,               // Alignment
+                        0xFF,               // Length
+                        _Y13)
+                })
+                Name (BUF2, ResourceTemplate ()
+                {
+                    IO (Decode16,
+                        0x0000,             // Range Minimum
+                        0x0000,             // Range Maximum
+                        0x01,               // Alignment
+                        0xFF,               // Length
+                        _Y14)
+                })
+                Name (BUF3, ResourceTemplate ()
+                {
+                    IO (Decode16,
+                        0x0000,             // Range Minimum
+                        0x0000,             // Range Maximum
+                        0x01,               // Alignment
+                        0xFF,               // Length
+                        _Y15)
+                })
+                CreateWordField (BUF0, \_SB.PCI0.IOTR._CRS._Y12._MIN, AMI0)  // _MIN: Minimum Base Address
+                CreateWordField (BUF0, \_SB.PCI0.IOTR._CRS._Y12._MAX, AMA0)  // _MAX: Maximum Base Address
+                CreateWordField (BUF1, \_SB.PCI0.IOTR._CRS._Y13._MIN, AMI1)  // _MIN: Minimum Base Address
+                CreateWordField (BUF1, \_SB.PCI0.IOTR._CRS._Y13._MAX, AMA1)  // _MAX: Maximum Base Address
+                CreateWordField (BUF2, \_SB.PCI0.IOTR._CRS._Y14._MIN, AMI2)  // _MIN: Minimum Base Address
+                CreateWordField (BUF2, \_SB.PCI0.IOTR._CRS._Y14._MAX, AMA2)  // _MAX: Maximum Base Address
+                CreateWordField (BUF3, \_SB.PCI0.IOTR._CRS._Y15._MIN, AMI3)  // _MIN: Minimum Base Address
+                CreateWordField (BUF3, \_SB.PCI0.IOTR._CRS._Y15._MAX, AMA3)  // _MAX: Maximum Base Address
+                AMI0 = ITA0 /* \ITA0 */
+                AMA0 = ITA0 /* \ITA0 */
+                AMI1 = ITA1 /* \ITA1 */
+                AMA1 = ITA1 /* \ITA1 */
+                AMI2 = ITA2 /* \ITA2 */
+                AMA2 = ITA2 /* \ITA2 */
+                AMI3 = ITA3 /* \ITA3 */
+                AMA3 = ITA3 /* \ITA3 */
+                If ((ITS0 == One))
+                {
+                    ConcatenateResTemplate (Local0, BUF0, Local1)
+                    Local0 = Local1
+                }
+
+                If ((ITS1 == One))
+                {
+                    ConcatenateResTemplate (Local0, BUF1, Local1)
+                    Local0 = Local1
+                }
+
+                If ((ITS2 == One))
+                {
+                    ConcatenateResTemplate (Local0, BUF2, Local1)
+                    Local0 = Local1
+                }
+
+                If ((ITS3 == One))
+                {
+                    ConcatenateResTemplate (Local0, BUF3, Local1)
+                    Local0 = Local1
+                }
+
+                Return (Local0)
+            }
+        }
+        
+        Device (SBUS)
+        {
+            Name (_ADR, 0x001F0004)  // _ADR: Address
+            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+            {
+                If (PCIC (Arg0))
+                {
+                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+        }
+        
         Device (XHC)
         {
             Name (_ADR, 0x00140000)  // _ADR: Address
@@ -7562,7 +13234,21 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
 
                 Return (Zero)
             }
-
+            
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                If (((S0ID == One) || (OSYS >= 0x07DF)))
+                {
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    Return (Package (0x00){})
+                }
+            }
             Device (RHUB)
             {
                 Name (_ADR, Zero)  // _ADR: Address
@@ -7722,70 +13408,10 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                     }
                 }
             }
+            
         }
-    }
-
-    If ((PCHS == PCHH))
-    {
-        Scope (_SB.PCI0.XHC.RHUB)
-        {
-            Device (HS11)
-            {
-                Name (_ADR, 0x0B)  // _ADR: Address
-            }
-
-            Device (HS12)
-            {
-                Name (_ADR, 0x0C)  // _ADR: Address
-            }
-
-            Device (HS13)
-            {
-                Name (_ADR, 0x0D)  // _ADR: Address
-            }
-
-            Device (HS14)
-            {
-                Name (_ADR, 0x0E)  // _ADR: Address
-            }
-
-            Device (SS07)
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return ((SSPA () + 0x06))
-                }
-            }
-
-            Device (SS08)
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return ((SSPA () + 0x07))
-                }
-            }
-
-            Device (SS09)
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return ((SSPA () + 0x08))
-                }
-            }
-
-            Device (SS10)
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return ((SSPA () + 0x09))
-                }
-            }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Device (HDAS)
+        
+        Device (HDEF)
         {
             Name (_ADR, 0x001F0003)  // _ADR: Address
             OperationRegion (HDAR, PCI_Config, Zero, 0x0100)
@@ -7815,7 +13441,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                     }
                 }
 
-                If (CondRefOf (\_SB.PCI0.HDAS.PS0X))
+                If (CondRefOf (\_SB.PCI0.HDEF.PS0X))
                 {
                     PS0X ()
                 }
@@ -7832,7 +13458,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                     }
                 }
 
-                If (CondRefOf (\_SB.PCI0.HDAS.PS3X))
+                If (CondRefOf (\_SB.PCI0.HDEF.PS3X))
                 {
                     PS3X ()
                 }
@@ -7857,10 +13483,10 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
             })
             Method (_INI, 0, NotSerialized)  // _INI: Initialize
             {
-                ADBG ("HDAS _INI")
-                CreateQWordField (NBUF, \_SB.PCI0.HDAS._Y16._MIN, NBAS)  // _MIN: Minimum Base Address
-                CreateQWordField (NBUF, \_SB.PCI0.HDAS._Y16._MAX, NMAS)  // _MAX: Maximum Base Address
-                CreateQWordField (NBUF, \_SB.PCI0.HDAS._Y16._LEN, NLEN)  // _LEN: Length
+                ADBG ("HDEF _INI")
+                CreateQWordField (NBUF, \_SB.PCI0.HDEF._Y16._MIN, NBAS)  // _MIN: Minimum Base Address
+                CreateQWordField (NBUF, \_SB.PCI0.HDEF._Y16._MAX, NMAS)  // _MAX: Maximum Base Address
+                CreateQWordField (NBUF, \_SB.PCI0.HDEF._Y16._LEN, NLEN)  // _LEN: Length
                 NBAS = NHLA /* \NHLA */
                 NMAS = (NHLA + (NHLL - One))
                 NLEN = NHLL /* \NHLL */
@@ -7880,7 +13506,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
             })
             Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
             {
-                ADBG ("HDAS _DSM")
+                ADBG ("HDEF _DSM")
                 If (PCIC (Arg0))
                 {
                     Return (PCID (Arg0, Arg1, Arg2, Arg3))
@@ -7908,7 +13534,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                         Case (One)
                         {
                             ADBG ("_DSM Fun 1 NHLT")
-                            Return (NBUF) /* \_SB_.PCI0.HDAS.NBUF */
+                            Return (NBUF) /* \_SB_.PCI0.HDEF.NBUF */
                         }
                         Case (0x02)
                         {
@@ -7923,7 +13549,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                                 Return (One)
                             }
 
-                            If (CondRefOf (\_SB.PCI0.HDAS.PPMS))
+                            If (CondRefOf (\_SB.PCI0.HDEF.PPMS))
                             {
                                 Return (PPMS (Arg3))
                             }
@@ -7933,7 +13559,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                         Case (0x04)
                         {
                             ADBG ("_DSM Fun 4 DBUF")
-                            Return (DBUF) /* \_SB_.PCI0.HDAS.DBUF */
+                            Return (DBUF) /* \_SB_.PCI0.HDEF.DBUF */
                         }
                         Default
                         {
@@ -7964,10 +13590,22 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                      0x00                                             // .
                 })
             }
-        }
-
-        Scope (HDAS)
-        {
+            
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                If ((S0ID == One))
+                {
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+                Else
+                {
+                    Return (Package (0x00){})
+                }
+            }
+        
             Device (SNDW)
             {
                 Name (_ADR, 0x40000000)  // _ADR: Address
@@ -8320,8 +13958,4056 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 })
             }
         }
+
+        Device (SAT0)
+        {
+            Name (_ADR, 0x00170000)  // _ADR: Address
+            Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
+            {
+                ToUUID ("5025030f-842f-4ab4-a561-99a5189762d0"), 
+                Package (0x01)
+                {
+                    Package (0x02)
+                    {
+                        "StorageD3Enable", 
+                        One
+                    }
+                }
+            })
+            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+            {
+                If (PCIC (Arg0))
+                {
+                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                }
+                ElseIf ((Arg0 == ToUUID ("9cd9cddd-8845-4afd-8392-31c4eb87cabd")))
+                {
+                    Return (D3AS (Arg1, Arg2, Arg3))
+                }
+                ElseIf ((CondRefOf (SATC) && CondRefOf (SATD)))
+                {
+                    If (SATC (Arg0))
+                    {
+                        Return (SATD (Arg0, Arg1, Arg2, Arg3))
+                    }
+                }
+                Else
+                {
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+            }
+
+            Method (_PS0, 0, Serialized)  // _PS0: Power State 0
+            {
+                ADBG ("SATA0 Ctrlr D0")
+                If ((PCHS == PCHL))
+                {
+                    If (!SCFD)
+                    {
+                        CSD0 (0x14)
+                    }
+                }
+            }
+
+            Method (_PS3, 0, Serialized)  // _PS3: Power State 3
+            {
+                ADBG ("SATA0 Ctrlr D3")
+                If ((PCHS == PCHL))
+                {
+                    CSD3 (0x14)
+                }
+            }
+
+            Method (_S0W, 0, NotSerialized)  // _S0W: S0 Device Wake State
+            {
+                Return (0x03)
+            }
+
+            Device (PRT0)
+            {
+                Name (_ADR, 0xFFFF)  // _ADR: Address
+                Method (PRES, 0, NotSerialized)
+                {
+                    If ((SPPR & One))
+                    {
+                        Return (One)
+                    }
+                    Else
+                    {
+                        Return (Zero)
+                    }
+                }
+            }
+
+            Device (PRT1)
+            {
+                Name (_ADR, 0x0001FFFF)  // _ADR: Address
+                Method (PRES, 0, NotSerialized)
+                {
+                    If ((SPPR & 0x02))
+                    {
+                        Return (One)
+                    }
+                    Else
+                    {
+                        Return (Zero)
+                    }
+                }
+            }
+
+            Device (PRT2)
+            {
+                Name (_ADR, 0x0002FFFF)  // _ADR: Address
+                Method (PRES, 0, NotSerialized)
+                {
+                    If ((SPPR & 0x04))
+                    {
+                        Return (One)
+                    }
+                    Else
+                    {
+                        Return (Zero)
+                    }
+                }
+            }
+
+            Device (PRT3)
+            {
+                Name (_ADR, 0x0003FFFF)  // _ADR: Address
+                Method (PRES, 0, NotSerialized)
+                {
+                    If ((SPPR & 0x08))
+                    {
+                        Return (One)
+                    }
+                    Else
+                    {
+                        Return (Zero)
+                    }
+                }
+            }
+
+            Device (PRT4)
+            {
+                Name (_ADR, 0x0004FFFF)  // _ADR: Address
+                Method (PRES, 0, NotSerialized)
+                {
+                    If ((SPPR & 0x10))
+                    {
+                        Return (One)
+                    }
+                    Else
+                    {
+                        Return (Zero)
+                    }
+                }
+            }
+
+            Device (PRT5)
+            {
+                Name (_ADR, 0x0005FFFF)  // _ADR: Address
+                Method (PRES, 0, NotSerialized)
+                {
+                    If ((SPPR & 0x20))
+                    {
+                        Return (One)
+                    }
+                    Else
+                    {
+                        Return (Zero)
+                    }
+                }
+            }
+
+            Device (NVM1)
+            {
+                Name (_ADR, 0x00C1FFFF)  // _ADR: Address
+                Method (_INI, 0, NotSerialized)  // _INI: Initialize
+                {
+                    NITV = NIT1 /* \NIT1 */
+                    NPMV = NPM1 /* \NPM1 */
+                    NPCV = NPC1 /* \NPC1 */
+                    NL1V = NL11 /* \NL11 */
+                    ND2V = ND21 /* \ND21 */
+                    ND1V = ND11 /* \ND11 */
+                    NLRV = NLR1 /* \NLR1 */
+                    NLDV = NLD1 /* \NLD1 */
+                    NEAV = NEA1 /* \NEA1 */
+                    NEBV = NEB1 /* \NEB1 */
+                    NECV = NEC1 /* \NEC1 */
+                    NRAV = NRA1 /* \NRA1 */
+                    NMBV = NMB1 /* \NMB1 */
+                    NMVV = NMV1 /* \NMV1 */
+                    NPBV = NPB1 /* \NPB1 */
+                    NPVV = NPV1 /* \NPV1 */
+                    NRPN = NRP1 /* \NRP1 */
+                    NCRN = Zero
+                }
+
+                Name (PRBI, Zero)
+                Name (PRBD, Zero)
+                Name (PCMD, Zero)
+                Name (NCRN, Zero)
+                Name (NITV, Zero)
+                Name (NPMV, Zero)
+                Name (NPCV, Zero)
+                Name (NL1V, Zero)
+                Name (ND2V, Zero)
+                Name (ND1V, Zero)
+                Name (NLRV, Zero)
+                Name (NLDV, Zero)
+                Name (NEAV, Zero)
+                Name (NEBV, Zero)
+                Name (NECV, Zero)
+                Name (NRAV, Zero)
+                Name (NMBV, Zero)
+                Name (NMVV, Zero)
+                Name (NPBV, Zero)
+                Name (NPVV, Zero)
+                Name (NRPN, Zero)
+                Name (MXIE, Zero)
+                Name (ID3C, Zero)
+                Name (ID3H, Zero)
+                Name (CSAV, Zero)
+                Method (_PS3, 0, Serialized)  // _PS3: Power State 3
+                {
+                    ADBG (Concatenate ("_PS3r:", ToHexString (_ADR)))
+                    If (IR3D ())
+                    {
+                        Return (Zero)
+                    }
+
+                    NVD3 ()
+                }
+
+                Method (_PS0, 0, Serialized)  // _PS0: Power State 0
+                {
+                    ADBG (Concatenate ("_PS0r:", ToHexString (_ADR)))
+                    If (IR3D ())
+                    {
+                        Return (Zero)
+                    }
+
+                    NVD0 ()
+                }
+
+                Method (RL23, 0, NotSerialized)
+                {
+                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x04, One)
+                    Sleep (0x10)
+                    Local0 = Zero
+                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x04))
+                    {
+                        If ((Local0 > 0x04))
+                        {
+                            Break
+                        }
+
+                        Sleep (0x10)
+                        Local0++
+                    }
+
+                    RDCA (NCRN, 0x0324, 0xFFFFFFFF, 0x08, One)
+                }
+
+                Method (RLA, 0, NotSerialized)
+                {
+                    RDCA (NCRN, 0x0420, 0xBFFFFFFF, Zero, One)
+                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x08, One)
+                    Sleep (0x10)
+                    Local0 = Zero
+                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x08))
+                    {
+                        If ((Local0 > 0x04))
+                        {
+                            Break
+                        }
+
+                        Sleep (0x10)
+                        Local0++
+                    }
+
+                    RDCA (NCRN, 0x0420, 0xFFFFFFFF, 0x40000000, One)
+                    Local0 = Zero
+                    While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
+                    {
+                        If ((Local0 > 0x08))
+                        {
+                            Break
+                        }
+
+                        Sleep (0x10)
+                        Local0++
+                    }
+
+                    RDCA (NCRN, 0x0324, 0xFFFFFFF7, Zero, One)
+                }
+
+                Method (RPON, 0, Serialized)
+                {
+                    ADBG (Concatenate ("RPONs: ", ToHexString (_ADR)))
+                    If ((ID3C == Zero))
+                    {
+                        ADBG ("RPON: no D3C")
+                        Return (Zero)
+                    }
+
+                    RSON (NRPN)
+                    RLA ()
+                    Sleep (0x64)
+                    ID3C = Zero
+                    ADBG (Concatenate ("RPONe: ", ToHexString (_ADR)))
+                }
+
+                Method (RPOF, 0, Serialized)
+                {
+                    ADBG (Concatenate ("RPOFs: ", ToHexString (_ADR)))
+                    If ((ID3H == Zero))
+                    {
+                        ADBG ("RPOF: No D3H")
+                        BreakPoint
+                        Return (Zero)
+                    }
+
+                    If (!D3CS (NRPN))
+                    {
+                        Return (Zero)
+                    }
+
+                    RL23 ()
+                    RSOF (NRPN)
+                    ID3C = One
+                }
+
+                Method (SAVC, 0, Serialized)
+                {
+                    ADBG (Concatenate ("SAVC:", ToHexString (_ADR)))
+                    PCMD = RDCA (NCRN, 0x04, Zero, Zero, 0x02)
+                    If ((NITV == One))
+                    {
+                        PRBI = 0x24
+                        PRBD = RDCA (NCRN, 0x24, Zero, Zero, 0x02)
+                    }
+                    ElseIf ((NITV == 0x02))
+                    {
+                        PRBI = 0x10
+                        PRBD = RDCA (NCRN, 0x10, Zero, Zero, 0x02)
+                        OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
+                        Field (MCRC, AnyAcc, NoLock, Preserve)
+                        {
+                            SCSO,   8, 
+                            Offset (0x02), 
+                            TCSO,   8, 
+                                ,   7, 
+                            RE,     1
+                        }
+
+                        MXIE = RDCA (NCRN, TCSO, Zero, Zero, 0x02)
+                    }
+
+                    CSAV = One
+                }
+
+                Method (NVD3, 0, Serialized)
+                {
+                    ADBG (Concatenate ("NVD3:", ToHexString (_ADR)))
+                    If ((NITV == Zero))
+                    {
+                        Return (Zero)
+                    }
+
+                    If ((ID3H == One))
+                    {
+                        ADBG ("Skip in D3")
+                        Return (Zero)
+                    }
+
+                    SAVC ()
+                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, 0x03, 0x03)
+                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, 0x03, One)
+                    ID3H = One
+                    Return (Zero)
+                }
+
+                Method (NVD0, 0, Serialized)
+                {
+                    ADBG (Concatenate ("NVD0:", ToHexString (_ADR)))
+                    If ((NITV == Zero))
+                    {
+                        Return (Zero)
+                    }
+
+                    If ((ID3H == Zero))
+                    {
+                        ADBG ("Remap already in D0")
+                        Return (Zero)
+                    }
+
+                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, Zero, One)
+                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, Zero, 0x03)
+                    If ((CSAV == One))
+                    {
+                        CNRS ()
+                        If ((NITV == 0x02))
+                        {
+                            OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
+                            Field (MCRC, AnyAcc, NoLock, Preserve)
+                            {
+                                SCSO,   8, 
+                                Offset (0x02), 
+                                TCSO,   8, 
+                                    ,   7, 
+                                RE,     1
+                            }
+
+                            RDCA (NCRN, TCSO, 0xFFFFFFFF, (MXIE & 0x80000000), 0x03)
+                            ADBG ("NVD0:  MSIXe")
+                        }
+                    }
+                    Else
+                    {
+                        ADBG ("Skip remap restore")
+                    }
+
+                    ID3H = Zero
+                    Return (Zero)
+                }
+
+                Method (CNRS, 0, Serialized)
+                {
+                    ADBG (Concatenate ("CNRSs ", ToDecimalString (Timer)))
+                    If ((NITV == Zero))
+                    {
+                        Return (Zero)
+                    }
+
+                    RDCA (NCRN, 0x10, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x14, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x18, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x1C, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x20, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x24, Zero, Zero, 0x03)
+                    RDCA (NCRN, PRBI, Zero, PRBD, 0x03)
+                    RDCA (NCRN, 0x04, 0xFFFFFFF8, PCMD, 0x03)
+                    If ((NL1V != Zero))
+                    {
+                        RDCA (NCRN, (NL1V + 0x0C), 0xFFFFFF00, ND2V, 0x03)
+                        RDCA (NCRN, (NL1V + 0x08), 0x0F, (ND1V & 0xFFFFFFF0), 0x03)
+                        RDCA (NCRN, (NL1V + 0x08), 0xFFFFFFFF, ND1V, 0x03)
+                    }
+
+                    If ((NLRV != Zero))
+                    {
+                        RDCA (NCRN, (NLRV + 0x04), 0xFFFFFFFF, NLDV, 0x03)
+                    }
+
+                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFEBF, (NEAV & 0xFFFC), 0x03)
+                    RDCA (NCRN, (NPCV + 0x28), 0xFFFFFBFF, NECV, 0x03)
+                    RDCA (NCRN, (NPCV + 0x08), 0xFFFFFF1F, NEBV, 0x03)
+                    RDCA (NCRN, 0x68, 0xFFFFFBFF, NRAV, One)
+                    If (((NEAV & 0x40) == 0x40))
+                    {
+                        RDCA (NCRN, 0x50, 0xFFFFFFDF, 0x20, One)
+                        ADBG (Concatenate ("CNRSw ", ToDecimalString (Timer)))
+                        While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
+                        {
+                            Stall (0x0A)
+                        }
+                    }
+
+                    ADBG (Concatenate ("CNRSx ", ToDecimalString (Timer)))
+                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFFFC, (NEAV & 0x03), 0x03)
+                    If ((NMVV != Zero))
+                    {
+                        RDCA (NCRN, NMBV, Zero, NMVV, 0x03)
+                    }
+
+                    If ((NPVV != Zero))
+                    {
+                        RDCA (NCRN, NPBV, Zero, NPVV, 0x03)
+                    }
+
+                    ADBG (Concatenate ("CNRSe ", ToDecimalString (Timer)))
+                }
+            }
+
+            Device (NVM2)
+            {
+                Name (_ADR, 0x00C2FFFF)  // _ADR: Address
+                Method (_INI, 0, NotSerialized)  // _INI: Initialize
+                {
+                    NITV = NIT2 /* \NIT2 */
+                    NPMV = NPM2 /* \NPM2 */
+                    NPCV = NPC2 /* \NPC2 */
+                    NL1V = NL12 /* \NL12 */
+                    ND2V = ND22 /* \ND22 */
+                    ND1V = ND12 /* \ND12 */
+                    NLRV = NLR2 /* \NLR2 */
+                    NLDV = NLD2 /* \NLD2 */
+                    NEAV = NEA2 /* \NEA2 */
+                    NEBV = NEB2 /* \NEB2 */
+                    NECV = NEC2 /* \NEC2 */
+                    NRAV = NRA2 /* \NRA2 */
+                    NMBV = NMB2 /* \NMB2 */
+                    NMVV = NMV2 /* \NMV2 */
+                    NPBV = NPB2 /* \NPB2 */
+                    NPVV = NPV2 /* \NPV2 */
+                    NRPN = NRP2 /* \NRP2 */
+                    NCRN = One
+                }
+
+                Name (PRBI, Zero)
+                Name (PRBD, Zero)
+                Name (PCMD, Zero)
+                Name (NCRN, Zero)
+                Name (NITV, Zero)
+                Name (NPMV, Zero)
+                Name (NPCV, Zero)
+                Name (NL1V, Zero)
+                Name (ND2V, Zero)
+                Name (ND1V, Zero)
+                Name (NLRV, Zero)
+                Name (NLDV, Zero)
+                Name (NEAV, Zero)
+                Name (NEBV, Zero)
+                Name (NECV, Zero)
+                Name (NRAV, Zero)
+                Name (NMBV, Zero)
+                Name (NMVV, Zero)
+                Name (NPBV, Zero)
+                Name (NPVV, Zero)
+                Name (NRPN, Zero)
+                Name (MXIE, Zero)
+                Name (ID3C, Zero)
+                Name (ID3H, Zero)
+                Name (CSAV, Zero)
+                Method (_PS3, 0, Serialized)  // _PS3: Power State 3
+                {
+                    ADBG (Concatenate ("_PS3r:", ToHexString (_ADR)))
+                    If (IR3D ())
+                    {
+                        Return (Zero)
+                    }
+
+                    NVD3 ()
+                }
+
+                Method (_PS0, 0, Serialized)  // _PS0: Power State 0
+                {
+                    ADBG (Concatenate ("_PS0r:", ToHexString (_ADR)))
+                    If (IR3D ())
+                    {
+                        Return (Zero)
+                    }
+
+                    NVD0 ()
+                }
+
+                Method (RL23, 0, NotSerialized)
+                {
+                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x04, One)
+                    Sleep (0x10)
+                    Local0 = Zero
+                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x04))
+                    {
+                        If ((Local0 > 0x04))
+                        {
+                            Break
+                        }
+
+                        Sleep (0x10)
+                        Local0++
+                    }
+
+                    RDCA (NCRN, 0x0324, 0xFFFFFFFF, 0x08, One)
+                }
+
+                Method (RLA, 0, NotSerialized)
+                {
+                    RDCA (NCRN, 0x0420, 0xBFFFFFFF, Zero, One)
+                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x08, One)
+                    Sleep (0x10)
+                    Local0 = Zero
+                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x08))
+                    {
+                        If ((Local0 > 0x04))
+                        {
+                            Break
+                        }
+
+                        Sleep (0x10)
+                        Local0++
+                    }
+
+                    RDCA (NCRN, 0x0420, 0xFFFFFFFF, 0x40000000, One)
+                    Local0 = Zero
+                    While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
+                    {
+                        If ((Local0 > 0x08))
+                        {
+                            Break
+                        }
+
+                        Sleep (0x10)
+                        Local0++
+                    }
+
+                    RDCA (NCRN, 0x0324, 0xFFFFFFF7, Zero, One)
+                }
+
+                Method (RPON, 0, Serialized)
+                {
+                    ADBG (Concatenate ("RPONs: ", ToHexString (_ADR)))
+                    If ((ID3C == Zero))
+                    {
+                        ADBG ("RPON: no D3C")
+                        Return (Zero)
+                    }
+
+                    RSON (NRPN)
+                    RLA ()
+                    Sleep (0x64)
+                    ID3C = Zero
+                    ADBG (Concatenate ("RPONe: ", ToHexString (_ADR)))
+                }
+
+                Method (RPOF, 0, Serialized)
+                {
+                    ADBG (Concatenate ("RPOFs: ", ToHexString (_ADR)))
+                    If ((ID3H == Zero))
+                    {
+                        ADBG ("RPOF: No D3H")
+                        BreakPoint
+                        Return (Zero)
+                    }
+
+                    If (!D3CS (NRPN))
+                    {
+                        Return (Zero)
+                    }
+
+                    RL23 ()
+                    RSOF (NRPN)
+                    ID3C = One
+                }
+
+                Method (SAVC, 0, Serialized)
+                {
+                    ADBG (Concatenate ("SAVC:", ToHexString (_ADR)))
+                    PCMD = RDCA (NCRN, 0x04, Zero, Zero, 0x02)
+                    If ((NITV == One))
+                    {
+                        PRBI = 0x24
+                        PRBD = RDCA (NCRN, 0x24, Zero, Zero, 0x02)
+                    }
+                    ElseIf ((NITV == 0x02))
+                    {
+                        PRBI = 0x10
+                        PRBD = RDCA (NCRN, 0x10, Zero, Zero, 0x02)
+                        OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
+                        Field (MCRC, AnyAcc, NoLock, Preserve)
+                        {
+                            SCSO,   8, 
+                            Offset (0x02), 
+                            TCSO,   8, 
+                                ,   7, 
+                            RE,     1
+                        }
+
+                        MXIE = RDCA (NCRN, TCSO, Zero, Zero, 0x02)
+                    }
+
+                    CSAV = One
+                }
+
+                Method (NVD3, 0, Serialized)
+                {
+                    ADBG (Concatenate ("NVD3:", ToHexString (_ADR)))
+                    If ((NITV == Zero))
+                    {
+                        Return (Zero)
+                    }
+
+                    If ((ID3H == One))
+                    {
+                        ADBG ("Skip in D3")
+                        Return (Zero)
+                    }
+
+                    SAVC ()
+                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, 0x03, 0x03)
+                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, 0x03, One)
+                    ID3H = One
+                    Return (Zero)
+                }
+
+                Method (NVD0, 0, Serialized)
+                {
+                    ADBG (Concatenate ("NVD0:", ToHexString (_ADR)))
+                    If ((NITV == Zero))
+                    {
+                        Return (Zero)
+                    }
+
+                    If ((ID3H == Zero))
+                    {
+                        ADBG ("Remap already in D0")
+                        Return (Zero)
+                    }
+
+                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, Zero, One)
+                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, Zero, 0x03)
+                    If ((CSAV == One))
+                    {
+                        CNRS ()
+                        If ((NITV == 0x02))
+                        {
+                            OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
+                            Field (MCRC, AnyAcc, NoLock, Preserve)
+                            {
+                                SCSO,   8, 
+                                Offset (0x02), 
+                                TCSO,   8, 
+                                    ,   7, 
+                                RE,     1
+                            }
+
+                            RDCA (NCRN, TCSO, 0xFFFFFFFF, (MXIE & 0x80000000), 0x03)
+                            ADBG ("NVD0:  MSIXe")
+                        }
+                    }
+                    Else
+                    {
+                        ADBG ("Skip remap restore")
+                    }
+
+                    ID3H = Zero
+                    Return (Zero)
+                }
+
+                Method (CNRS, 0, Serialized)
+                {
+                    ADBG (Concatenate ("CNRSs ", ToDecimalString (Timer)))
+                    If ((NITV == Zero))
+                    {
+                        Return (Zero)
+                    }
+
+                    RDCA (NCRN, 0x10, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x14, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x18, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x1C, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x20, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x24, Zero, Zero, 0x03)
+                    RDCA (NCRN, PRBI, Zero, PRBD, 0x03)
+                    RDCA (NCRN, 0x04, 0xFFFFFFF8, PCMD, 0x03)
+                    If ((NL1V != Zero))
+                    {
+                        RDCA (NCRN, (NL1V + 0x0C), 0xFFFFFF00, ND2V, 0x03)
+                        RDCA (NCRN, (NL1V + 0x08), 0x0F, (ND1V & 0xFFFFFFF0), 0x03)
+                        RDCA (NCRN, (NL1V + 0x08), 0xFFFFFFFF, ND1V, 0x03)
+                    }
+
+                    If ((NLRV != Zero))
+                    {
+                        RDCA (NCRN, (NLRV + 0x04), 0xFFFFFFFF, NLDV, 0x03)
+                    }
+
+                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFEBF, (NEAV & 0xFFFC), 0x03)
+                    RDCA (NCRN, (NPCV + 0x28), 0xFFFFFBFF, NECV, 0x03)
+                    RDCA (NCRN, (NPCV + 0x08), 0xFFFFFF1F, NEBV, 0x03)
+                    RDCA (NCRN, 0x68, 0xFFFFFBFF, NRAV, One)
+                    If (((NEAV & 0x40) == 0x40))
+                    {
+                        RDCA (NCRN, 0x50, 0xFFFFFFDF, 0x20, One)
+                        ADBG (Concatenate ("CNRSw ", ToDecimalString (Timer)))
+                        While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
+                        {
+                            Stall (0x0A)
+                        }
+                    }
+
+                    ADBG (Concatenate ("CNRSx ", ToDecimalString (Timer)))
+                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFFFC, (NEAV & 0x03), 0x03)
+                    If ((NMVV != Zero))
+                    {
+                        RDCA (NCRN, NMBV, Zero, NMVV, 0x03)
+                    }
+
+                    If ((NPVV != Zero))
+                    {
+                        RDCA (NCRN, NPBV, Zero, NPVV, 0x03)
+                    }
+
+                    ADBG (Concatenate ("CNRSe ", ToDecimalString (Timer)))
+                }
+            }
+
+            Device (NVM3)
+            {
+                Name (_ADR, 0x00C3FFFF)  // _ADR: Address
+                Method (_INI, 0, NotSerialized)  // _INI: Initialize
+                {
+                    NITV = NIT3 /* \NIT3 */
+                    NPMV = NPM3 /* \NPM3 */
+                    NPCV = NPC3 /* \NPC3 */
+                    NL1V = NL13 /* \NL13 */
+                    ND2V = ND23 /* \ND23 */
+                    ND1V = ND13 /* \ND13 */
+                    NLRV = NLR3 /* \NLR3 */
+                    NLDV = NLD3 /* \NLD3 */
+                    NEAV = NEA3 /* \NEA3 */
+                    NEBV = NEB3 /* \NEB3 */
+                    NECV = NEC3 /* \NEC3 */
+                    NRAV = NRA3 /* \NRA3 */
+                    NMBV = NMB3 /* \NMB3 */
+                    NMVV = NMV3 /* \NMV3 */
+                    NPBV = NPB3 /* \NPB3 */
+                    NPVV = NPV3 /* \NPV3 */
+                    NRPN = NRP3 /* \NRP3 */
+                    NCRN = 0x02
+                }
+
+                Name (PRBI, Zero)
+                Name (PRBD, Zero)
+                Name (PCMD, Zero)
+                Name (NCRN, Zero)
+                Name (NITV, Zero)
+                Name (NPMV, Zero)
+                Name (NPCV, Zero)
+                Name (NL1V, Zero)
+                Name (ND2V, Zero)
+                Name (ND1V, Zero)
+                Name (NLRV, Zero)
+                Name (NLDV, Zero)
+                Name (NEAV, Zero)
+                Name (NEBV, Zero)
+                Name (NECV, Zero)
+                Name (NRAV, Zero)
+                Name (NMBV, Zero)
+                Name (NMVV, Zero)
+                Name (NPBV, Zero)
+                Name (NPVV, Zero)
+                Name (NRPN, Zero)
+                Name (MXIE, Zero)
+                Name (ID3C, Zero)
+                Name (ID3H, Zero)
+                Name (CSAV, Zero)
+                Method (_PS3, 0, Serialized)  // _PS3: Power State 3
+                {
+                    ADBG (Concatenate ("_PS3r:", ToHexString (_ADR)))
+                    If (IR3D ())
+                    {
+                        Return (Zero)
+                    }
+
+                    NVD3 ()
+                }
+
+                Method (_PS0, 0, Serialized)  // _PS0: Power State 0
+                {
+                    ADBG (Concatenate ("_PS0r:", ToHexString (_ADR)))
+                    If (IR3D ())
+                    {
+                        Return (Zero)
+                    }
+
+                    NVD0 ()
+                }
+
+                Method (RL23, 0, NotSerialized)
+                {
+                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x04, One)
+                    Sleep (0x10)
+                    Local0 = Zero
+                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x04))
+                    {
+                        If ((Local0 > 0x04))
+                        {
+                            Break
+                        }
+
+                        Sleep (0x10)
+                        Local0++
+                    }
+
+                    RDCA (NCRN, 0x0324, 0xFFFFFFFF, 0x08, One)
+                }
+
+                Method (RLA, 0, NotSerialized)
+                {
+                    RDCA (NCRN, 0x0420, 0xBFFFFFFF, Zero, One)
+                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x08, One)
+                    Sleep (0x10)
+                    Local0 = Zero
+                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x08))
+                    {
+                        If ((Local0 > 0x04))
+                        {
+                            Break
+                        }
+
+                        Sleep (0x10)
+                        Local0++
+                    }
+
+                    RDCA (NCRN, 0x0420, 0xFFFFFFFF, 0x40000000, One)
+                    Local0 = Zero
+                    While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
+                    {
+                        If ((Local0 > 0x08))
+                        {
+                            Break
+                        }
+
+                        Sleep (0x10)
+                        Local0++
+                    }
+
+                    RDCA (NCRN, 0x0324, 0xFFFFFFF7, Zero, One)
+                }
+
+                Method (RPON, 0, Serialized)
+                {
+                    ADBG (Concatenate ("RPONs: ", ToHexString (_ADR)))
+                    If ((ID3C == Zero))
+                    {
+                        ADBG ("RPON: no D3C")
+                        Return (Zero)
+                    }
+
+                    RSON (NRPN)
+                    RLA ()
+                    Sleep (0x64)
+                    ID3C = Zero
+                    ADBG (Concatenate ("RPONe: ", ToHexString (_ADR)))
+                }
+
+                Method (RPOF, 0, Serialized)
+                {
+                    ADBG (Concatenate ("RPOFs: ", ToHexString (_ADR)))
+                    If ((ID3H == Zero))
+                    {
+                        ADBG ("RPOF: No D3H")
+                        BreakPoint
+                        Return (Zero)
+                    }
+
+                    If (!D3CS (NRPN))
+                    {
+                        Return (Zero)
+                    }
+
+                    RL23 ()
+                    RSOF (NRPN)
+                    ID3C = One
+                }
+
+                Method (SAVC, 0, Serialized)
+                {
+                    ADBG (Concatenate ("SAVC:", ToHexString (_ADR)))
+                    PCMD = RDCA (NCRN, 0x04, Zero, Zero, 0x02)
+                    If ((NITV == One))
+                    {
+                        PRBI = 0x24
+                        PRBD = RDCA (NCRN, 0x24, Zero, Zero, 0x02)
+                    }
+                    ElseIf ((NITV == 0x02))
+                    {
+                        PRBI = 0x10
+                        PRBD = RDCA (NCRN, 0x10, Zero, Zero, 0x02)
+                        OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
+                        Field (MCRC, AnyAcc, NoLock, Preserve)
+                        {
+                            SCSO,   8, 
+                            Offset (0x02), 
+                            TCSO,   8, 
+                                ,   7, 
+                            RE,     1
+                        }
+
+                        MXIE = RDCA (NCRN, TCSO, Zero, Zero, 0x02)
+                    }
+
+                    CSAV = One
+                }
+
+                Method (NVD3, 0, Serialized)
+                {
+                    ADBG (Concatenate ("NVD3:", ToHexString (_ADR)))
+                    If ((NITV == Zero))
+                    {
+                        Return (Zero)
+                    }
+
+                    If ((ID3H == One))
+                    {
+                        ADBG ("Skip in D3")
+                        Return (Zero)
+                    }
+
+                    SAVC ()
+                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, 0x03, 0x03)
+                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, 0x03, One)
+                    ID3H = One
+                    Return (Zero)
+                }
+
+                Method (NVD0, 0, Serialized)
+                {
+                    ADBG (Concatenate ("NVD0:", ToHexString (_ADR)))
+                    If ((NITV == Zero))
+                    {
+                        Return (Zero)
+                    }
+
+                    If ((ID3H == Zero))
+                    {
+                        ADBG ("Remap already in D0")
+                        Return (Zero)
+                    }
+
+                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, Zero, One)
+                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, Zero, 0x03)
+                    If ((CSAV == One))
+                    {
+                        CNRS ()
+                        If ((NITV == 0x02))
+                        {
+                            OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
+                            Field (MCRC, AnyAcc, NoLock, Preserve)
+                            {
+                                SCSO,   8, 
+                                Offset (0x02), 
+                                TCSO,   8, 
+                                    ,   7, 
+                                RE,     1
+                            }
+
+                            RDCA (NCRN, TCSO, 0xFFFFFFFF, (MXIE & 0x80000000), 0x03)
+                            ADBG ("NVD0:  MSIXe")
+                        }
+                    }
+                    Else
+                    {
+                        ADBG ("Skip remap restore")
+                    }
+
+                    ID3H = Zero
+                    Return (Zero)
+                }
+
+                Method (CNRS, 0, Serialized)
+                {
+                    ADBG (Concatenate ("CNRSs ", ToDecimalString (Timer)))
+                    If ((NITV == Zero))
+                    {
+                        Return (Zero)
+                    }
+
+                    RDCA (NCRN, 0x10, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x14, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x18, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x1C, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x20, Zero, Zero, 0x03)
+                    RDCA (NCRN, 0x24, Zero, Zero, 0x03)
+                    RDCA (NCRN, PRBI, Zero, PRBD, 0x03)
+                    RDCA (NCRN, 0x04, 0xFFFFFFF8, PCMD, 0x03)
+                    If ((NL1V != Zero))
+                    {
+                        RDCA (NCRN, (NL1V + 0x0C), 0xFFFFFF00, ND2V, 0x03)
+                        RDCA (NCRN, (NL1V + 0x08), 0x0F, (ND1V & 0xFFFFFFF0), 0x03)
+                        RDCA (NCRN, (NL1V + 0x08), 0xFFFFFFFF, ND1V, 0x03)
+                    }
+
+                    If ((NLRV != Zero))
+                    {
+                        RDCA (NCRN, (NLRV + 0x04), 0xFFFFFFFF, NLDV, 0x03)
+                    }
+
+                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFEBF, (NEAV & 0xFFFC), 0x03)
+                    RDCA (NCRN, (NPCV + 0x28), 0xFFFFFBFF, NECV, 0x03)
+                    RDCA (NCRN, (NPCV + 0x08), 0xFFFFFF1F, NEBV, 0x03)
+                    RDCA (NCRN, 0x68, 0xFFFFFBFF, NRAV, One)
+                    If (((NEAV & 0x40) == 0x40))
+                    {
+                        RDCA (NCRN, 0x50, 0xFFFFFFDF, 0x20, One)
+                        ADBG (Concatenate ("CNRSw ", ToDecimalString (Timer)))
+                        While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
+                        {
+                            Stall (0x0A)
+                        }
+                    }
+
+                    ADBG (Concatenate ("CNRSx ", ToDecimalString (Timer)))
+                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFFFC, (NEAV & 0x03), 0x03)
+                    If ((NMVV != Zero))
+                    {
+                        RDCA (NCRN, NMBV, Zero, NMVV, 0x03)
+                    }
+
+                    If ((NPVV != Zero))
+                    {
+                        RDCA (NCRN, NPBV, Zero, NPVV, 0x03)
+                    }
+
+                    ADBG (Concatenate ("CNRSe ", ToDecimalString (Timer)))
+                }
+            }
+
+            Method (RDCA, 5, Serialized)
+            {
+                OperationRegion (RPAL, SystemMemory, (GPCB () + (0x000B8100 + Arg1)), 0x04)
+                Field (RPAL, DWordAcc, Lock, Preserve)
+                {
+                    RPCD,   32
+                }
+
+                OperationRegion (EPAC, SystemMemory, (GPCB () + 0x000B8308), 0x08)
+                Field (EPAC, DWordAcc, Lock, Preserve)
+                {
+                    CAIR,   32, 
+                    CADR,   32
+                }
+
+                OperationRegion (NCRG, SystemMemory, (GPCB () + 0x000B8FC0), 0x04)
+                Field (NCRG, DWordAcc, Lock, Preserve)
+                {
+                    CRGC,   32
+                }
+
+                If ((Arg0 > 0x02))
+                {
+                    Return (Zero)
+                }
+                Else
+                {
+                    CRGC = Arg0
+                }
+
+                Switch (ToInteger (Arg4))
+                {
+                    Case (Zero)
+                    {
+                        Return (RPCD) /* \_SB_.PCI0.SAT0.RDCA.RPCD */
+                    }
+                    Case (0x02)
+                    {
+                        CAIR = Arg1
+                        Return (CADR) /* \_SB_.PCI0.SAT0.RDCA.CADR */
+                    }
+                    Case (One)
+                    {
+                        Local0 = (Arg2 & RPCD) /* \_SB_.PCI0.SAT0.RDCA.RPCD */
+                        Local0 |= Arg3
+                        RPCD = Local0
+                    }
+                    Case (0x03)
+                    {
+                        CAIR = Arg1
+                        Local0 = (Arg2 & CADR) /* \_SB_.PCI0.SAT0.RDCA.CADR */
+                        Local0 |= Arg3
+                        CADR = Local0
+                    }
+                    Default
+                    {
+                        Return (Zero)
+                    }
+
+                }
+
+                Return (Zero)
+            }
+
+            Method (D3CS, 1, Serialized)
+            {
+                Switch (Arg0)
+                {
+                    Case (0x04)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP05.POFF))
+                        {
+                            Return (One)
+                        }
+                    }
+                    Case (0x06)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP07.POFF))
+                        {
+                            Return (One)
+                        }
+                    }
+                    Case (0x08)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP09.POFF))
+                        {
+                            Return (One)
+                        }
+                    }
+                    Case (0x0A)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP11.POFF))
+                        {
+                            Return (One)
+                        }
+                    }
+                    Case (0x0C)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP13.POFF))
+                        {
+                            Return (One)
+                        }
+                    }
+                    Case (0x0E)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP15.POFF))
+                        {
+                            Return (One)
+                        }
+                    }
+                    Case (0x10)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP17.POFF))
+                        {
+                            Return (One)
+                        }
+                    }
+                    Case (0x12)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP19.POFF))
+                        {
+                            Return (One)
+                        }
+                    }
+                    Case (0x14)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP21.POFF))
+                        {
+                            Return (One)
+                        }
+                    }
+                    Case (0x16)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP23.POFF))
+                        {
+                            Return (One)
+                        }
+                    }
+
+                }
+
+                Return (Zero)
+            }
+
+            Method (RSON, 1, Serialized)
+            {
+                Switch (Arg0)
+                {
+                    Case (0x04)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP05.PON))
+                        {
+                            ^^RP05.PON ()
+                        }
+                    }
+                    Case (0x06)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP07.PON))
+                        {
+                            ^^RP07.PON ()
+                        }
+                    }
+                    Case (0x08)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP09.PON))
+                        {
+                            ^^RP09.PON ()
+                        }
+                    }
+                    Case (0x0A)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP11.PON))
+                        {
+                            ^^RP11.PON ()
+                        }
+                    }
+                    Case (0x0C)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP13.PON))
+                        {
+                            ^^RP13.PON ()
+                        }
+                    }
+                    Case (0x0E)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP15.PON))
+                        {
+                            ^^RP15.PON ()
+                        }
+                    }
+                    Case (0x10)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP17.PON))
+                        {
+                            ^^RP17.PON ()
+                        }
+                    }
+                    Case (0x12)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP19.PON))
+                        {
+                            ^^RP19.PON ()
+                        }
+                    }
+                    Case (0x14)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP21.PON))
+                        {
+                            ^^RP21.PON ()
+                        }
+                    }
+                    Case (0x16)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP23.PON))
+                        {
+                            ^^RP23.PON ()
+                        }
+                    }
+
+                }
+            }
+
+            Method (RSOF, 1, Serialized)
+            {
+                Switch (Arg0)
+                {
+                    Case (0x04)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP05.POFF))
+                        {
+                            ^^RP05.POFF ()
+                        }
+                    }
+                    Case (0x06)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP07.POFF))
+                        {
+                            ^^RP07.POFF ()
+                        }
+                    }
+                    Case (0x08)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP09.POFF))
+                        {
+                            ^^RP09.POFF ()
+                        }
+                    }
+                    Case (0x0A)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP11.POFF))
+                        {
+                            ^^RP11.POFF ()
+                        }
+                    }
+                    Case (0x0C)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP13.POFF))
+                        {
+                            ^^RP13.POFF ()
+                        }
+                    }
+                    Case (0x0E)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP15.POFF))
+                        {
+                            ^^RP15.POFF ()
+                        }
+                    }
+                    Case (0x10)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP17.POFF))
+                        {
+                            ^^RP17.POFF ()
+                        }
+                    }
+                    Case (0x12)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP19.POFF))
+                        {
+                            ^^RP19.POFF ()
+                        }
+                    }
+                    Case (0x14)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP21.POFF))
+                        {
+                            ^^RP21.POFF ()
+                        }
+                    }
+                    Case (0x16)
+                    {
+                        If (CondRefOf (\_SB.PCI0.RP23.POFF))
+                        {
+                            ^^RP23.POFF ()
+                        }
+                    }
+
+                }
+            }
+
+            Name (VL0M, Zero)
+            Name (VL1M, Zero)
+            Name (VL2M, Zero)
+            Name (VR3A, One)
+            Method (IRM, 1, NotSerialized)
+            {
+                If ((VL0M & Arg0))
+                {
+                    Return (One)
+                }
+                ElseIf ((VL1M & Arg0))
+                {
+                    Return (One)
+                }
+                ElseIf ((VL2M & Arg0))
+                {
+                    Return (One)
+                }
+                Else
+                {
+                    Return (Zero)
+                }
+            }
+
+            Method (PD3C, 1, NotSerialized)
+            {
+                Return ((!VR3A || IRM (Arg0)))
+            }
+
+            Scope (PRT0)
+            {
+                Method (IR3D, 0, NotSerialized)
+                {
+                    Return (PD3C (One))
+                }
+            }
+
+            Scope (PRT1)
+            {
+                Method (IR3D, 0, NotSerialized)
+                {
+                    Return (PD3C (0x02))
+                }
+            }
+
+            Scope (PRT2)
+            {
+                Method (IR3D, 0, NotSerialized)
+                {
+                    Return (PD3C (0x04))
+                }
+            }
+
+            Scope (PRT3)
+            {
+                Method (IR3D, 0, NotSerialized)
+                {
+                    Return (PD3C (0x08))
+                }
+            }
+
+            Scope (PRT4)
+            {
+                Method (IR3D, 0, NotSerialized)
+                {
+                    Return (PD3C (0x10))
+                }
+            }
+
+            Scope (PRT5)
+            {
+                Method (IR3D, 0, NotSerialized)
+                {
+                    Return (PD3C (0x20))
+                }
+            }
+
+            Scope (NVM1)
+            {
+                Method (IR3D, 0, NotSerialized)
+                {
+                    Return (PD3C (0x0100))
+                }
+            }
+
+            Scope (NVM2)
+            {
+                Method (IR3D, 0, NotSerialized)
+                {
+                    Return (PD3C (0x0200))
+                }
+            }
+
+            Scope (NVM3)
+            {
+                Method (IR3D, 0, NotSerialized)
+                {
+                    Return (PD3C (0x0400))
+                }
+            }
+
+            Method (RSTD, 5, Serialized)
+            {
+                If ((Arg0 == ToUUID ("e03e3431-e510-4fa2-abc0-2d7e901245fe")))
+                {
+                    Switch (ToInteger (Arg2))
+                    {
+                        Case (Zero)
+                        {
+                            Name (RBUF, Buffer (One)
+                            {
+                                 0x00                                             // .
+                            })
+                            CreateByteField (RBUF, Zero, SFUN)
+                            SFUN = 0x3F
+                            Return (RBUF) /* \_SB_.PCI0.SAT0.RSTD.RBUF */
+                        }
+                        Case (One)
+                        {
+                            Arg4 = DerefOf (Arg3 [Zero])
+                            Local0 = DerefOf (Arg3 [Zero])
+                            ADBG (Concatenate ("RSTD.SET:", ToHexString (Local0)))
+                            Return (Package (0x01)
+                            {
+                                Zero
+                            })
+                        }
+                        Case (0x02)
+                        {
+                            Local0 = DerefOf (Arg3 [Zero])
+                            ADBG (Concatenate ("RSTD.ON:", ToHexString (Local0)))
+                            CPON (Local0)
+                            Return (Package (0x01)
+                            {
+                                Zero
+                            })
+                        }
+                        Case (0x03)
+                        {
+                            Local0 = DerefOf (Arg3 [Zero])
+                            ADBG (Concatenate ("RSTD.OFF:", ToHexString (Local0)))
+                            CPOF (Local0)
+                            Return (Package (0x01)
+                            {
+                                Zero
+                            })
+                        }
+                        Case (0x04)
+                        {
+                            Name (GETM, Buffer (One)
+                            {
+                                 0x00                                             // .
+                            })
+                            CreateByteField (GETM, Zero, GMSK)
+                            GMSK = Arg4
+                            ADBG (Concatenate ("RSTD.GET:", ToHexString (GMSK)))
+                            Return (GETM) /* \_SB_.PCI0.SAT0.RSTD.GETM */
+                        }
+                        Case (0x05)
+                        {
+                            VR3A = DerefOf (Arg3 [Zero])
+                            ADBG (Concatenate ("RSTD.D3A:", ToHexString (VR3A)))
+                            Return (Zero)
+                        }
+                        Default
+                        {
+                            Return (Package (0x01)
+                            {
+                                0x02
+                            })
+                        }
+
+                    }
+                }
+                Else
+                {
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+            }
+
+            Method (D3AS, 3, Serialized)
+            {
+                Switch (Arg1)
+                {
+                    Case (Zero)
+                    {
+                        Return (Buffer (One)
+                        {
+                             0x03                                             // .
+                        })
+                    }
+                    Case (One)
+                    {
+                        If ((PSON == One))
+                        {
+                            Return (Buffer (One)
+                            {
+                                 0x01                                             // .
+                            })
+                        }
+                        Else
+                        {
+                            Return (Buffer (One)
+                            {
+                                 0x00                                             // .
+                            })
+                        }
+                    }
+
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+
+            Method (CPON, 1, Serialized)
+            {
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT0.SPON) && (Arg0 & One)))
+                {
+                    ^PRT0.SPON ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT1.SPON) && (Arg0 & 0x02)))
+                {
+                    ^PRT1.SPON ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT2.SPON) && (Arg0 & 0x04)))
+                {
+                    ^PRT2.SPON ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT3.SPON) && (Arg0 & 0x08)))
+                {
+                    ^PRT3.SPON ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT4.SPON) && (Arg0 & 0x10)))
+                {
+                    ^PRT4.SPON ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT5.SPON) && (Arg0 & 0x20)))
+                {
+                    ^PRT5.SPON ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM1.RPON) && (Arg0 & 0x0100)))
+                {
+                    ^NVM1.RPON ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM1.NVD0) && (Arg0 & 0x0100)))
+                {
+                    ^NVM1.NVD0 ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM2.RPON) && (Arg0 & 0x0200)))
+                {
+                    ^NVM2.RPON ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM2.NVD0) && (Arg0 & 0x0200)))
+                {
+                    ^NVM2.NVD0 ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM3.RPON) && (Arg0 & 0x0400)))
+                {
+                    ^NVM3.RPON ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM3.NVD0) && (Arg0 & 0x0400)))
+                {
+                    ^NVM3.NVD0 ()
+                }
+            }
+
+            Method (CPOF, 1, Serialized)
+            {
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT0.SPOF) && (Arg0 & One)))
+                {
+                    ^PRT0.SPOF ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT1.SPOF) && (Arg0 & 0x02)))
+                {
+                    ^PRT1.SPOF ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT2.SPOF) && (Arg0 & 0x04)))
+                {
+                    ^PRT2.SPOF ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT3.SPOF) && (Arg0 & 0x08)))
+                {
+                    ^PRT3.SPOF ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT4.SPOF) && (Arg0 & 0x10)))
+                {
+                    ^PRT4.SPOF ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.PRT5.SPOF) && (Arg0 & 0x20)))
+                {
+                    ^PRT5.SPOF ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM1.NVD3) && (Arg0 & 0x0100)))
+                {
+                    ^NVM1.NVD3 ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM1.RPOF) && (Arg0 & 0x0100)))
+                {
+                    ^NVM1.RPOF ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM2.NVD3) && (Arg0 & 0x0200)))
+                {
+                    ^NVM2.NVD3 ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM2.RPOF) && (Arg0 & 0x0200)))
+                {
+                    ^NVM2.RPOF ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM3.NVD3) && (Arg0 & 0x0400)))
+                {
+                    ^NVM3.NVD3 ()
+                }
+
+                If ((CondRefOf (\_SB.PCI0.SAT0.NVM3.RPOF) && (Arg0 & 0x0400)))
+                {
+                    ^NVM3.RPOF ()
+                }
+            }
+
+            Device (VOL0)
+            {
+                Name (_ADR, 0x0080FFFF)  // _ADR: Address
+                Name (_PR0, Package (0x01)  // _PR0: Power Resources for D0
+                {
+                    V0PR
+                })
+                Name (_PR3, Package (0x01)  // _PR3: Power Resources for D3hot
+                {
+                    V0PR
+                })
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    Return (RSTD (Arg0, Arg1, Arg2, Arg3, RefOf (VL0M)))
+                }
+
+                PowerResource (V0PR, 0x00, 0x0000)
+                {
+                    Name (_STA, One)  // _STA: Status
+                    Method (_ON, 0, NotSerialized)  // _ON_: Power On
+                    {
+                        ADBG (Concatenate ("VOL0._ON:", ToHexString (VL0M)))
+                        If (VR3A)
+                        {
+                            CPON (VL0M)
+                            _STA = One
+                        }
+                        Else
+                        {
+                            ADBG ("Global RTD3 lock")
+                        }
+                    }
+
+                    Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
+                    {
+                        ADBG (Concatenate ("VOL0._OFF:", ToHexString (VL0M)))
+                        If (VR3A)
+                        {
+                            CPOF (VL0M)
+                            _STA = Zero
+                        }
+                        Else
+                        {
+                            ADBG ("Global RTD3 lock")
+                        }
+                    }
+                }
+            }
+
+            Device (VOL1)
+            {
+                Name (_ADR, 0x0081FFFF)  // _ADR: Address
+                Name (_PR0, Package (0x01)  // _PR0: Power Resources for D0
+                {
+                    V1PR
+                })
+                Name (_PR3, Package (0x01)  // _PR3: Power Resources for D3hot
+                {
+                    V1PR
+                })
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    Return (RSTD (Arg0, Arg1, Arg2, Arg3, RefOf (VL1M)))
+                }
+
+                PowerResource (V1PR, 0x00, 0x0000)
+                {
+                    Name (_STA, One)  // _STA: Status
+                    Method (_ON, 0, NotSerialized)  // _ON_: Power On
+                    {
+                        ADBG (Concatenate ("VOL1._ON:", ToHexString (VL1M)))
+                        If (VR3A)
+                        {
+                            CPON (VL1M)
+                            _STA = One
+                        }
+                        Else
+                        {
+                            ADBG ("Global RTD3 lock")
+                        }
+                    }
+
+                    Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
+                    {
+                        ADBG (Concatenate ("VOL1._OFF:", ToHexString (VL1M)))
+                        If (VR3A)
+                        {
+                            CPOF (VL1M)
+                            _STA = Zero
+                        }
+                        Else
+                        {
+                            ADBG ("Global RTD3 lock")
+                        }
+                    }
+                }
+            }
+
+            Device (VOL2)
+            {
+                Name (_ADR, 0x0082FFFF)  // _ADR: Address
+                Name (_PR0, Package (0x01)  // _PR0: Power Resources for D0
+                {
+                    V2PR
+                })
+                Name (_PR3, Package (0x01)  // _PR3: Power Resources for D3hot
+                {
+                    V2PR
+                })
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    Return (RSTD (Arg0, Arg1, Arg2, Arg3, RefOf (VL2M)))
+                }
+
+                PowerResource (V2PR, 0x00, 0x0000)
+                {
+                    Name (_STA, One)  // _STA: Status
+                    Method (_ON, 0, NotSerialized)  // _ON_: Power On
+                    {
+                        ADBG (Concatenate ("VOL2._ON:", ToHexString (VL2M)))
+                        If (VR3A)
+                        {
+                            CPON (VL2M)
+                            _STA = One
+                        }
+                        Else
+                        {
+                            ADBG ("Global RTD3 lock")
+                        }
+                    }
+
+                    Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
+                    {
+                        ADBG (Concatenate ("VOL2._OFF:", ToHexString (VL2M)))
+                        If (VR3A)
+                        {
+                            CPOF (VL2M)
+                            _STA = Zero
+                        }
+                        Else
+                        {
+                            ADBG ("Global RTD3 lock")
+                        }
+                    }
+                }
+            }
+        }
+        Device (GPI0)
+        {
+            Method (_HID, 0, NotSerialized)  // _HID: Hardware ID
+            {
+                If ((GPHD == One))
+                {
+                    Return ("PNP0C02")
+                }
+
+                If ((PCHS == PCHH))
+                {
+                    Return ("INT3450")
+                }
+
+                Return ("INT34BB")
+            }
+
+            Name (LINK, "\\_SB.PCI0.GPI0")
+            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+            {
+                Name (RBUF, ResourceTemplate ()
+                {
+                    Memory32Fixed (ReadWrite,
+                        0x00000000,         // Address Base
+                        0x00010000,         // Address Length
+                        _Y17)
+                    Memory32Fixed (ReadWrite,
+                        0x00000000,         // Address Base
+                        0x00010000,         // Address Length
+                        _Y18)
+                    Memory32Fixed (ReadWrite,
+                        0x00000000,         // Address Base
+                        0x00010000,         // Address Length
+                        _Y1A)
+                    Interrupt (ResourceConsumer, Level, ActiveLow, Shared, ,, _Y19)
+                    {
+                        0x0000000E,
+                    }
+                })
+                Name (CBUF, ResourceTemplate ()
+                {
+                    Memory32Fixed (ReadWrite,
+                        0x00000000,         // Address Base
+                        0x00010000,         // Address Length
+                        _Y1B)
+                })
+                CreateDWordField (RBUF, \_SB.PCI0.GPI0._CRS._Y17._BAS, COM0)  // _BAS: Base Address
+                CreateDWordField (RBUF, \_SB.PCI0.GPI0._CRS._Y18._BAS, COM1)  // _BAS: Base Address
+                CreateDWordField (RBUF, \_SB.PCI0.GPI0._CRS._Y19._INT, IRQN)  // _INT: Interrupts
+                COM0 = (SBRG + 0x006E0000)
+                COM1 = (SBRG + 0x006D0000)
+                IRQN = SGIR /* \SGIR */
+                If ((PCHS == PCHH))
+                {
+                    CreateDWordField (RBUF, \_SB.PCI0.GPI0._CRS._Y1A._BAS, CMH3)  // _BAS: Base Address
+                    CMH3 = (SBRG + 0x006B0000)
+                    CreateDWordField (CBUF, \_SB.PCI0.GPI0._CRS._Y1B._BAS, CMH4)  // _BAS: Base Address
+                    CMH4 = (SBRG + 0x006A0000)
+                    Return (ConcatenateResTemplate (RBUF, CBUF))
+                }
+                Else
+                {
+                    CreateDWordField (RBUF, \_SB.PCI0.GPI0._CRS._Y1A._BAS, CML4)  // _BAS: Base Address
+                    CML4 = (SBRG + 0x006A0000)
+                    Return (RBUF) /* \_SB_.PCI0.GPI0._CRS.RBUF */
+                }
+            }
+
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((GPHD == One))
+                {
+                    Return (0x03)
+                }
+
+                Return (0x0F)
+            }
+        }
+        
+        Method (SOD3, 3, Serialized)
+        {
+            Name (STMP, Zero)
+            OperationRegion (ICB1, SystemMemory, (GPCB () + Arg0), 0x88)
+            If (Arg1)
+            {
+                Field (ICB1, ByteAcc, NoLock, Preserve)
+                {
+                    Offset (0x84), 
+                    PMEC,   8
+                }
+
+                PMEC = 0x03
+                STMP = PMEC /* \_SB_.PCI0.SOD3.PMEC */
+            }
+
+            If ((Arg1 && Arg2))
+            {
+                Field (ICB1, DWordAcc, NoLock, Preserve)
+                {
+                    Offset (0x10), 
+                    BAR0,   64
+                }
+
+                BAR0 = Zero
+            }
+        }
+        
+        Method (SPIH, 1, Serialized)
+        {
+            OperationRegion (ICB1, SystemMemory, Arg0, 0x20)
+            Field (ICB1, DWordAcc, NoLock, Preserve)
+            {
+                Offset (0x10), 
+                BAR0,   64, 
+                BAR1,   64
+            }
+
+            Name (BUF0, ResourceTemplate ()
+            {
+                Memory32Fixed (ReadWrite,
+                    0x00000000,         // Address Base
+                    0x00001000,         // Address Length
+                    _Y1C)
+            })
+            Name (BUF1, ResourceTemplate ()
+            {
+                Memory32Fixed (ReadWrite,
+                    0x00000000,         // Address Base
+                    0x00001000,         // Address Length
+                    _Y1D)
+            })
+            CreateDWordField (BUF0, \_SB.PCI0.SPIH._Y1C._BAS, ADR0)  // _BAS: Base Address
+            CreateDWordField (BUF1, \_SB.PCI0.SPIH._Y1D._BAS, ADR1)  // _BAS: Base Address
+            ADR0 = (BAR0 & 0xFFFFFFFFFFFFF000)
+            ADR1 = (BAR1 & 0xFFFFFFFFFFFFF000)
+            ConcatenateResTemplate (BUF0, BUF1, Local0)
+            Return (Local0)
+        }
+
+        Device (SPI0)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            If ((SM00 == 0x02))
+            {
+                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (SPIH (SC00))
+                }
+
+                Name (_STA, 0x03)  // _STA: Status
+            }
+
+            If ((SM00 == One))
+            {
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    If (PCIC (Arg0))
+                    {
+                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                    }
+
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+
+                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                {
+                    SOD3 (SC00, One, One)
+                }
+
+                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                {
+                }
+            }
+
+            If (((SM00 == One) || (SM00 == Zero)))
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return (0x001E0002)
+                }
+            }
+        }
+
+        Device (SPI1)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            If ((SM01 == 0x02))
+            {
+                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (SPIH (SC01))
+                }
+
+                Name (_STA, 0x03)  // _STA: Status
+            }
+
+            If ((SM01 == One))
+            {
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    If (PCIC (Arg0))
+                    {
+                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                    }
+
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+
+                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                {
+                    SOD3 (SC01, One, One)
+                }
+
+                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                {
+                }
+            }
+
+            If (((SM01 == One) || (SM01 == Zero)))
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return (0x001E0003)
+                }
+            }
+        }
+
+        Device (SPI2)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            If ((SM02 == 0x02))
+            {
+                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (SPIH (SC02))
+                }
+
+                Name (_STA, 0x03)  // _STA: Status
+            }
+
+            If ((SM02 == One))
+            {
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    If (PCIC (Arg0))
+                    {
+                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                    }
+
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+
+                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                {
+                    SOD3 (SC02, One, One)
+                }
+
+                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                {
+                }
+            }
+
+            If (((SM02 == One) || (SM02 == Zero)))
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return (0x00120006)
+                }
+            }
+        }
+        
+        Method (I2CH, 1, Serialized)
+        {
+            OperationRegion (ICB1, SystemMemory, Arg0, 0x20)
+            Field (ICB1, DWordAcc, NoLock, Preserve)
+            {
+                Offset (0x10), 
+                BAR0,   64, 
+                BAR1,   64
+            }
+
+            Name (BUF0, ResourceTemplate ()
+            {
+                Memory32Fixed (ReadWrite,
+                    0x00000000,         // Address Base
+                    0x00001000,         // Address Length
+                    _Y1E)
+            })
+            Name (BUF1, ResourceTemplate ()
+            {
+                Memory32Fixed (ReadWrite,
+                    0x00000000,         // Address Base
+                    0x00001000,         // Address Length
+                    _Y1F)
+            })
+            CreateDWordField (BUF0, \_SB.PCI0.I2CH._Y1E._BAS, ADR0)  // _BAS: Base Address
+            CreateDWordField (BUF1, \_SB.PCI0.I2CH._Y1F._BAS, ADR1)  // _BAS: Base Address
+            ADR0 = (BAR0 & 0xFFFFFFFFFFFFF000)
+            ADR1 = (BAR1 & 0xFFFFFFFFFFFFF000)
+            ConcatenateResTemplate (BUF0, BUF1, Local0)
+            Return (Local0)
+        }
+        
+        Device (I2C0)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            If ((IM00 == 0x02))
+            {
+                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (I2CH (IC00))
+                }
+
+                Name (_STA, 0x03)  // _STA: Status
+            }
+
+            If ((IM00 == One))
+            {
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    If (PCIC (Arg0))
+                    {
+                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                    }
+
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+
+                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                {
+                    SOD3 (IC00, One, One)
+                }
+
+                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                {
+                }
+            }
+
+            If (((IM00 == One) || (IM00 == Zero)))
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return (0x00150000)
+                }
+            }
+        }
+
+        Device (I2C1)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            If ((IM01 == 0x02))
+            {
+                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (I2CH (IC01))
+                }
+
+                Name (_STA, 0x03)  // _STA: Status
+            }
+
+            If ((IM01 == One))
+            {
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    If (PCIC (Arg0))
+                    {
+                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                    }
+
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+
+                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                {
+                    SOD3 (IC01, One, One)
+                }
+
+                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                {
+                }
+            }
+
+            If (((IM01 == One) || (IM01 == Zero)))
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return (0x00150001)
+                }
+            }
+        }
+
+        Device (I2C2)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            If ((IM02 == 0x02))
+            {
+                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (I2CH (IC02))
+                }
+
+                Name (_STA, 0x03)  // _STA: Status
+            }
+
+            If ((IM02 == One))
+            {
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    If (PCIC (Arg0))
+                    {
+                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                    }
+
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+
+                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                {
+                    SOD3 (IC02, One, One)
+                }
+
+                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                {
+                }
+            }
+
+            If (((IM02 == One) || (IM02 == Zero)))
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return (0x00150002)
+                }
+            }
+        }
+
+        Device (I2C3)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            If ((IM03 == 0x02))
+            {
+                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (I2CH (IC03))
+                }
+
+                Name (_STA, 0x03)  // _STA: Status
+            }
+
+            If ((IM03 == One))
+            {
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    If (PCIC (Arg0))
+                    {
+                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                    }
+
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+
+                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                {
+                    SOD3 (IC03, One, One)
+                }
+
+                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                {
+                }
+            }
+
+            If (((IM03 == One) || (IM03 == Zero)))
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return (0x00150003)
+                }
+            }
+        }
+
+        Device (I2C4)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            If ((IM04 == 0x02))
+            {
+                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (I2CH (IC04))
+                }
+
+                Name (_STA, 0x03)  // _STA: Status
+            }
+
+            If ((IM04 == One))
+            {
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    If (PCIC (Arg0))
+                    {
+                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                    }
+
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+
+                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                {
+                    SOD3 (IC04, One, One)
+                }
+
+                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                {
+                }
+            }
+
+            If (((IM04 == One) || (IM04 == Zero)))
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return (0x00190000)
+                }
+            }
+        }
+
+        Device (I2C5)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            If ((IM05 == 0x02))
+            {
+                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Return (I2CH (IC05))
+                }
+
+                Name (_STA, 0x03)  // _STA: Status
+            }
+
+            If ((IM05 == One))
+            {
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    If (PCIC (Arg0))
+                    {
+                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                    }
+
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+
+                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+                {
+                    SOD3 (IC05, One, One)
+                }
+
+                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+                {
+                }
+            }
+
+            If (((IM05 == One) || (IM05 == Zero)))
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return (0x00190001)
+                }
+            }
+        }
+        
+        Method (UDSM, 1, Serialized)
+        {
+            If ((Arg0 == ToUUID ("f7af8347-a966-49fe-9022-7a9deeebdb27")))
+            {
+                Return (One)
+            }
+
+            Return (Zero)
+        }
+
+        Method (UDMA, 2, Serialized)
+        {
+            Switch (ToInteger (Arg0))
+            {
+                Case (Zero)
+                {
+                    Return (Buffer (0x08)
+                    {
+                         0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // ........
+                    })
+                }
+                Case (One)
+                {
+                    Return (ToInteger (Arg1))
+                }
+
+            }
+
+            Return (Buffer (0x08)
+            {
+                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // ........
+            })
+        }
+
+        Device (UA00)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+            {
+                If (PCIC (Arg0))
+                {
+                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                }
+
+                If (UDSM (Arg0))
+                {
+                    Return (UDMA (Arg2, UD00))
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+
+            Method (_ADR, 0, NotSerialized)  // _ADR: Address
+            {
+                Return (0x001E0000)
+            }
+
+            Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+            {
+                SOD3 (UC00, One, One)
+            }
+
+            Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+            {
+            }
+        }
+
+        Device (UA01)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+            {
+                If (PCIC (Arg0))
+                {
+                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                }
+
+                If (UDSM (Arg0))
+                {
+                    Return (UDMA (Arg2, UD01))
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+
+            Method (_ADR, 0, NotSerialized)  // _ADR: Address
+            {
+                Return (0x001E0001)
+            }
+
+            Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+            {
+                SOD3 (UC01, One, One)
+            }
+
+            Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+            {
+            }
+        }
+
+        Device (UA02)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+            {
+                If (PCIC (Arg0))
+                {
+                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                }
+
+                If (UDSM (Arg0))
+                {
+                    Return (UDMA (Arg2, UD02))
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+
+            Method (_ADR, 0, NotSerialized)  // _ADR: Address
+            {
+                Return (0x00190002)
+            }
+
+            Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
+            {
+                SOD3 (UC02, One, One)
+            }
+
+            Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
+            {
+            }
+        }
+
+        Method (DLLR, 5, Serialized)
+        {
+            ADBG ("SD DLL restore flow")
+            Name (TEMP, Zero)
+            Name (EMPB, Zero)
+            EMPB = XBAS /* External reference */
+            EMPB |= (Arg0 << 0x14)
+            EMPB |= (Arg1 << 0x0F)
+            EMPB |= (Arg2 << 0x0C)
+            OperationRegion (EMPC, SystemMemory, EMPB, 0x0100)
+            Field (EMPC, DWordAcc, NoLock, Preserve)
+            {
+                Offset (0x04), 
+                    ,   1, 
+                MSE,    1, 
+                Offset (0x10), 
+                BAR0,   64, 
+                Offset (0x84), 
+                PSTA,   32
+            }
+
+            Name (OPST, Zero)
+            OPST = PSTA /* \_SB_.PCI0.DLLR.PSTA */
+            PSTA &= 0xFFFFFFFC
+            TEMP = PSTA /* \_SB_.PCI0.DLLR.PSTA */
+            Name (OMSE, Zero)
+            OMSE = MSE /* \_SB_.PCI0.DLLR.MSE_ */
+            MSE = Zero
+            Name (OBAR, Zero)
+            OBAR = BAR0 /* \_SB_.PCI0.DLLR.BAR0 */
+            BAR0 = Arg3
+            TEMP = BAR0 /* \_SB_.PCI0.DLLR.BAR0 */
+            MSE = One
+            OperationRegion (EMMI, SystemMemory, Arg3, Arg4)
+            Field (EMMI, DWordAcc, NoLock, Preserve)
+            {
+                Offset (0x834), 
+                FDLL,   8, 
+                Offset (0x840), 
+                ADLL,   8
+            }
+
+            Name (FDLV, Zero)
+            Name (ADLV, Zero)
+            FDLV = FDLL /* \_SB_.PCI0.DLLR.FDLL */
+            ADLV = ADLL /* \_SB_.PCI0.DLLR.ADLL */
+            ADBG (Concatenate ("Fixed DLL value ", ToHexString (FDLV)))
+            ADBG (Concatenate ("Auto DLL Value ", ToHexString (ADLV)))
+            If ((ADLV != Zero))
+            {
+                ADBG ("Auto tuning executed, restoring values")
+                ADLV *= 0x02
+                FDLL = ADLV /* \_SB_.PCI0.DLLR.ADLV */
+            }
+
+            MSE = Zero
+            BAR0 = OBAR /* \_SB_.PCI0.DLLR.OBAR */
+            MSE = OMSE /* \_SB_.PCI0.DLLR.OMSE */
+            PSTA = OPST /* \_SB_.PCI0.DLLR.OPST */
+            TEMP = PSTA /* \_SB_.PCI0.DLLR.PSTA */
+        }
+
+        Device (PUFS)
+        {
+            Name (_ADR, 0x00120005)  // _ADR: Address
+            Name (_DDN, "Intel(R) UFS Controller")  // _DDN: DOS Device Name
+            Device (CARD)
+            {
+                Name (_ADR, 0x08)  // _ADR: Address
+                Method (_RMV, 0, NotSerialized)  // _RMV: Removal Status
+                {
+                    Return (Zero)
+                }
+            }
+        }
+
+        Device (PEMC)
+        {
+            Name (_ADR, 0x001A0000)  // _ADR: Address
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((EMCE == Zero))
+                {
+                    Return (Zero)
+                }
+                Else
+                {
+                    Return (0x0F)
+                }
+            }
+
+            OperationRegion (SCSR, PCI_Config, Zero, 0x0100)
+            Field (SCSR, WordAcc, NoLock, Preserve)
+            {
+                Offset (0x84), 
+                PSTA,   32, 
+                Offset (0xA2), 
+                    ,   2, 
+                PGEN,   1
+            }
+
+            Method (_PS0, 0, Serialized)  // _PS0: Power State 0
+            {
+                Stall (0x32)
+                PGEN = Zero
+                PCRA (0x52, 0x1C20, Zero)
+                PCRA (0x52, 0x4820, Zero)
+                PSTA &= 0xFFFFFFFC
+                TEMP = PSTA /* \_SB_.PCI0.PEMC.PSTA */
+            }
+
+            Method (_PS3, 0, Serialized)  // _PS3: Power State 3
+            {
+                DLLR (Zero, 0x1A, Zero, 0xFE0D0000, 0x00010000)
+                PGEN = One
+                PSTA |= 0x03
+                TEMP = PSTA /* \_SB_.PCI0.PEMC.PSTA */
+            }
+
+            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+            {
+                If (PCIC (Arg0))
+                {
+                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                }
+
+                ADBG (Concatenate ("EMH4=", ToDecimalString (EMH4)))
+                If ((Arg0 == ToUUID ("f6c13ea5-65cd-461f-ab7a-29f7e8d5bd61")))
+                {
+                    If ((Arg1 >= Zero))
+                    {
+                        Switch (ToInteger (Arg2))
+                        {
+                            Case (Zero)
+                            {
+                                If ((EMH4 == One))
+                                {
+                                    Return (Buffer (0x02)
+                                    {
+                                         0x61, 0x02                                       // a.
+                                    })
+                                }
+
+                                Return (Buffer (0x02)
+                                {
+                                     0x21, 0x02                                       // !.
+                                })
+                            }
+                            Case (0x05)
+                            {
+                                Return (Buffer (One)
+                                {
+                                     0x03                                             // .
+                                })
+                            }
+                            Case (0x06)
+                            {
+                                Return (Buffer (One)
+                                {
+                                     0x05                                             // .
+                                })
+                            }
+                            Case (0x09)
+                            {
+                                Switch (EMDS)
+                                {
+                                    Case (Zero)
+                                    {
+                                        Return (Buffer (One)
+                                        {
+                                             0x00                                             // .
+                                        })
+                                    }
+                                    Case (One)
+                                    {
+                                        Return (Buffer (One)
+                                        {
+                                             0x01                                             // .
+                                        })
+                                    }
+                                    Case (0x04)
+                                    {
+                                        Return (Buffer (One)
+                                        {
+                                             0x04                                             // .
+                                        })
+                                    }
+
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+
+            Device (CARD)
+            {
+                Name (_ADR, 0x08)  // _ADR: Address
+                Method (_RMV, 0, NotSerialized)  // _RMV: Removal Status
+                {
+                    Return (Zero)
+                }
+            }
+        }
+
+        Device (PSDC)
+        {
+            Name (_ADR, 0x00140005)  // _ADR: Address
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((SDCE == Zero))
+                {
+                    Return (Zero)
+                }
+                Else
+                {
+                    Return (0x0F)
+                }
+            }
+
+            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+            {
+                Name (SBFI, ResourceTemplate ()
+                {
+                    GpioInt (Edge, ActiveBoth, SharedAndWake, PullNone, 0x2710,
+                        "\\_SB.PCI0.GPI0", 0x00, ResourceConsumer, ,
+                        )
+                        {   // Pin list
+                            0x0000
+                        }
+                    GpioIo (Shared, PullDefault, 0x0000, 0x0000, IoRestrictionInputOnly,
+                        "\\_SB.PCI0.GPI0", 0x00, ResourceConsumer, ,
+                        )
+                        {   // Pin list
+                            0x0000
+                        }
+                })
+                CreateWordField (SBFI, 0x17, SDIP)
+                CreateWordField (SBFI, 0x3F, SDGP)
+                If ((PCHS == PCHL))
+                {
+                    SDIP = GNUM (0x04090027)
+                    SDGP = GNUM (0x04090027)
+                }
+                Else
+                {
+                    SDIP = GNUM (0x030C0006)
+                    SDGP = GNUM (0x030C0006)
+                }
+
+                Return (SBFI) /* \_SB_.PCI0.PSDC._CRS.SBFI */
+            }
+
+            Name (_S0W, 0x03)  // _S0W: S0 Device Wake State
+            OperationRegion (SCSR, PCI_Config, Zero, 0x0100)
+            Field (SCSR, WordAcc, NoLock, Preserve)
+            {
+                Offset (0x84), 
+                PSTA,   32, 
+                Offset (0xA2), 
+                    ,   2, 
+                PGEN,   1
+            }
+
+            Method (SDPW, 1, Serialized)
+            {
+                If (!SDPH)
+                {
+                    Return (Zero)
+                }
+
+                Name (GPIO, Zero)
+                If ((PCHS == PCHL))
+                {
+                    GPIO = 0x04000011
+                }
+                Else
+                {
+                    GPIO = 0x03000011
+                }
+
+                If ((Arg0 == Zero))
+                {
+                    SPMV (GPIO, One)
+                }
+                Else
+                {
+                    SGOV (GPIO, Zero)
+                    SPMV (GPIO, Zero)
+                }
+            }
+
+            Method (_PS0, 0, Serialized)  // _PS0: Power State 0
+            {
+                PGEN = Zero
+                PCRA (0x53, 0x1C20, Zero)
+                PCRA (0x53, 0x4820, Zero)
+                PSTA &= 0xFFFFFFFC
+                TEMP = PSTA /* \_SB_.PCI0.PSDC.PSTA */
+                SDPW (Zero)
+            }
+
+            Method (_PS3, 0, Serialized)  // _PS3: Power State 3
+            {
+                SDPW (One)
+                PGEN = One
+                PSTA |= 0x03
+                TEMP = PSTA /* \_SB_.PCI0.PSDC.PSTA */
+            }
+
+            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+            {
+                If (PCIC (Arg0))
+                {
+                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                }
+
+                If ((Arg0 == ToUUID ("f6c13ea5-65cd-461f-ab7a-29f7e8d5bd61")))
+                {
+                    If ((Arg1 >= Zero))
+                    {
+                        Switch (ToInteger (Arg2))
+                        {
+                            Case (Zero)
+                            {
+                                Return (Buffer (One)
+                                {
+                                     0x19                                             // .
+                                })
+                            }
+                            Case (0x03)
+                            {
+                                Sleep (0x64)
+                                Return (Buffer (One)
+                                {
+                                     0x00                                             // .
+                                })
+                            }
+                            Case (0x04)
+                            {
+                                Sleep (0x64)
+                                Return (Buffer (One)
+                                {
+                                     0x00                                             // .
+                                })
+                            }
+
+                        }
+                    }
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+        }
+
+        Device (ISHD)
+        {
+            Name (_ADR, 0x00130000)  // _ADR: Address
+            Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
+            {
+                If (PCIC (Arg0))
+                {
+                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                }
+
+                If (CondRefOf (HIWC))
+                {
+                    If (HIWC (Arg0))
+                    {
+                        If (CondRefOf (HIDW))
+                        {
+                            Return (HIDW (Arg0, Arg1, Arg2, Arg3))
+                        }
+                    }
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+        }
+
+        Device (HECI)
+        {
+            If (((S0ID == One) || (OSYS >= 0x07DF)))
+            {
+                Name (_DEP, Package (0x01)  // _DEP: Dependencies
+                {
+                    PEPD
+                })
+            }
+            Name (_ADR, 0x00160000)  // _ADR: Address
+            Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
+            {
+                If (PCIC (Arg0))
+                {
+                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
+                }
+
+                If (CondRefOf (HIWC))
+                {
+                    If (HIWC (Arg0))
+                    {
+                        If (CondRefOf (HIDW))
+                        {
+                            Return (HIDW (Arg0, Arg1, Arg2, Arg3))
+                        }
+                    }
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+        }
+
+        Device (CNVW)
+        {
+            Name (_ADR, 0x00140003)  // _ADR: Address
+            OperationRegion (CWAR, PCI_Config, Zero, 0x0100)
+            Field (CWAR, WordAcc, NoLock, Preserve)
+            {
+                VDID,   32, 
+                    ,   1, 
+                WMSE,   1, 
+                WBME,   1, 
+                Offset (0x10), 
+                WBR0,   64, 
+                Offset (0x44), 
+                    ,   28, 
+                WFLR,   1, 
+                Offset (0x48), 
+                    ,   15, 
+                WIFR,   1, 
+                Offset (0xCC), 
+                WPMS,   32
+            }
+
+            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+            {
+                If ((Arg0 == ToUUID ("079ff457-64a8-44be-bd8a-6955052b9b92")))
+                {
+                    Switch (ToInteger (Arg2))
+                    {
+                        Case (Zero)
+                        {
+                            Switch (Arg1)
+                            {
+                                Case (One)
+                                {
+                                    Return (Buffer (One)
+                                    {
+                                         0x03                                             // .
+                                    })
+                                }
+
+                            }
+
+                            Return (Buffer (One)
+                            {
+                                 0x00                                             // .
+                            })
+                        }
+                        Case (One)
+                        {
+                            Return (RMRC) /* \RMRC */
+                        }
+
+                    }
+                }
+                Else
+                {
+                    Return (Buffer (One)
+                    {
+                         0x00                                             // .
+                    })
+                }
+            }
+
+            Method (_S0W, 0, NotSerialized)  // _S0W: S0 Device Wake State
+            {
+                Return (0x03)
+            }
+
+            Method (_PRW, 0, NotSerialized)  // _PRW: Power Resources for Wake
+            {
+                Return (GPRW (0x6D, 0x04))
+            }
+
+            Method (_DSW, 3, NotSerialized)  // _DSW: Device Sleep Wake
+            {
+            }
+
+            PowerResource (WRST, 0x05, 0x0000)
+            {
+                Method (_STA, 0, NotSerialized)  // _STA: Status
+                {
+                    Return (One)
+                }
+
+                Method (_ON, 0, NotSerialized)  // _ON_: Power On
+                {
+                }
+
+                Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
+                {
+                }
+
+                Method (_RST, 0, NotSerialized)  // _RST: Device Reset
+                {
+                    If ((WFLR == One))
+                    {
+                        WBR0 = Zero
+                        WPMS = Zero
+                        WBME = Zero
+                        WMSE = Zero
+                        WIFR = One
+                    }
+                }
+            }
+
+            Name (_PRR, Package (0x01)  // _PRR: Power Resource for Reset
+            {
+                WRST
+            })
+        }
+
+        Method (CNIP, 0, NotSerialized)
+        {
+            If ((^CNVW.VDID != 0xFFFFFFFF))
+            {
+                Return (One)
+            }
+            Else
+            {
+                Return (Zero)
+            }
+        }
+
+        Method (SBTE, 1, Serialized)
+        {
+            If ((PCHS == PCHL))
+            {
+                Local0 = 0x04090000
+            }
+            Else
+            {
+                Local0 = 0x030C0000
+            }
+
+            SGOV (Local0, Arg0)
+        }
+
+        Method (GBTE, 0, NotSerialized)
+        {
+            If ((PCHS == PCHL))
+            {
+                Local0 = 0x04090000
+            }
+            Else
+            {
+                Local0 = 0x030C0000
+            }
+
+            Return (GGOV (Local0))
+        }
+
+        Method (AOLX, 0, Serialized)
+        {
+            Name (AODS, Package (0x03)
+            {
+                Zero, 
+                0x12, 
+                Zero
+            })
+            If ((CBTA == One))
+            {
+                AODS [0x02] = One
+            }
+
+            Return (AODS) /* \_SB_.PCI0.AOLX.AODS */
+        }
+        
+        If ((PTHM == 0x02))
+        {
+            Device (PCHT)
+            {
+                Name (_HID, "INTC1001")  // _HID: Hardware ID
+                Method (_STA, 0, Serialized)  // _STA: Status
+                {
+                    Return (0x0F)
+                }
+
+                Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+                {
+                    Memory32Fixed (ReadWrite,
+                        0xFE100000,         // Address Base
+                        0x00100000,         // Address Length
+                        )
+                    Memory32Fixed (ReadWrite,
+                        0xFC800000,         // Address Base
+                        0x00800000,         // Address Length
+                        )
+                })
+            }
+        }
+
+        Method (PTMA, 0, NotSerialized)
+        {
+            Return (BGMA) /* External reference */
+        }
+
+        Method (PTMS, 0, NotSerialized)
+        {
+            Return (BGMS) /* External reference */
+        }
+
+        Method (PTIA, 0, NotSerialized)
+        {
+            Return (BGIA) /* External reference */
+        }
+
+        Method (_INI, 0, Serialized)  // _INI: Initialize
+        {
+            TBPE = One
+            OSYS = 0x03E8
+            If (CondRefOf (\_OSI, Local0))
+            {
+                If (_OSI ("Windows 2001"))
+                {
+                    OSYS = 0x07D1
+                }
+
+                If (_OSI ("Windows 2001 SP1"))
+                {
+                    OSYS = 0x07D1
+                }
+
+                If (_OSI ("Windows 2001 SP2"))
+                {
+                    OSYS = 0x07D2
+                }
+
+                If (_OSI ("Windows 2001.1"))
+                {
+                    OSYS = 0x07D3
+                }
+
+                If (_OSI ("Windows 2006"))
+                {
+                    OSYS = 0x07D6
+                }
+
+                If (_OSI ("Windows 2009"))
+                {
+                    OSYS = 0x07D9
+                }
+
+                If (_OSI ("Windows 2012"))
+                {
+                    OSYS = 0x07DC
+                }
+
+                If (_OSI ("Windows 2013"))
+                {
+                    OSYS = 0x07DD
+                }
+
+                If (_OSI ("Windows 2015"))
+                {
+                    OSYS = 0x07DF
+                }
+
+                If (_OSI ("Windows 2016"))
+                {
+                    OSYS = 0x07E0
+                }
+
+                If (_OSI ("Windows 2017"))
+                {
+                    OSYS = 0x07E1
+                }
+            }
+
+            If (CondRefOf (\_SB.DTSE))
+            {
+                If ((DTSE >= One))
+                {
+                    DSAE = One
+                }
+            }
+
+            If ((TBTS == One))
+            {
+                If ((RPN0 == One))
+                {
+                    Acquire (OSUM, 0xFFFF)
+                    \_GPE.TINI (Zero, RPS0, RPT0, Zero)
+                    Release (OSUM)
+                }
+
+                If ((RPN1 == One))
+                {
+                    Acquire (OSUM, 0xFFFF)
+                    \_GPE.TINI (Zero, RPS1, RPT1, Zero)
+                    Release (OSUM)
+                }
+
+                Signal (WFEV)
+            }
+
+            GOST ()
+        }
+
+        Device (PDRC)
+        {
+            Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
+            Name (_UID, One)  // _UID: Unique ID
+            Name (BUF0, ResourceTemplate ()
+            {
+                Memory32Fixed (ReadWrite,
+                    0x00000000,         // Address Base
+                    0x00008000,         // Address Length
+                    _Y27)
+                Memory32Fixed (ReadWrite,
+                    0x00000000,         // Address Base
+                    0x00001000,         // Address Length
+                    _Y28)
+                Memory32Fixed (ReadWrite,
+                    0x00000000,         // Address Base
+                    0x00001000,         // Address Length
+                    _Y29)
+                Memory32Fixed (ReadWrite,
+                    0x00000000,         // Address Base
+                    0x00000000,         // Address Length
+                    _Y2A)
+                Memory32Fixed (ReadWrite,
+                    0xFED20000,         // Address Base
+                    0x00020000,         // Address Length
+                    )
+                Memory32Fixed (ReadOnly,
+                    0xFED90000,         // Address Base
+                    0x00004000,         // Address Length
+                    )
+                Memory32Fixed (ReadWrite,
+                    0xFED45000,         // Address Base
+                    0x0004B000,         // Address Length
+                    )
+                Memory32Fixed (ReadOnly,
+                    0xFEE00000,         // Address Base
+                    0x00100000,         // Address Length
+                    )
+                Memory32Fixed (ReadWrite,
+                    0x00000000,         // Address Base
+                    0x00000000,         // Address Length
+                    )
+                Memory32Fixed (ReadWrite,
+                    0x00000000,         // Address Base
+                    0x00000000,         // Address Length
+                    _Y2B)
+            })
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y27._BAS, MBR0)  // _BAS: Base Address
+                MBR0 = GMHB ()
+                CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y28._BAS, DBR0)  // _BAS: Base Address
+                DBR0 = GDMB ()
+                CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y29._BAS, EBR0)  // _BAS: Base Address
+                EBR0 = GEPB ()
+                CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y2A._BAS, XBR0)  // _BAS: Base Address
+                XBR0 = GPCB ()
+                CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y2A._LEN, XSZ0)  // _LEN: Length
+                XSZ0 = GPCL ()
+                If (!HPTE)
+                {
+                    CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y2B._BAS, HBAS)  // _BAS: Base Address
+                    CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y2B._LEN, HLEN)  // _LEN: Length
+                    HBAS = HPTB /* \HPTB */
+                    HLEN = 0x0400
+                }
+
+                Return (BUF0) /* \_SB_.PCI0.PDRC.BUF0 */
+            }
+        }
+
+        Method (PCIC, 1, Serialized)
+        {
+            If ((ECR1 == One))
+            {
+                If ((Arg0 == PCIG))
+                {
+                    Return (One)
+                }
+            }
+
+            Return (Zero)
+        }
+
+        Method (IICB, 2, Serialized)
+        {
+            Switch (ToInteger (Arg1))
+            {
+                Case (Zero)
+                {
+                    Name (IIC0, ResourceTemplate ()
+                    {
+                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
+                            AddressingMode7Bit, "\\_SB.PCI0.I2C0",
+                            0x00, ResourceConsumer, _Y2C, Exclusive,
+                            )
+                    })
+                    CreateWordField (IIC0, \_SB.PCI0.IICB._Y2C._ADR, DAD0)  // _ADR: Address
+                    DAD0 = Arg0
+                    Return (IIC0) /* \_SB_.PCI0.IICB.IIC0 */
+                }
+                Case (One)
+                {
+                    Name (IIC1, ResourceTemplate ()
+                    {
+                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
+                            AddressingMode7Bit, "\\_SB.PCI0.I2C1",
+                            0x00, ResourceConsumer, _Y2D, Exclusive,
+                            )
+                    })
+                    CreateWordField (IIC1, \_SB.PCI0.IICB._Y2D._ADR, DAD1)  // _ADR: Address
+                    DAD1 = Arg0
+                    Return (IIC1) /* \_SB_.PCI0.IICB.IIC1 */
+                }
+                Case (0x02)
+                {
+                    Name (IIC2, ResourceTemplate ()
+                    {
+                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
+                            AddressingMode7Bit, "\\_SB.PCI0.I2C2",
+                            0x00, ResourceConsumer, _Y2E, Exclusive,
+                            )
+                    })
+                    CreateWordField (IIC2, \_SB.PCI0.IICB._Y2E._ADR, DAD2)  // _ADR: Address
+                    DAD2 = Arg0
+                    Return (IIC2) /* \_SB_.PCI0.IICB.IIC2 */
+                }
+                Case (0x03)
+                {
+                    Name (IIC3, ResourceTemplate ()
+                    {
+                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
+                            AddressingMode7Bit, "\\_SB.PCI0.I2C3",
+                            0x00, ResourceConsumer, _Y2F, Exclusive,
+                            )
+                    })
+                    CreateWordField (IIC3, \_SB.PCI0.IICB._Y2F._ADR, DAD3)  // _ADR: Address
+                    DAD3 = Arg0
+                    Return (IIC3) /* \_SB_.PCI0.IICB.IIC3 */
+                }
+                Case (0x04)
+                {
+                    Name (IIC4, ResourceTemplate ()
+                    {
+                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
+                            AddressingMode7Bit, "\\_SB.PCI0.I2C4",
+                            0x00, ResourceConsumer, _Y30, Exclusive,
+                            )
+                    })
+                    CreateWordField (IIC4, \_SB.PCI0.IICB._Y30._ADR, DAD4)  // _ADR: Address
+                    DAD4 = Arg0
+                    Return (IIC4) /* \_SB_.PCI0.IICB.IIC4 */
+                }
+                Case (0x05)
+                {
+                    Name (IIC5, ResourceTemplate ()
+                    {
+                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
+                            AddressingMode7Bit, "\\_SB.PCI0.I2C5",
+                            0x00, ResourceConsumer, _Y31, Exclusive,
+                            )
+                    })
+                    CreateWordField (IIC5, \_SB.PCI0.IICB._Y31._ADR, DAD5)  // _ADR: Address
+                    DAD5 = Arg0
+                    Return (IIC5) /* \_SB_.PCI0.IICB.IIC5 */
+                }
+                Default
+                {
+                    Return (Zero)
+                }
+
+            }
+        }
+
+        Method (INTB, 3, Serialized)
+        {
+            Name (INTR, ResourceTemplate ()
+            {
+                Interrupt (ResourceConsumer, Level, ActiveLow, ExclusiveAndWake, ,, _Y32)
+                {
+                    0x00000000,
+                }
+            })
+            CreateDWordField (INTR, \_SB.PCI0.INTB._Y32._INT, NUMI)  // _INT: Interrupts
+            NUMI = INUM (Arg0)
+            CreateBitField (INTR, \_SB.PCI0.INTB._Y32._HE, LEVI)  // _HE_: High-Edge
+            LEVI = Arg1
+            CreateBitField (INTR, \_SB.PCI0.INTB._Y32._LL, ACTI)  // _LL_: Low Level
+            ACTI = Arg2
+            Return (INTR) /* \_SB_.PCI0.INTB.INTR */
+        }
     }
 
+    Scope (_SB.PCI0.LPCB)
+    {
+        Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+        {
+            If (PCIC (Arg0))
+            {
+                Return (PCID (Arg0, Arg1, Arg2, Arg3))
+            }
+
+            Return (Buffer (One)
+            {
+                 0x00                                             // .
+            })
+        }
+
+        OperationRegion (LPC, PCI_Config, Zero, 0x0100)
+        Field (LPC, AnyAcc, NoLock, Preserve)
+        {
+            Offset (0x02), 
+            CDID,   16, 
+            Offset (0x08), 
+            CRID,   8, 
+            Offset (0x80), 
+            IOD0,   8, 
+            IOD1,   8, 
+            Offset (0xA0), 
+                ,   9, 
+            PRBL,   1, 
+            Offset (0xDC), 
+                ,   2, 
+            ESPI,   1
+        }
+
+        Device (HPET)
+        {
+            Name (_HID, EisaId ("PNP0103") /* HPET System Timer */)  // _HID: Hardware ID
+            Name (_UID, Zero)  // _UID: Unique ID
+            Name (BUF0, ResourceTemplate ()
+            {
+                Memory32Fixed (ReadWrite,
+                    0xFED00000,         // Address Base
+                    0x00000400,         // Address Length
+                    _Y24)
+            })
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If (HPTE)
+                {
+                    Return (0x0F)
+                }
+
+                Return (Zero)
+            }
+
+            Method (XCRS, 0, Serialized)
+            {
+                If (HPTE)
+                {
+                    CreateDWordField (BUF0, \_SB.PCI0.LPCB.HPET._Y24._BAS, HPT0)  // _BAS: Base Address
+                    HPT0 = HPTB /* \HPTB */
+                }
+
+                Return (BUF0) /* \_SB_.PCI0.LPCB.HPET.BUF0 */
+            }
+        }
+
+        Device (IPIC)
+        {
+            Name (_HID, EisaId ("PNP0000") /* 8259-compatible Programmable Interrupt Controller */)  // _HID: Hardware ID
+            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            {
+                IO (Decode16,
+                    0x0020,             // Range Minimum
+                    0x0020,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x0024,             // Range Minimum
+                    0x0024,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x0028,             // Range Minimum
+                    0x0028,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x002C,             // Range Minimum
+                    0x002C,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x0030,             // Range Minimum
+                    0x0030,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x0034,             // Range Minimum
+                    0x0034,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x0038,             // Range Minimum
+                    0x0038,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x003C,             // Range Minimum
+                    0x003C,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x00A0,             // Range Minimum
+                    0x00A0,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x00A4,             // Range Minimum
+                    0x00A4,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x00A8,             // Range Minimum
+                    0x00A8,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x00AC,             // Range Minimum
+                    0x00AC,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x00B0,             // Range Minimum
+                    0x00B0,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x00B4,             // Range Minimum
+                    0x00B4,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x00B8,             // Range Minimum
+                    0x00B8,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x00BC,             // Range Minimum
+                    0x00BC,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x04D0,             // Range Minimum
+                    0x04D0,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IRQNoFlags ()
+                    {2}
+            })
+        }
+
+        Device (MATH)
+        {
+            Name (_HID, EisaId ("PNP0C04") /* x87-compatible Floating Point Processing Unit */)  // _HID: Hardware ID
+            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            {
+                IO (Decode16,
+                    0x00F0,             // Range Minimum
+                    0x00F0,             // Range Maximum
+                    0x01,               // Alignment
+                    0x01,               // Length
+                    )
+                IRQNoFlags ()
+                    {13}
+            })
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((PCHS == PCHH))
+                {
+                    Return (0x1F)
+                }
+                Else
+                {
+                    Return (Zero)
+                }
+            }
+        }
+
+        Device (LDRC)
+        {
+            Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
+            Name (_UID, 0x02)  // _UID: Unique ID
+            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            {
+                IO (Decode16,
+                    0x002E,             // Range Minimum
+                    0x002E,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x004E,             // Range Minimum
+                    0x004E,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x0061,             // Range Minimum
+                    0x0061,             // Range Maximum
+                    0x01,               // Alignment
+                    0x01,               // Length
+                    )
+                IO (Decode16,
+                    0x0063,             // Range Minimum
+                    0x0063,             // Range Maximum
+                    0x01,               // Alignment
+                    0x01,               // Length
+                    )
+                IO (Decode16,
+                    0x0065,             // Range Minimum
+                    0x0065,             // Range Maximum
+                    0x01,               // Alignment
+                    0x01,               // Length
+                    )
+                IO (Decode16,
+                    0x0067,             // Range Minimum
+                    0x0067,             // Range Maximum
+                    0x01,               // Alignment
+                    0x01,               // Length
+                    )
+                IO (Decode16,
+                    0x0070,             // Range Minimum
+                    0x0070,             // Range Maximum
+                    0x01,               // Alignment
+                    0x01,               // Length
+                    )
+                IO (Decode16,
+                    0x0080,             // Range Minimum
+                    0x0080,             // Range Maximum
+                    0x01,               // Alignment
+                    0x01,               // Length
+                    )
+                IO (Decode16,
+                    0x0092,             // Range Minimum
+                    0x0092,             // Range Maximum
+                    0x01,               // Alignment
+                    0x01,               // Length
+                    )
+                IO (Decode16,
+                    0x00B2,             // Range Minimum
+                    0x00B2,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+                IO (Decode16,
+                    0x0680,             // Range Minimum
+                    0x0680,             // Range Maximum
+                    0x01,               // Alignment
+                    0x20,               // Length
+                    )
+                IO (Decode16,
+                    0x164E,             // Range Minimum
+                    0x164E,             // Range Maximum
+                    0x01,               // Alignment
+                    0x02,               // Length
+                    )
+            })
+        }
+
+        Device (RTC)
+        {
+            Name (_HID, EisaId ("PNP0B00") /* AT Real-Time Clock */)  // _HID: Hardware ID
+            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            {
+                IO (Decode16,
+                    0x0070,             // Range Minimum
+                    0x0070,             // Range Maximum
+                    0x01,               // Alignment
+                    0x08,               // Length
+                    )
+                IRQNoFlags ()
+                    {}
+            })
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((STAS == One))
+                {
+                    Return (0x0F)
+                }
+                Else
+                {
+                    Return (Zero)
+                }
+            }
+        }
+
+        Device (TIMR)
+        {
+            Name (_HID, EisaId ("PNP0100") /* PC-class System Timer */)  // _HID: Hardware ID
+            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            {
+                IO (Decode16,
+                    0x0040,             // Range Minimum
+                    0x0040,             // Range Maximum
+                    0x01,               // Alignment
+                    0x04,               // Length
+                    )
+                IO (Decode16,
+                    0x0050,             // Range Minimum
+                    0x0050,             // Range Maximum
+                    0x10,               // Alignment
+                    0x04,               // Length
+                    )
+                IRQNoFlags ()
+                    {}
+            })
+        }
+
+        Device (CWDT)
+        {
+            Name (_HID, EisaId ("INT3F0D") /* ACPI Motherboard Resources */)  // _HID: Hardware ID
+            Name (_CID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _CID: Compatible ID
+            Method (_STA, 0, Serialized)  // _STA: Status
+            {
+                Return (0x0F)
+            }
+
+            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+            {
+                Name (RBUF, ResourceTemplate ()
+                {
+                    IO (Decode16,
+                        0x0000,             // Range Minimum
+                        0x0000,             // Range Maximum
+                        0x04,               // Alignment
+                        0x04,               // Length
+                        _Y25)
+                })
+                CreateWordField (RBUF, \_SB.PCI0.LPCB.CWDT._CRS._Y25._MIN, OMIN)  // _MIN: Minimum Base Address
+                CreateWordField (RBUF, \_SB.PCI0.LPCB.CWDT._CRS._Y25._MAX, OMAX)  // _MAX: Maximum Base Address
+                OMIN = (PMBS + 0x54)
+                OMAX = (PMBS + 0x54)
+                Return (RBUF) /* \_SB_.PCI0.LPCB.CWDT._CRS.RBUF */
+            }
+        }
+    }
+    
+    If ((PCHS == PCHH))
+    {
+        Scope (_SB.PCI0.XHC.RHUB)
+        {
+            Device (HS11)
+            {
+                Name (_ADR, 0x0B)  // _ADR: Address
+            }
+
+            Device (HS12)
+            {
+                Name (_ADR, 0x0C)  // _ADR: Address
+            }
+
+            Device (HS13)
+            {
+                Name (_ADR, 0x0D)  // _ADR: Address
+            }
+
+            Device (HS14)
+            {
+                Name (_ADR, 0x0E)  // _ADR: Address
+            }
+
+            Device (SS07)
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return ((SSPA () + 0x06))
+                }
+            }
+
+            Device (SS08)
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return ((SSPA () + 0x07))
+                }
+            }
+
+            Device (SS09)
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return ((SSPA () + 0x08))
+                }
+            }
+
+            Device (SS10)
+            {
+                Method (_ADR, 0, NotSerialized)  // _ADR: Address
+                {
+                    Return ((SSPA () + 0x09))
+                }
+            }
+        }
+    }
+    
     Scope (_SB.PCI0.RP01)
     {
         Name (LTRZ, Zero)
@@ -11666,6 +21352,698 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
             {
                  0x00                                             // .
             })
+        }
+        If (CondRefOf (\_SB.PCI0.RP11.PXSX))
+        {
+        Device (PXSX)
+        {
+            Name (_ADR, Zero)  // _ADR: Address
+            Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
+            {
+                ToUUID ("5025030f-842f-4ab4-a561-99a5189762d0"), 
+                Package (0x01)
+                {
+                    Package (0x02)
+                    {
+                        "StorageD3Enable", 
+                        One
+                    }
+                }
+            })
+            Method (_PRW, 0, NotSerialized)  // _PRW: Power Resources for Wake
+            {
+                Return (GPRW (0x69, 0x04))
+            }
+            
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                If ((PAHC () || PNVM ()))
+                {
+                    If (((S0ID == One) && (OSYS == 0x07DC)))
+                    {
+                        If (((PEPC & One) == One))
+                        {
+                            Return (Package (0x01)
+                            {
+                                PEPD
+                            })
+                        }
+                    }
+
+                    If (((S0ID == One) && (OSYS >= 0x07DF)))
+                    {
+                        Return (Package (0x01)
+                        {
+                            PEPD
+                        })
+                    }
+                }
+
+                Return (Package (0x00){})
+            }
+
+            OperationRegion (PCCX, PCI_Config, 0x09, 0x04)
+            Field (PCCX, ByteAcc, NoLock, Preserve)
+            {
+                PIXX,   8, 
+                SCCX,   8, 
+                BCCX,   8
+            }
+
+            Method (PAHC, 0, Serialized)
+            {
+                If ((BCCX == One))
+                {
+                    If ((SCCX == 0x06))
+                    {
+                        If ((PIXX == One))
+                        {
+                            Return (One)
+                        }
+                    }
+                }
+
+                Return (Zero)
+            }
+
+            Method (PNVM, 0, Serialized)
+            {
+                If ((BCCX == One))
+                {
+                    If ((SCCX == 0x08))
+                    {
+                        If ((PIXX == 0x02))
+                        {
+                            Return (One)
+                        }
+                    }
+                }
+
+                Return (Zero)
+            }
+
+            Method (PRAD, 0, Serialized)
+            {
+                If ((BCCX == One))
+                {
+                    If ((SCCX == 0x04))
+                    {
+                        Return (One)
+                    }
+                }
+
+                Return (Zero)
+            }
+            
+            Method (_RMV, 0, NotSerialized)  // _RMV: Removal Status
+            {
+                If ((TBTS == One))
+                {
+                    If (((SBNR == TBU0) || (SBNR == TBU1)))
+                    {
+                        Return (Zero)
+                    }
+                    Else
+                    {
+                        Return (HPCE) /* \_SB_.PCI0.RP11.HPCE */
+                    }
+                }
+                Else
+                {
+                    Return (HPCE) /* \_SB_.PCI0.RP11.HPCE */
+                }
+            }
+            OperationRegion (RPXX, PCI_Config, Zero, 0x10)
+            Field (RPXX, AnyAcc, NoLock, Preserve)
+            {
+                VDID,   32
+            }
+
+            OperationRegion (FLDR, PCI_Config, 0x44, 0x06)
+            Field (FLDR, ByteAcc, NoLock, Preserve)
+            {
+                DCAP,   32, 
+                DCTR,   16
+            }
+
+            Method (WIST, 0, Serialized)
+            {
+                If (CondRefOf (VDID))
+                {
+                    Switch (ToInteger (VDID))
+                    {
+                        Case (0x095A8086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x095B8086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x31658086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x31668086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x08B18086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x08B28086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x08B38086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x08B48086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x24F38086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x24F48086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x24F58086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x24F68086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x24FD8086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x24FB8086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x25268086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x27238086)
+                        {
+                            Return (One)
+                        }
+                        Default
+                        {
+                            Return (Zero)
+                        }
+
+                    }
+                }
+                Else
+                {
+                    Return (Zero)
+                }
+            }
+
+            Method (WWST, 0, Serialized)
+            {
+                If (CondRefOf (VDID))
+                {
+                    Switch (ToInteger (VDID))
+                    {
+                        Case (0x73608086)
+                        {
+                            Return (One)
+                        }
+                        Case (0x75608086)
+                        {
+                            Return (One)
+                        }
+                        Default
+                        {
+                            Return (Zero)
+                        }
+
+                    }
+                }
+                Else
+                {
+                    Return (Zero)
+                }
+            }
+
+            If (WIST ())
+            {
+                PowerResource (WRST, 0x05, 0x0000)
+                {
+                    Method (_STA, 0, NotSerialized)  // _STA: Status
+                    {
+                        ADBG ("Wifi PR _STA")
+                        Return (One)
+                    }
+
+                    Method (_ON, 0, NotSerialized)  // _ON_: Power On
+                    {
+                        ADBG ("Wifi PR _ON")
+                    }
+
+                    Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
+                    {
+                        ADBG ("Wifi PR _OFF")
+                    }
+
+                    Method (_RST, 0, NotSerialized)  // _RST: Device Reset
+                    {
+                        ADBG ("Wifi PR _RST")
+                        If ((DCAP & 0x10000000))
+                        {
+                            Local0 = DCTR /* \_SB_.PCI0.RP11.PXSX.DCTR */
+                            Local0 |= 0x8000
+                            DCTR = Local0
+                        }
+                    }
+                }
+
+                Name (SPLX, Package (0x02)
+                {
+                    Zero, 
+                    Package (0x03)
+                    {
+                        0x80000000, 
+                        0x80000000, 
+                        0x80000000
+                    }
+                })
+                Method (SPLC, 0, Serialized)
+                {
+                    DerefOf (SPLX [One]) [Zero] = DOM1 /* \DOM1 */
+                    DerefOf (SPLX [One]) [One] = LIM1 /* \LIM1 */
+                    DerefOf (SPLX [One]) [0x02] = TIM1 /* \TIM1 */
+                    Return (SPLX) /* \_SB_.PCI0.RP11.PXSX.SPLX */
+                }
+
+                Name (WANX, Package (0x03)
+                {
+                    Zero, 
+                    Package (0x03)
+                    {
+                        0x80000000, 
+                        0x80000000, 
+                        0x80000000
+                    }, 
+
+                    Package (0x03)
+                    {
+                        0x80000000, 
+                        0x80000000, 
+                        0x80000000
+                    }
+                })
+                Method (WAND, 0, Serialized)
+                {
+                    DerefOf (WANX [One]) [Zero] = Zero
+                    DerefOf (WANX [One]) [One] = TRD0 /* \TRD0 */
+                    DerefOf (WANX [One]) [0x02] = TRL0 /* \TRL0 */
+                    DerefOf (WANX [0x02]) [Zero] = One
+                    DerefOf (WANX [0x02]) [One] = TRD1 /* \TRD1 */
+                    DerefOf (WANX [0x02]) [0x02] = TRL1 /* \TRL1 */
+                    Return (WANX) /* \_SB_.PCI0.RP11.PXSX.WANX */
+                }
+
+                Name (WRDX, Package (0x02)
+                {
+                    Zero, 
+                    Package (0x02)
+                    {
+                        0x80000000, 
+                        0x8000
+                    }
+                })
+                Method (WRDD, 0, Serialized)
+                {
+                    DerefOf (WRDX [One]) [Zero] = WDM1 /* \WDM1 */
+                    DerefOf (WRDX [One]) [One] = CID1 /* \CID1 */
+                    Return (WRDX) /* \_SB_.PCI0.RP11.PXSX.WRDX */
+                }
+
+                Name (WRDY, Package (0x02)
+                {
+                    Zero, 
+                    Package (0x0C)
+                    {
+                        0x07, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80
+                    }
+                })
+                Method (WRDS, 0, Serialized)
+                {
+                    DerefOf (WRDY [One]) [One] = STXE /* \STXE */
+                    DerefOf (WRDY [One]) [0x02] = ST10 /* \ST10 */
+                    DerefOf (WRDY [One]) [0x03] = ST11 /* \ST11 */
+                    DerefOf (WRDY [One]) [0x04] = ST12 /* \ST12 */
+                    DerefOf (WRDY [One]) [0x05] = ST13 /* \ST13 */
+                    DerefOf (WRDY [One]) [0x06] = ST14 /* \ST14 */
+                    DerefOf (WRDY [One]) [0x07] = ST15 /* \ST15 */
+                    DerefOf (WRDY [One]) [0x08] = ST16 /* \ST16 */
+                    DerefOf (WRDY [One]) [0x09] = ST17 /* \ST17 */
+                    DerefOf (WRDY [One]) [0x0A] = ST18 /* \ST18 */
+                    DerefOf (WRDY [One]) [0x0B] = ST19 /* \ST19 */
+                    Return (WRDY) /* \_SB_.PCI0.RP11.PXSX.WRDY */
+                }
+
+                Name (EWRY, Package (0x02)
+                {
+                    Zero, 
+                    Package (0x21)
+                    {
+                        0x07, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80
+                    }
+                })
+                Method (EWRD, 0, Serialized)
+                {
+                    DerefOf (EWRY [One]) [One] = STDE /* \STDE */
+                    DerefOf (EWRY [One]) [0x02] = STRS /* \STRS */
+                    DerefOf (EWRY [One]) [0x03] = ST20 /* \ST20 */
+                    DerefOf (EWRY [One]) [0x04] = ST21 /* \ST21 */
+                    DerefOf (EWRY [One]) [0x05] = ST22 /* \ST22 */
+                    DerefOf (EWRY [One]) [0x06] = ST23 /* \ST23 */
+                    DerefOf (EWRY [One]) [0x07] = ST24 /* \ST24 */
+                    DerefOf (EWRY [One]) [0x08] = ST25 /* \ST25 */
+                    DerefOf (EWRY [One]) [0x09] = ST26 /* \ST26 */
+                    DerefOf (EWRY [One]) [0x0A] = ST27 /* \ST27 */
+                    DerefOf (EWRY [One]) [0x0B] = ST28 /* \ST28 */
+                    DerefOf (EWRY [One]) [0x0C] = ST29 /* \ST29 */
+                    DerefOf (EWRY [One]) [0x0D] = ST30 /* \ST30 */
+                    DerefOf (EWRY [One]) [0x0E] = ST31 /* \ST31 */
+                    DerefOf (EWRY [One]) [0x0F] = ST32 /* \ST32 */
+                    DerefOf (EWRY [One]) [0x10] = ST33 /* \ST33 */
+                    DerefOf (EWRY [One]) [0x11] = ST34 /* \ST34 */
+                    DerefOf (EWRY [One]) [0x12] = ST35 /* \ST35 */
+                    DerefOf (EWRY [One]) [0x13] = ST36 /* \ST36 */
+                    DerefOf (EWRY [One]) [0x14] = ST37 /* \ST37 */
+                    DerefOf (EWRY [One]) [0x15] = ST38 /* \ST38 */
+                    DerefOf (EWRY [One]) [0x16] = ST39 /* \ST39 */
+                    DerefOf (EWRY [One]) [0x17] = ST40 /* \ST40 */
+                    DerefOf (EWRY [One]) [0x18] = ST41 /* \ST41 */
+                    DerefOf (EWRY [One]) [0x19] = ST42 /* \ST42 */
+                    DerefOf (EWRY [One]) [0x1A] = ST43 /* \ST43 */
+                    DerefOf (EWRY [One]) [0x1B] = ST44 /* \ST44 */
+                    DerefOf (EWRY [One]) [0x1C] = ST45 /* \ST45 */
+                    DerefOf (EWRY [One]) [0x1D] = ST46 /* \ST46 */
+                    DerefOf (EWRY [One]) [0x1E] = ST47 /* \ST47 */
+                    DerefOf (EWRY [One]) [0x1F] = ST48 /* \ST48 */
+                    DerefOf (EWRY [One]) [0x20] = ST49 /* \ST49 */
+                    Return (EWRY) /* \_SB_.PCI0.RP11.PXSX.EWRY */
+                }
+
+                Name (WGDY, Package (0x02)
+                {
+                    Zero, 
+                    Package (0x13)
+                    {
+                        0x07, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80
+                    }
+                })
+                Method (WGDS, 0, Serialized)
+                {
+                    DerefOf (WGDY [One]) [One] = SD11 /* \SD11 */
+                    DerefOf (WGDY [One]) [0x02] = SD12 /* \SD12 */
+                    DerefOf (WGDY [One]) [0x03] = SD13 /* \SD13 */
+                    DerefOf (WGDY [One]) [0x04] = SD14 /* \SD14 */
+                    DerefOf (WGDY [One]) [0x05] = SD15 /* \SD15 */
+                    DerefOf (WGDY [One]) [0x06] = SD16 /* \SD16 */
+                    DerefOf (WGDY [One]) [0x07] = SD21 /* \SD21 */
+                    DerefOf (WGDY [One]) [0x08] = SD22 /* \SD22 */
+                    DerefOf (WGDY [One]) [0x09] = SD23 /* \SD23 */
+                    DerefOf (WGDY [One]) [0x0A] = SD24 /* \SD24 */
+                    DerefOf (WGDY [One]) [0x0B] = SD25 /* \SD25 */
+                    DerefOf (WGDY [One]) [0x0C] = SD26 /* \SD26 */
+                    DerefOf (WGDY [One]) [0x0D] = SD31 /* \SD31 */
+                    DerefOf (WGDY [One]) [0x0E] = SD32 /* \SD32 */
+                    DerefOf (WGDY [One]) [0x0F] = SD33 /* \SD33 */
+                    DerefOf (WGDY [One]) [0x10] = SD34 /* \SD34 */
+                    DerefOf (WGDY [One]) [0x11] = SD35 /* \SD35 */
+                    DerefOf (WGDY [One]) [0x12] = SD36 /* \SD36 */
+                    Return (WGDY) /* \_SB_.PCI0.RP11.PXSX.WGDY */
+                }
+
+                Name (PPAY, Package (0x02)
+                {
+                    Zero, 
+                    Package (0x0C)
+                    {
+                        0x07, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80, 
+                        0x80
+                    }
+                })
+                Method (PPAG, 0, Serialized)
+                {
+                    DerefOf (PPAY [One]) [One] = WAGE /* \WAGE */
+                    DerefOf (PPAY [One]) [0x02] = AGA1 /* \AGA1 */
+                    DerefOf (PPAY [One]) [0x03] = AGA2 /* \AGA2 */
+                    DerefOf (PPAY [One]) [0x04] = AGA3 /* \AGA3 */
+                    DerefOf (PPAY [One]) [0x05] = AGA4 /* \AGA4 */
+                    DerefOf (PPAY [One]) [0x06] = AGA5 /* \AGA5 */
+                    DerefOf (PPAY [One]) [0x07] = AGB1 /* \AGB1 */
+                    DerefOf (PPAY [One]) [0x08] = AGB2 /* \AGB2 */
+                    DerefOf (PPAY [One]) [0x09] = AGB3 /* \AGB3 */
+                    DerefOf (PPAY [One]) [0x0A] = AGB4 /* \AGB4 */
+                    DerefOf (PPAY [One]) [0x0B] = AGB5 /* \AGB5 */
+                    Return (PPAY) /* \_SB_.PCI0.RP11.PXSX.PPAY */
+                }
+
+                Name (ECKY, Package (0x02)
+                {
+                    Zero, 
+                    Package (0x02)
+                    {
+                        0x07, 
+                        Zero
+                    }
+                })
+                Method (ECKV, 0, Serialized)
+                {
+                    DerefOf (ECKY [One]) [One] = CECV /* \CECV */
+                    Return (ECKY) /* \_SB_.PCI0.RP11.PXSX.ECKY */
+                }
+
+                Name (SADX, Package (0x03)
+                {
+                    Zero, 
+                    Package (0x02)
+                    {
+                        0x07, 
+                        0x80000000
+                    }, 
+
+                    Package (0x02)
+                    {
+                        0x12, 
+                        0x80000000
+                    }
+                })
+                Method (SADS, 0, Serialized)
+                {
+                    DerefOf (SADX [One]) [One] = ATDV /* \ATDV */
+                    DerefOf (SADX [0x02]) [One] = ATDV /* \ATDV */
+                    Return (SADX) /* \_SB_.PCI0.RP11.PXSX.SADX */
+                }
+
+                Name (GPCX, Package (0x03)
+                {
+                    Zero, 
+                    Package (0x02)
+                    {
+                        0x07, 
+                        Package (0x03)
+                        {
+                            Zero, 
+                            Zero, 
+                            Zero
+                        }
+                    }, 
+
+                    Package (0x02)
+                    {
+                        0x12, 
+                        Package (0x03)
+                        {
+                            Zero, 
+                            Zero, 
+                            Zero
+                        }
+                    }
+                })
+                Method (GPC, 0, Serialized)
+                {
+                    Return (GPCX) /* \_SB_.PCI0.RP11.PXSX.GPCX */
+                }
+
+                PowerResource (DRST, 0x05, 0x0000)
+                {
+                    Method (_STA, 0, NotSerialized)  // _STA: Status
+                    {
+                        ADBG ("PXSX PR _STA")
+                        Return (One)
+                    }
+
+                    Method (_ON, 0, NotSerialized)  // _ON_: Power On
+                    {
+                        ADBG ("PXSX PR _ON")
+                    }
+
+                    Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
+                    {
+                        ADBG ("PXSX PR _OFF")
+                    }
+
+                    Method (_RST, 0, NotSerialized)  // _RST: Device Reset
+                    {
+                        ADBG ("PXSX PR _RST")
+                        If ((DCAP & 0x10000000))
+                        {
+                            Local0 = DCTR /* \_SB_.PCI0.RP11.PXSX.DCTR */
+                            Local0 |= 0x8000
+                            DCTR = Local0
+                        }
+                    }
+                }
+
+                Method (_PRR, 0, NotSerialized)  // _PRR: Power Resource for Reset
+                {
+                    If (WIST ())
+                    {
+                        If (CondRefOf (WRST))
+                        {
+                            Return (Package (0x01)
+                            {
+                                WRST
+                            })
+                        }
+                    }
+
+                    Return (Package (0x01)
+                    {
+                        DRST
+                    })
+                }
+
+                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
+                {
+                    If ((Arg0 == ToUUID ("079ff457-64a8-44be-bd8a-6955052b9b92")))
+                    {
+                        Switch (ToInteger (Arg2))
+                        {
+                            Case (Zero)
+                            {
+                                Switch (Arg1)
+                                {
+                                    Case (One)
+                                    {
+                                        Return (Buffer (One)
+                                        {
+                                             0x03                                             // .
+                                        })
+                                    }
+
+                                }
+
+                                Return (Buffer (One)
+                                {
+                                     0x00                                             // .
+                                })
+                            }
+                            Case (One)
+                            {
+                                Return (RMRC) /* \RMRC */
+                            }
+
+                        }
+                    }
+                    Else
+                    {
+                        Return (Buffer (One)
+                        {
+                             0x00                                             // .
+                        })
+                    }
+                }
+            }
+        }
         }
 
         Method (HPME, 0, Serialized)
@@ -15691,3618 +26069,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
             Return (GPRW (0x69, 0x04))
         }
     }
-
-    Scope (_SB.PCI0)
-    {
-        Device (SAT0)
-        {
-            Name (_ADR, 0x00170000)  // _ADR: Address
-            Name (_DSD, Package (0x02)  // _DSD: Device-Specific Data
-            {
-                ToUUID ("5025030f-842f-4ab4-a561-99a5189762d0"), 
-                Package (0x01)
-                {
-                    Package (0x02)
-                    {
-                        "StorageD3Enable", 
-                        One
-                    }
-                }
-            })
-            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-            {
-                If (PCIC (Arg0))
-                {
-                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                }
-                ElseIf ((Arg0 == ToUUID ("9cd9cddd-8845-4afd-8392-31c4eb87cabd")))
-                {
-                    Return (D3AS (Arg1, Arg2, Arg3))
-                }
-                ElseIf ((CondRefOf (SATC) && CondRefOf (SATD)))
-                {
-                    If (SATC (Arg0))
-                    {
-                        Return (SATD (Arg0, Arg1, Arg2, Arg3))
-                    }
-                }
-                Else
-                {
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-            }
-
-            Method (_PS0, 0, Serialized)  // _PS0: Power State 0
-            {
-                ADBG ("SATA0 Ctrlr D0")
-                If ((PCHS == PCHL))
-                {
-                    If (!SCFD)
-                    {
-                        CSD0 (0x14)
-                    }
-                }
-            }
-
-            Method (_PS3, 0, Serialized)  // _PS3: Power State 3
-            {
-                ADBG ("SATA0 Ctrlr D3")
-                If ((PCHS == PCHL))
-                {
-                    CSD3 (0x14)
-                }
-            }
-
-            Method (_S0W, 0, NotSerialized)  // _S0W: S0 Device Wake State
-            {
-                Return (0x03)
-            }
-
-            Device (PRT0)
-            {
-                Name (_ADR, 0xFFFF)  // _ADR: Address
-                Method (PRES, 0, NotSerialized)
-                {
-                    If ((SPPR & One))
-                    {
-                        Return (One)
-                    }
-                    Else
-                    {
-                        Return (Zero)
-                    }
-                }
-            }
-
-            Device (PRT1)
-            {
-                Name (_ADR, 0x0001FFFF)  // _ADR: Address
-                Method (PRES, 0, NotSerialized)
-                {
-                    If ((SPPR & 0x02))
-                    {
-                        Return (One)
-                    }
-                    Else
-                    {
-                        Return (Zero)
-                    }
-                }
-            }
-
-            Device (PRT2)
-            {
-                Name (_ADR, 0x0002FFFF)  // _ADR: Address
-                Method (PRES, 0, NotSerialized)
-                {
-                    If ((SPPR & 0x04))
-                    {
-                        Return (One)
-                    }
-                    Else
-                    {
-                        Return (Zero)
-                    }
-                }
-            }
-
-            Device (PRT3)
-            {
-                Name (_ADR, 0x0003FFFF)  // _ADR: Address
-                Method (PRES, 0, NotSerialized)
-                {
-                    If ((SPPR & 0x08))
-                    {
-                        Return (One)
-                    }
-                    Else
-                    {
-                        Return (Zero)
-                    }
-                }
-            }
-
-            Device (PRT4)
-            {
-                Name (_ADR, 0x0004FFFF)  // _ADR: Address
-                Method (PRES, 0, NotSerialized)
-                {
-                    If ((SPPR & 0x10))
-                    {
-                        Return (One)
-                    }
-                    Else
-                    {
-                        Return (Zero)
-                    }
-                }
-            }
-
-            Device (PRT5)
-            {
-                Name (_ADR, 0x0005FFFF)  // _ADR: Address
-                Method (PRES, 0, NotSerialized)
-                {
-                    If ((SPPR & 0x20))
-                    {
-                        Return (One)
-                    }
-                    Else
-                    {
-                        Return (Zero)
-                    }
-                }
-            }
-
-            Device (NVM1)
-            {
-                Name (_ADR, 0x00C1FFFF)  // _ADR: Address
-                Method (_INI, 0, NotSerialized)  // _INI: Initialize
-                {
-                    NITV = NIT1 /* \NIT1 */
-                    NPMV = NPM1 /* \NPM1 */
-                    NPCV = NPC1 /* \NPC1 */
-                    NL1V = NL11 /* \NL11 */
-                    ND2V = ND21 /* \ND21 */
-                    ND1V = ND11 /* \ND11 */
-                    NLRV = NLR1 /* \NLR1 */
-                    NLDV = NLD1 /* \NLD1 */
-                    NEAV = NEA1 /* \NEA1 */
-                    NEBV = NEB1 /* \NEB1 */
-                    NECV = NEC1 /* \NEC1 */
-                    NRAV = NRA1 /* \NRA1 */
-                    NMBV = NMB1 /* \NMB1 */
-                    NMVV = NMV1 /* \NMV1 */
-                    NPBV = NPB1 /* \NPB1 */
-                    NPVV = NPV1 /* \NPV1 */
-                    NRPN = NRP1 /* \NRP1 */
-                    NCRN = Zero
-                }
-
-                Name (PRBI, Zero)
-                Name (PRBD, Zero)
-                Name (PCMD, Zero)
-                Name (NCRN, Zero)
-                Name (NITV, Zero)
-                Name (NPMV, Zero)
-                Name (NPCV, Zero)
-                Name (NL1V, Zero)
-                Name (ND2V, Zero)
-                Name (ND1V, Zero)
-                Name (NLRV, Zero)
-                Name (NLDV, Zero)
-                Name (NEAV, Zero)
-                Name (NEBV, Zero)
-                Name (NECV, Zero)
-                Name (NRAV, Zero)
-                Name (NMBV, Zero)
-                Name (NMVV, Zero)
-                Name (NPBV, Zero)
-                Name (NPVV, Zero)
-                Name (NRPN, Zero)
-                Name (MXIE, Zero)
-                Name (ID3C, Zero)
-                Name (ID3H, Zero)
-                Name (CSAV, Zero)
-                Method (_PS3, 0, Serialized)  // _PS3: Power State 3
-                {
-                    ADBG (Concatenate ("_PS3r:", ToHexString (_ADR)))
-                    If (IR3D ())
-                    {
-                        Return (Zero)
-                    }
-
-                    NVD3 ()
-                }
-
-                Method (_PS0, 0, Serialized)  // _PS0: Power State 0
-                {
-                    ADBG (Concatenate ("_PS0r:", ToHexString (_ADR)))
-                    If (IR3D ())
-                    {
-                        Return (Zero)
-                    }
-
-                    NVD0 ()
-                }
-
-                Method (RL23, 0, NotSerialized)
-                {
-                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x04, One)
-                    Sleep (0x10)
-                    Local0 = Zero
-                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x04))
-                    {
-                        If ((Local0 > 0x04))
-                        {
-                            Break
-                        }
-
-                        Sleep (0x10)
-                        Local0++
-                    }
-
-                    RDCA (NCRN, 0x0324, 0xFFFFFFFF, 0x08, One)
-                }
-
-                Method (RLA, 0, NotSerialized)
-                {
-                    RDCA (NCRN, 0x0420, 0xBFFFFFFF, Zero, One)
-                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x08, One)
-                    Sleep (0x10)
-                    Local0 = Zero
-                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x08))
-                    {
-                        If ((Local0 > 0x04))
-                        {
-                            Break
-                        }
-
-                        Sleep (0x10)
-                        Local0++
-                    }
-
-                    RDCA (NCRN, 0x0420, 0xFFFFFFFF, 0x40000000, One)
-                    Local0 = Zero
-                    While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
-                    {
-                        If ((Local0 > 0x08))
-                        {
-                            Break
-                        }
-
-                        Sleep (0x10)
-                        Local0++
-                    }
-
-                    RDCA (NCRN, 0x0324, 0xFFFFFFF7, Zero, One)
-                }
-
-                Method (RPON, 0, Serialized)
-                {
-                    ADBG (Concatenate ("RPONs: ", ToHexString (_ADR)))
-                    If ((ID3C == Zero))
-                    {
-                        ADBG ("RPON: no D3C")
-                        Return (Zero)
-                    }
-
-                    RSON (NRPN)
-                    RLA ()
-                    Sleep (0x64)
-                    ID3C = Zero
-                    ADBG (Concatenate ("RPONe: ", ToHexString (_ADR)))
-                }
-
-                Method (RPOF, 0, Serialized)
-                {
-                    ADBG (Concatenate ("RPOFs: ", ToHexString (_ADR)))
-                    If ((ID3H == Zero))
-                    {
-                        ADBG ("RPOF: No D3H")
-                        BreakPoint
-                        Return (Zero)
-                    }
-
-                    If (!D3CS (NRPN))
-                    {
-                        Return (Zero)
-                    }
-
-                    RL23 ()
-                    RSOF (NRPN)
-                    ID3C = One
-                }
-
-                Method (SAVC, 0, Serialized)
-                {
-                    ADBG (Concatenate ("SAVC:", ToHexString (_ADR)))
-                    PCMD = RDCA (NCRN, 0x04, Zero, Zero, 0x02)
-                    If ((NITV == One))
-                    {
-                        PRBI = 0x24
-                        PRBD = RDCA (NCRN, 0x24, Zero, Zero, 0x02)
-                    }
-                    ElseIf ((NITV == 0x02))
-                    {
-                        PRBI = 0x10
-                        PRBD = RDCA (NCRN, 0x10, Zero, Zero, 0x02)
-                        OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
-                        Field (MCRC, AnyAcc, NoLock, Preserve)
-                        {
-                            SCSO,   8, 
-                            Offset (0x02), 
-                            TCSO,   8, 
-                                ,   7, 
-                            RE,     1
-                        }
-
-                        MXIE = RDCA (NCRN, TCSO, Zero, Zero, 0x02)
-                    }
-
-                    CSAV = One
-                }
-
-                Method (NVD3, 0, Serialized)
-                {
-                    ADBG (Concatenate ("NVD3:", ToHexString (_ADR)))
-                    If ((NITV == Zero))
-                    {
-                        Return (Zero)
-                    }
-
-                    If ((ID3H == One))
-                    {
-                        ADBG ("Skip in D3")
-                        Return (Zero)
-                    }
-
-                    SAVC ()
-                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, 0x03, 0x03)
-                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, 0x03, One)
-                    ID3H = One
-                    Return (Zero)
-                }
-
-                Method (NVD0, 0, Serialized)
-                {
-                    ADBG (Concatenate ("NVD0:", ToHexString (_ADR)))
-                    If ((NITV == Zero))
-                    {
-                        Return (Zero)
-                    }
-
-                    If ((ID3H == Zero))
-                    {
-                        ADBG ("Remap already in D0")
-                        Return (Zero)
-                    }
-
-                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, Zero, One)
-                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, Zero, 0x03)
-                    If ((CSAV == One))
-                    {
-                        CNRS ()
-                        If ((NITV == 0x02))
-                        {
-                            OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
-                            Field (MCRC, AnyAcc, NoLock, Preserve)
-                            {
-                                SCSO,   8, 
-                                Offset (0x02), 
-                                TCSO,   8, 
-                                    ,   7, 
-                                RE,     1
-                            }
-
-                            RDCA (NCRN, TCSO, 0xFFFFFFFF, (MXIE & 0x80000000), 0x03)
-                            ADBG ("NVD0:  MSIXe")
-                        }
-                    }
-                    Else
-                    {
-                        ADBG ("Skip remap restore")
-                    }
-
-                    ID3H = Zero
-                    Return (Zero)
-                }
-
-                Method (CNRS, 0, Serialized)
-                {
-                    ADBG (Concatenate ("CNRSs ", ToDecimalString (Timer)))
-                    If ((NITV == Zero))
-                    {
-                        Return (Zero)
-                    }
-
-                    RDCA (NCRN, 0x10, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x14, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x18, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x1C, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x20, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x24, Zero, Zero, 0x03)
-                    RDCA (NCRN, PRBI, Zero, PRBD, 0x03)
-                    RDCA (NCRN, 0x04, 0xFFFFFFF8, PCMD, 0x03)
-                    If ((NL1V != Zero))
-                    {
-                        RDCA (NCRN, (NL1V + 0x0C), 0xFFFFFF00, ND2V, 0x03)
-                        RDCA (NCRN, (NL1V + 0x08), 0x0F, (ND1V & 0xFFFFFFF0), 0x03)
-                        RDCA (NCRN, (NL1V + 0x08), 0xFFFFFFFF, ND1V, 0x03)
-                    }
-
-                    If ((NLRV != Zero))
-                    {
-                        RDCA (NCRN, (NLRV + 0x04), 0xFFFFFFFF, NLDV, 0x03)
-                    }
-
-                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFEBF, (NEAV & 0xFFFC), 0x03)
-                    RDCA (NCRN, (NPCV + 0x28), 0xFFFFFBFF, NECV, 0x03)
-                    RDCA (NCRN, (NPCV + 0x08), 0xFFFFFF1F, NEBV, 0x03)
-                    RDCA (NCRN, 0x68, 0xFFFFFBFF, NRAV, One)
-                    If (((NEAV & 0x40) == 0x40))
-                    {
-                        RDCA (NCRN, 0x50, 0xFFFFFFDF, 0x20, One)
-                        ADBG (Concatenate ("CNRSw ", ToDecimalString (Timer)))
-                        While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
-                        {
-                            Stall (0x0A)
-                        }
-                    }
-
-                    ADBG (Concatenate ("CNRSx ", ToDecimalString (Timer)))
-                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFFFC, (NEAV & 0x03), 0x03)
-                    If ((NMVV != Zero))
-                    {
-                        RDCA (NCRN, NMBV, Zero, NMVV, 0x03)
-                    }
-
-                    If ((NPVV != Zero))
-                    {
-                        RDCA (NCRN, NPBV, Zero, NPVV, 0x03)
-                    }
-
-                    ADBG (Concatenate ("CNRSe ", ToDecimalString (Timer)))
-                }
-            }
-
-            Device (NVM2)
-            {
-                Name (_ADR, 0x00C2FFFF)  // _ADR: Address
-                Method (_INI, 0, NotSerialized)  // _INI: Initialize
-                {
-                    NITV = NIT2 /* \NIT2 */
-                    NPMV = NPM2 /* \NPM2 */
-                    NPCV = NPC2 /* \NPC2 */
-                    NL1V = NL12 /* \NL12 */
-                    ND2V = ND22 /* \ND22 */
-                    ND1V = ND12 /* \ND12 */
-                    NLRV = NLR2 /* \NLR2 */
-                    NLDV = NLD2 /* \NLD2 */
-                    NEAV = NEA2 /* \NEA2 */
-                    NEBV = NEB2 /* \NEB2 */
-                    NECV = NEC2 /* \NEC2 */
-                    NRAV = NRA2 /* \NRA2 */
-                    NMBV = NMB2 /* \NMB2 */
-                    NMVV = NMV2 /* \NMV2 */
-                    NPBV = NPB2 /* \NPB2 */
-                    NPVV = NPV2 /* \NPV2 */
-                    NRPN = NRP2 /* \NRP2 */
-                    NCRN = One
-                }
-
-                Name (PRBI, Zero)
-                Name (PRBD, Zero)
-                Name (PCMD, Zero)
-                Name (NCRN, Zero)
-                Name (NITV, Zero)
-                Name (NPMV, Zero)
-                Name (NPCV, Zero)
-                Name (NL1V, Zero)
-                Name (ND2V, Zero)
-                Name (ND1V, Zero)
-                Name (NLRV, Zero)
-                Name (NLDV, Zero)
-                Name (NEAV, Zero)
-                Name (NEBV, Zero)
-                Name (NECV, Zero)
-                Name (NRAV, Zero)
-                Name (NMBV, Zero)
-                Name (NMVV, Zero)
-                Name (NPBV, Zero)
-                Name (NPVV, Zero)
-                Name (NRPN, Zero)
-                Name (MXIE, Zero)
-                Name (ID3C, Zero)
-                Name (ID3H, Zero)
-                Name (CSAV, Zero)
-                Method (_PS3, 0, Serialized)  // _PS3: Power State 3
-                {
-                    ADBG (Concatenate ("_PS3r:", ToHexString (_ADR)))
-                    If (IR3D ())
-                    {
-                        Return (Zero)
-                    }
-
-                    NVD3 ()
-                }
-
-                Method (_PS0, 0, Serialized)  // _PS0: Power State 0
-                {
-                    ADBG (Concatenate ("_PS0r:", ToHexString (_ADR)))
-                    If (IR3D ())
-                    {
-                        Return (Zero)
-                    }
-
-                    NVD0 ()
-                }
-
-                Method (RL23, 0, NotSerialized)
-                {
-                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x04, One)
-                    Sleep (0x10)
-                    Local0 = Zero
-                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x04))
-                    {
-                        If ((Local0 > 0x04))
-                        {
-                            Break
-                        }
-
-                        Sleep (0x10)
-                        Local0++
-                    }
-
-                    RDCA (NCRN, 0x0324, 0xFFFFFFFF, 0x08, One)
-                }
-
-                Method (RLA, 0, NotSerialized)
-                {
-                    RDCA (NCRN, 0x0420, 0xBFFFFFFF, Zero, One)
-                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x08, One)
-                    Sleep (0x10)
-                    Local0 = Zero
-                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x08))
-                    {
-                        If ((Local0 > 0x04))
-                        {
-                            Break
-                        }
-
-                        Sleep (0x10)
-                        Local0++
-                    }
-
-                    RDCA (NCRN, 0x0420, 0xFFFFFFFF, 0x40000000, One)
-                    Local0 = Zero
-                    While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
-                    {
-                        If ((Local0 > 0x08))
-                        {
-                            Break
-                        }
-
-                        Sleep (0x10)
-                        Local0++
-                    }
-
-                    RDCA (NCRN, 0x0324, 0xFFFFFFF7, Zero, One)
-                }
-
-                Method (RPON, 0, Serialized)
-                {
-                    ADBG (Concatenate ("RPONs: ", ToHexString (_ADR)))
-                    If ((ID3C == Zero))
-                    {
-                        ADBG ("RPON: no D3C")
-                        Return (Zero)
-                    }
-
-                    RSON (NRPN)
-                    RLA ()
-                    Sleep (0x64)
-                    ID3C = Zero
-                    ADBG (Concatenate ("RPONe: ", ToHexString (_ADR)))
-                }
-
-                Method (RPOF, 0, Serialized)
-                {
-                    ADBG (Concatenate ("RPOFs: ", ToHexString (_ADR)))
-                    If ((ID3H == Zero))
-                    {
-                        ADBG ("RPOF: No D3H")
-                        BreakPoint
-                        Return (Zero)
-                    }
-
-                    If (!D3CS (NRPN))
-                    {
-                        Return (Zero)
-                    }
-
-                    RL23 ()
-                    RSOF (NRPN)
-                    ID3C = One
-                }
-
-                Method (SAVC, 0, Serialized)
-                {
-                    ADBG (Concatenate ("SAVC:", ToHexString (_ADR)))
-                    PCMD = RDCA (NCRN, 0x04, Zero, Zero, 0x02)
-                    If ((NITV == One))
-                    {
-                        PRBI = 0x24
-                        PRBD = RDCA (NCRN, 0x24, Zero, Zero, 0x02)
-                    }
-                    ElseIf ((NITV == 0x02))
-                    {
-                        PRBI = 0x10
-                        PRBD = RDCA (NCRN, 0x10, Zero, Zero, 0x02)
-                        OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
-                        Field (MCRC, AnyAcc, NoLock, Preserve)
-                        {
-                            SCSO,   8, 
-                            Offset (0x02), 
-                            TCSO,   8, 
-                                ,   7, 
-                            RE,     1
-                        }
-
-                        MXIE = RDCA (NCRN, TCSO, Zero, Zero, 0x02)
-                    }
-
-                    CSAV = One
-                }
-
-                Method (NVD3, 0, Serialized)
-                {
-                    ADBG (Concatenate ("NVD3:", ToHexString (_ADR)))
-                    If ((NITV == Zero))
-                    {
-                        Return (Zero)
-                    }
-
-                    If ((ID3H == One))
-                    {
-                        ADBG ("Skip in D3")
-                        Return (Zero)
-                    }
-
-                    SAVC ()
-                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, 0x03, 0x03)
-                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, 0x03, One)
-                    ID3H = One
-                    Return (Zero)
-                }
-
-                Method (NVD0, 0, Serialized)
-                {
-                    ADBG (Concatenate ("NVD0:", ToHexString (_ADR)))
-                    If ((NITV == Zero))
-                    {
-                        Return (Zero)
-                    }
-
-                    If ((ID3H == Zero))
-                    {
-                        ADBG ("Remap already in D0")
-                        Return (Zero)
-                    }
-
-                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, Zero, One)
-                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, Zero, 0x03)
-                    If ((CSAV == One))
-                    {
-                        CNRS ()
-                        If ((NITV == 0x02))
-                        {
-                            OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
-                            Field (MCRC, AnyAcc, NoLock, Preserve)
-                            {
-                                SCSO,   8, 
-                                Offset (0x02), 
-                                TCSO,   8, 
-                                    ,   7, 
-                                RE,     1
-                            }
-
-                            RDCA (NCRN, TCSO, 0xFFFFFFFF, (MXIE & 0x80000000), 0x03)
-                            ADBG ("NVD0:  MSIXe")
-                        }
-                    }
-                    Else
-                    {
-                        ADBG ("Skip remap restore")
-                    }
-
-                    ID3H = Zero
-                    Return (Zero)
-                }
-
-                Method (CNRS, 0, Serialized)
-                {
-                    ADBG (Concatenate ("CNRSs ", ToDecimalString (Timer)))
-                    If ((NITV == Zero))
-                    {
-                        Return (Zero)
-                    }
-
-                    RDCA (NCRN, 0x10, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x14, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x18, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x1C, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x20, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x24, Zero, Zero, 0x03)
-                    RDCA (NCRN, PRBI, Zero, PRBD, 0x03)
-                    RDCA (NCRN, 0x04, 0xFFFFFFF8, PCMD, 0x03)
-                    If ((NL1V != Zero))
-                    {
-                        RDCA (NCRN, (NL1V + 0x0C), 0xFFFFFF00, ND2V, 0x03)
-                        RDCA (NCRN, (NL1V + 0x08), 0x0F, (ND1V & 0xFFFFFFF0), 0x03)
-                        RDCA (NCRN, (NL1V + 0x08), 0xFFFFFFFF, ND1V, 0x03)
-                    }
-
-                    If ((NLRV != Zero))
-                    {
-                        RDCA (NCRN, (NLRV + 0x04), 0xFFFFFFFF, NLDV, 0x03)
-                    }
-
-                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFEBF, (NEAV & 0xFFFC), 0x03)
-                    RDCA (NCRN, (NPCV + 0x28), 0xFFFFFBFF, NECV, 0x03)
-                    RDCA (NCRN, (NPCV + 0x08), 0xFFFFFF1F, NEBV, 0x03)
-                    RDCA (NCRN, 0x68, 0xFFFFFBFF, NRAV, One)
-                    If (((NEAV & 0x40) == 0x40))
-                    {
-                        RDCA (NCRN, 0x50, 0xFFFFFFDF, 0x20, One)
-                        ADBG (Concatenate ("CNRSw ", ToDecimalString (Timer)))
-                        While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
-                        {
-                            Stall (0x0A)
-                        }
-                    }
-
-                    ADBG (Concatenate ("CNRSx ", ToDecimalString (Timer)))
-                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFFFC, (NEAV & 0x03), 0x03)
-                    If ((NMVV != Zero))
-                    {
-                        RDCA (NCRN, NMBV, Zero, NMVV, 0x03)
-                    }
-
-                    If ((NPVV != Zero))
-                    {
-                        RDCA (NCRN, NPBV, Zero, NPVV, 0x03)
-                    }
-
-                    ADBG (Concatenate ("CNRSe ", ToDecimalString (Timer)))
-                }
-            }
-
-            Device (NVM3)
-            {
-                Name (_ADR, 0x00C3FFFF)  // _ADR: Address
-                Method (_INI, 0, NotSerialized)  // _INI: Initialize
-                {
-                    NITV = NIT3 /* \NIT3 */
-                    NPMV = NPM3 /* \NPM3 */
-                    NPCV = NPC3 /* \NPC3 */
-                    NL1V = NL13 /* \NL13 */
-                    ND2V = ND23 /* \ND23 */
-                    ND1V = ND13 /* \ND13 */
-                    NLRV = NLR3 /* \NLR3 */
-                    NLDV = NLD3 /* \NLD3 */
-                    NEAV = NEA3 /* \NEA3 */
-                    NEBV = NEB3 /* \NEB3 */
-                    NECV = NEC3 /* \NEC3 */
-                    NRAV = NRA3 /* \NRA3 */
-                    NMBV = NMB3 /* \NMB3 */
-                    NMVV = NMV3 /* \NMV3 */
-                    NPBV = NPB3 /* \NPB3 */
-                    NPVV = NPV3 /* \NPV3 */
-                    NRPN = NRP3 /* \NRP3 */
-                    NCRN = 0x02
-                }
-
-                Name (PRBI, Zero)
-                Name (PRBD, Zero)
-                Name (PCMD, Zero)
-                Name (NCRN, Zero)
-                Name (NITV, Zero)
-                Name (NPMV, Zero)
-                Name (NPCV, Zero)
-                Name (NL1V, Zero)
-                Name (ND2V, Zero)
-                Name (ND1V, Zero)
-                Name (NLRV, Zero)
-                Name (NLDV, Zero)
-                Name (NEAV, Zero)
-                Name (NEBV, Zero)
-                Name (NECV, Zero)
-                Name (NRAV, Zero)
-                Name (NMBV, Zero)
-                Name (NMVV, Zero)
-                Name (NPBV, Zero)
-                Name (NPVV, Zero)
-                Name (NRPN, Zero)
-                Name (MXIE, Zero)
-                Name (ID3C, Zero)
-                Name (ID3H, Zero)
-                Name (CSAV, Zero)
-                Method (_PS3, 0, Serialized)  // _PS3: Power State 3
-                {
-                    ADBG (Concatenate ("_PS3r:", ToHexString (_ADR)))
-                    If (IR3D ())
-                    {
-                        Return (Zero)
-                    }
-
-                    NVD3 ()
-                }
-
-                Method (_PS0, 0, Serialized)  // _PS0: Power State 0
-                {
-                    ADBG (Concatenate ("_PS0r:", ToHexString (_ADR)))
-                    If (IR3D ())
-                    {
-                        Return (Zero)
-                    }
-
-                    NVD0 ()
-                }
-
-                Method (RL23, 0, NotSerialized)
-                {
-                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x04, One)
-                    Sleep (0x10)
-                    Local0 = Zero
-                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x04))
-                    {
-                        If ((Local0 > 0x04))
-                        {
-                            Break
-                        }
-
-                        Sleep (0x10)
-                        Local0++
-                    }
-
-                    RDCA (NCRN, 0x0324, 0xFFFFFFFF, 0x08, One)
-                }
-
-                Method (RLA, 0, NotSerialized)
-                {
-                    RDCA (NCRN, 0x0420, 0xBFFFFFFF, Zero, One)
-                    RDCA (NCRN, 0xE2, 0xFFFFFFFF, 0x08, One)
-                    Sleep (0x10)
-                    Local0 = Zero
-                    While ((RDCA (NCRN, 0xE2, Zero, Zero, Zero) & 0x08))
-                    {
-                        If ((Local0 > 0x04))
-                        {
-                            Break
-                        }
-
-                        Sleep (0x10)
-                        Local0++
-                    }
-
-                    RDCA (NCRN, 0x0420, 0xFFFFFFFF, 0x40000000, One)
-                    Local0 = Zero
-                    While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
-                    {
-                        If ((Local0 > 0x08))
-                        {
-                            Break
-                        }
-
-                        Sleep (0x10)
-                        Local0++
-                    }
-
-                    RDCA (NCRN, 0x0324, 0xFFFFFFF7, Zero, One)
-                }
-
-                Method (RPON, 0, Serialized)
-                {
-                    ADBG (Concatenate ("RPONs: ", ToHexString (_ADR)))
-                    If ((ID3C == Zero))
-                    {
-                        ADBG ("RPON: no D3C")
-                        Return (Zero)
-                    }
-
-                    RSON (NRPN)
-                    RLA ()
-                    Sleep (0x64)
-                    ID3C = Zero
-                    ADBG (Concatenate ("RPONe: ", ToHexString (_ADR)))
-                }
-
-                Method (RPOF, 0, Serialized)
-                {
-                    ADBG (Concatenate ("RPOFs: ", ToHexString (_ADR)))
-                    If ((ID3H == Zero))
-                    {
-                        ADBG ("RPOF: No D3H")
-                        BreakPoint
-                        Return (Zero)
-                    }
-
-                    If (!D3CS (NRPN))
-                    {
-                        Return (Zero)
-                    }
-
-                    RL23 ()
-                    RSOF (NRPN)
-                    ID3C = One
-                }
-
-                Method (SAVC, 0, Serialized)
-                {
-                    ADBG (Concatenate ("SAVC:", ToHexString (_ADR)))
-                    PCMD = RDCA (NCRN, 0x04, Zero, Zero, 0x02)
-                    If ((NITV == One))
-                    {
-                        PRBI = 0x24
-                        PRBD = RDCA (NCRN, 0x24, Zero, Zero, 0x02)
-                    }
-                    ElseIf ((NITV == 0x02))
-                    {
-                        PRBI = 0x10
-                        PRBD = RDCA (NCRN, 0x10, Zero, Zero, 0x02)
-                        OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
-                        Field (MCRC, AnyAcc, NoLock, Preserve)
-                        {
-                            SCSO,   8, 
-                            Offset (0x02), 
-                            TCSO,   8, 
-                                ,   7, 
-                            RE,     1
-                        }
-
-                        MXIE = RDCA (NCRN, TCSO, Zero, Zero, 0x02)
-                    }
-
-                    CSAV = One
-                }
-
-                Method (NVD3, 0, Serialized)
-                {
-                    ADBG (Concatenate ("NVD3:", ToHexString (_ADR)))
-                    If ((NITV == Zero))
-                    {
-                        Return (Zero)
-                    }
-
-                    If ((ID3H == One))
-                    {
-                        ADBG ("Skip in D3")
-                        Return (Zero)
-                    }
-
-                    SAVC ()
-                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, 0x03, 0x03)
-                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, 0x03, One)
-                    ID3H = One
-                    Return (Zero)
-                }
-
-                Method (NVD0, 0, Serialized)
-                {
-                    ADBG (Concatenate ("NVD0:", ToHexString (_ADR)))
-                    If ((NITV == Zero))
-                    {
-                        Return (Zero)
-                    }
-
-                    If ((ID3H == Zero))
-                    {
-                        ADBG ("Remap already in D0")
-                        Return (Zero)
-                    }
-
-                    RDCA (NCRN, 0xA4, 0xFFFFFFFC, Zero, One)
-                    RDCA (NCRN, (NPMV + 0x04), 0xFFFFFFFC, Zero, 0x03)
-                    If ((CSAV == One))
-                    {
-                        CNRS ()
-                        If ((NITV == 0x02))
-                        {
-                            OperationRegion (MCRC, SystemMemory, (GPCB () + 0x000B833C), 0x04)
-                            Field (MCRC, AnyAcc, NoLock, Preserve)
-                            {
-                                SCSO,   8, 
-                                Offset (0x02), 
-                                TCSO,   8, 
-                                    ,   7, 
-                                RE,     1
-                            }
-
-                            RDCA (NCRN, TCSO, 0xFFFFFFFF, (MXIE & 0x80000000), 0x03)
-                            ADBG ("NVD0:  MSIXe")
-                        }
-                    }
-                    Else
-                    {
-                        ADBG ("Skip remap restore")
-                    }
-
-                    ID3H = Zero
-                    Return (Zero)
-                }
-
-                Method (CNRS, 0, Serialized)
-                {
-                    ADBG (Concatenate ("CNRSs ", ToDecimalString (Timer)))
-                    If ((NITV == Zero))
-                    {
-                        Return (Zero)
-                    }
-
-                    RDCA (NCRN, 0x10, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x14, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x18, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x1C, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x20, Zero, Zero, 0x03)
-                    RDCA (NCRN, 0x24, Zero, Zero, 0x03)
-                    RDCA (NCRN, PRBI, Zero, PRBD, 0x03)
-                    RDCA (NCRN, 0x04, 0xFFFFFFF8, PCMD, 0x03)
-                    If ((NL1V != Zero))
-                    {
-                        RDCA (NCRN, (NL1V + 0x0C), 0xFFFFFF00, ND2V, 0x03)
-                        RDCA (NCRN, (NL1V + 0x08), 0x0F, (ND1V & 0xFFFFFFF0), 0x03)
-                        RDCA (NCRN, (NL1V + 0x08), 0xFFFFFFFF, ND1V, 0x03)
-                    }
-
-                    If ((NLRV != Zero))
-                    {
-                        RDCA (NCRN, (NLRV + 0x04), 0xFFFFFFFF, NLDV, 0x03)
-                    }
-
-                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFEBF, (NEAV & 0xFFFC), 0x03)
-                    RDCA (NCRN, (NPCV + 0x28), 0xFFFFFBFF, NECV, 0x03)
-                    RDCA (NCRN, (NPCV + 0x08), 0xFFFFFF1F, NEBV, 0x03)
-                    RDCA (NCRN, 0x68, 0xFFFFFBFF, NRAV, One)
-                    If (((NEAV & 0x40) == 0x40))
-                    {
-                        RDCA (NCRN, 0x50, 0xFFFFFFDF, 0x20, One)
-                        ADBG (Concatenate ("CNRSw ", ToDecimalString (Timer)))
-                        While (((RDCA (NCRN, 0x52, Zero, Zero, Zero) & 0x2000) == Zero))
-                        {
-                            Stall (0x0A)
-                        }
-                    }
-
-                    ADBG (Concatenate ("CNRSx ", ToDecimalString (Timer)))
-                    RDCA (NCRN, (NPCV + 0x10), 0xFFFFFFFC, (NEAV & 0x03), 0x03)
-                    If ((NMVV != Zero))
-                    {
-                        RDCA (NCRN, NMBV, Zero, NMVV, 0x03)
-                    }
-
-                    If ((NPVV != Zero))
-                    {
-                        RDCA (NCRN, NPBV, Zero, NPVV, 0x03)
-                    }
-
-                    ADBG (Concatenate ("CNRSe ", ToDecimalString (Timer)))
-                }
-            }
-
-            Method (RDCA, 5, Serialized)
-            {
-                OperationRegion (RPAL, SystemMemory, (GPCB () + (0x000B8100 + Arg1)), 0x04)
-                Field (RPAL, DWordAcc, Lock, Preserve)
-                {
-                    RPCD,   32
-                }
-
-                OperationRegion (EPAC, SystemMemory, (GPCB () + 0x000B8308), 0x08)
-                Field (EPAC, DWordAcc, Lock, Preserve)
-                {
-                    CAIR,   32, 
-                    CADR,   32
-                }
-
-                OperationRegion (NCRG, SystemMemory, (GPCB () + 0x000B8FC0), 0x04)
-                Field (NCRG, DWordAcc, Lock, Preserve)
-                {
-                    CRGC,   32
-                }
-
-                If ((Arg0 > 0x02))
-                {
-                    Return (Zero)
-                }
-                Else
-                {
-                    CRGC = Arg0
-                }
-
-                Switch (ToInteger (Arg4))
-                {
-                    Case (Zero)
-                    {
-                        Return (RPCD) /* \_SB_.PCI0.SAT0.RDCA.RPCD */
-                    }
-                    Case (0x02)
-                    {
-                        CAIR = Arg1
-                        Return (CADR) /* \_SB_.PCI0.SAT0.RDCA.CADR */
-                    }
-                    Case (One)
-                    {
-                        Local0 = (Arg2 & RPCD) /* \_SB_.PCI0.SAT0.RDCA.RPCD */
-                        Local0 |= Arg3
-                        RPCD = Local0
-                    }
-                    Case (0x03)
-                    {
-                        CAIR = Arg1
-                        Local0 = (Arg2 & CADR) /* \_SB_.PCI0.SAT0.RDCA.CADR */
-                        Local0 |= Arg3
-                        CADR = Local0
-                    }
-                    Default
-                    {
-                        Return (Zero)
-                    }
-
-                }
-
-                Return (Zero)
-            }
-
-            Method (D3CS, 1, Serialized)
-            {
-                Switch (Arg0)
-                {
-                    Case (0x04)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP05.POFF))
-                        {
-                            Return (One)
-                        }
-                    }
-                    Case (0x06)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP07.POFF))
-                        {
-                            Return (One)
-                        }
-                    }
-                    Case (0x08)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP09.POFF))
-                        {
-                            Return (One)
-                        }
-                    }
-                    Case (0x0A)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP11.POFF))
-                        {
-                            Return (One)
-                        }
-                    }
-                    Case (0x0C)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP13.POFF))
-                        {
-                            Return (One)
-                        }
-                    }
-                    Case (0x0E)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP15.POFF))
-                        {
-                            Return (One)
-                        }
-                    }
-                    Case (0x10)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP17.POFF))
-                        {
-                            Return (One)
-                        }
-                    }
-                    Case (0x12)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP19.POFF))
-                        {
-                            Return (One)
-                        }
-                    }
-                    Case (0x14)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP21.POFF))
-                        {
-                            Return (One)
-                        }
-                    }
-                    Case (0x16)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP23.POFF))
-                        {
-                            Return (One)
-                        }
-                    }
-
-                }
-
-                Return (Zero)
-            }
-
-            Method (RSON, 1, Serialized)
-            {
-                Switch (Arg0)
-                {
-                    Case (0x04)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP05.PON))
-                        {
-                            ^^RP05.PON ()
-                        }
-                    }
-                    Case (0x06)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP07.PON))
-                        {
-                            ^^RP07.PON ()
-                        }
-                    }
-                    Case (0x08)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP09.PON))
-                        {
-                            ^^RP09.PON ()
-                        }
-                    }
-                    Case (0x0A)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP11.PON))
-                        {
-                            ^^RP11.PON ()
-                        }
-                    }
-                    Case (0x0C)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP13.PON))
-                        {
-                            ^^RP13.PON ()
-                        }
-                    }
-                    Case (0x0E)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP15.PON))
-                        {
-                            ^^RP15.PON ()
-                        }
-                    }
-                    Case (0x10)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP17.PON))
-                        {
-                            ^^RP17.PON ()
-                        }
-                    }
-                    Case (0x12)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP19.PON))
-                        {
-                            ^^RP19.PON ()
-                        }
-                    }
-                    Case (0x14)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP21.PON))
-                        {
-                            ^^RP21.PON ()
-                        }
-                    }
-                    Case (0x16)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP23.PON))
-                        {
-                            ^^RP23.PON ()
-                        }
-                    }
-
-                }
-            }
-
-            Method (RSOF, 1, Serialized)
-            {
-                Switch (Arg0)
-                {
-                    Case (0x04)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP05.POFF))
-                        {
-                            ^^RP05.POFF ()
-                        }
-                    }
-                    Case (0x06)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP07.POFF))
-                        {
-                            ^^RP07.POFF ()
-                        }
-                    }
-                    Case (0x08)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP09.POFF))
-                        {
-                            ^^RP09.POFF ()
-                        }
-                    }
-                    Case (0x0A)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP11.POFF))
-                        {
-                            ^^RP11.POFF ()
-                        }
-                    }
-                    Case (0x0C)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP13.POFF))
-                        {
-                            ^^RP13.POFF ()
-                        }
-                    }
-                    Case (0x0E)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP15.POFF))
-                        {
-                            ^^RP15.POFF ()
-                        }
-                    }
-                    Case (0x10)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP17.POFF))
-                        {
-                            ^^RP17.POFF ()
-                        }
-                    }
-                    Case (0x12)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP19.POFF))
-                        {
-                            ^^RP19.POFF ()
-                        }
-                    }
-                    Case (0x14)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP21.POFF))
-                        {
-                            ^^RP21.POFF ()
-                        }
-                    }
-                    Case (0x16)
-                    {
-                        If (CondRefOf (\_SB.PCI0.RP23.POFF))
-                        {
-                            ^^RP23.POFF ()
-                        }
-                    }
-
-                }
-            }
-
-            Name (VL0M, Zero)
-            Name (VL1M, Zero)
-            Name (VL2M, Zero)
-            Name (VR3A, One)
-            Method (IRM, 1, NotSerialized)
-            {
-                If ((VL0M & Arg0))
-                {
-                    Return (One)
-                }
-                ElseIf ((VL1M & Arg0))
-                {
-                    Return (One)
-                }
-                ElseIf ((VL2M & Arg0))
-                {
-                    Return (One)
-                }
-                Else
-                {
-                    Return (Zero)
-                }
-            }
-
-            Method (PD3C, 1, NotSerialized)
-            {
-                Return ((!VR3A || IRM (Arg0)))
-            }
-
-            Scope (PRT0)
-            {
-                Method (IR3D, 0, NotSerialized)
-                {
-                    Return (PD3C (One))
-                }
-            }
-
-            Scope (PRT1)
-            {
-                Method (IR3D, 0, NotSerialized)
-                {
-                    Return (PD3C (0x02))
-                }
-            }
-
-            Scope (PRT2)
-            {
-                Method (IR3D, 0, NotSerialized)
-                {
-                    Return (PD3C (0x04))
-                }
-            }
-
-            Scope (PRT3)
-            {
-                Method (IR3D, 0, NotSerialized)
-                {
-                    Return (PD3C (0x08))
-                }
-            }
-
-            Scope (PRT4)
-            {
-                Method (IR3D, 0, NotSerialized)
-                {
-                    Return (PD3C (0x10))
-                }
-            }
-
-            Scope (PRT5)
-            {
-                Method (IR3D, 0, NotSerialized)
-                {
-                    Return (PD3C (0x20))
-                }
-            }
-
-            Scope (NVM1)
-            {
-                Method (IR3D, 0, NotSerialized)
-                {
-                    Return (PD3C (0x0100))
-                }
-            }
-
-            Scope (NVM2)
-            {
-                Method (IR3D, 0, NotSerialized)
-                {
-                    Return (PD3C (0x0200))
-                }
-            }
-
-            Scope (NVM3)
-            {
-                Method (IR3D, 0, NotSerialized)
-                {
-                    Return (PD3C (0x0400))
-                }
-            }
-
-            Method (RSTD, 5, Serialized)
-            {
-                If ((Arg0 == ToUUID ("e03e3431-e510-4fa2-abc0-2d7e901245fe")))
-                {
-                    Switch (ToInteger (Arg2))
-                    {
-                        Case (Zero)
-                        {
-                            Name (RBUF, Buffer (One)
-                            {
-                                 0x00                                             // .
-                            })
-                            CreateByteField (RBUF, Zero, SFUN)
-                            SFUN = 0x3F
-                            Return (RBUF) /* \_SB_.PCI0.SAT0.RSTD.RBUF */
-                        }
-                        Case (One)
-                        {
-                            Arg4 = DerefOf (Arg3 [Zero])
-                            Local0 = DerefOf (Arg3 [Zero])
-                            ADBG (Concatenate ("RSTD.SET:", ToHexString (Local0)))
-                            Return (Package (0x01)
-                            {
-                                Zero
-                            })
-                        }
-                        Case (0x02)
-                        {
-                            Local0 = DerefOf (Arg3 [Zero])
-                            ADBG (Concatenate ("RSTD.ON:", ToHexString (Local0)))
-                            CPON (Local0)
-                            Return (Package (0x01)
-                            {
-                                Zero
-                            })
-                        }
-                        Case (0x03)
-                        {
-                            Local0 = DerefOf (Arg3 [Zero])
-                            ADBG (Concatenate ("RSTD.OFF:", ToHexString (Local0)))
-                            CPOF (Local0)
-                            Return (Package (0x01)
-                            {
-                                Zero
-                            })
-                        }
-                        Case (0x04)
-                        {
-                            Name (GETM, Buffer (One)
-                            {
-                                 0x00                                             // .
-                            })
-                            CreateByteField (GETM, Zero, GMSK)
-                            GMSK = Arg4
-                            ADBG (Concatenate ("RSTD.GET:", ToHexString (GMSK)))
-                            Return (GETM) /* \_SB_.PCI0.SAT0.RSTD.GETM */
-                        }
-                        Case (0x05)
-                        {
-                            VR3A = DerefOf (Arg3 [Zero])
-                            ADBG (Concatenate ("RSTD.D3A:", ToHexString (VR3A)))
-                            Return (Zero)
-                        }
-                        Default
-                        {
-                            Return (Package (0x01)
-                            {
-                                0x02
-                            })
-                        }
-
-                    }
-                }
-                Else
-                {
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-            }
-
-            Method (D3AS, 3, Serialized)
-            {
-                Switch (Arg1)
-                {
-                    Case (Zero)
-                    {
-                        Return (Buffer (One)
-                        {
-                             0x03                                             // .
-                        })
-                    }
-                    Case (One)
-                    {
-                        If ((PSON == One))
-                        {
-                            Return (Buffer (One)
-                            {
-                                 0x01                                             // .
-                            })
-                        }
-                        Else
-                        {
-                            Return (Buffer (One)
-                            {
-                                 0x00                                             // .
-                            })
-                        }
-                    }
-
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
-
-            Method (CPON, 1, Serialized)
-            {
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT0.SPON) && (Arg0 & One)))
-                {
-                    ^PRT0.SPON ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT1.SPON) && (Arg0 & 0x02)))
-                {
-                    ^PRT1.SPON ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT2.SPON) && (Arg0 & 0x04)))
-                {
-                    ^PRT2.SPON ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT3.SPON) && (Arg0 & 0x08)))
-                {
-                    ^PRT3.SPON ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT4.SPON) && (Arg0 & 0x10)))
-                {
-                    ^PRT4.SPON ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT5.SPON) && (Arg0 & 0x20)))
-                {
-                    ^PRT5.SPON ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM1.RPON) && (Arg0 & 0x0100)))
-                {
-                    ^NVM1.RPON ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM1.NVD0) && (Arg0 & 0x0100)))
-                {
-                    ^NVM1.NVD0 ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM2.RPON) && (Arg0 & 0x0200)))
-                {
-                    ^NVM2.RPON ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM2.NVD0) && (Arg0 & 0x0200)))
-                {
-                    ^NVM2.NVD0 ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM3.RPON) && (Arg0 & 0x0400)))
-                {
-                    ^NVM3.RPON ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM3.NVD0) && (Arg0 & 0x0400)))
-                {
-                    ^NVM3.NVD0 ()
-                }
-            }
-
-            Method (CPOF, 1, Serialized)
-            {
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT0.SPOF) && (Arg0 & One)))
-                {
-                    ^PRT0.SPOF ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT1.SPOF) && (Arg0 & 0x02)))
-                {
-                    ^PRT1.SPOF ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT2.SPOF) && (Arg0 & 0x04)))
-                {
-                    ^PRT2.SPOF ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT3.SPOF) && (Arg0 & 0x08)))
-                {
-                    ^PRT3.SPOF ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT4.SPOF) && (Arg0 & 0x10)))
-                {
-                    ^PRT4.SPOF ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.PRT5.SPOF) && (Arg0 & 0x20)))
-                {
-                    ^PRT5.SPOF ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM1.NVD3) && (Arg0 & 0x0100)))
-                {
-                    ^NVM1.NVD3 ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM1.RPOF) && (Arg0 & 0x0100)))
-                {
-                    ^NVM1.RPOF ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM2.NVD3) && (Arg0 & 0x0200)))
-                {
-                    ^NVM2.NVD3 ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM2.RPOF) && (Arg0 & 0x0200)))
-                {
-                    ^NVM2.RPOF ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM3.NVD3) && (Arg0 & 0x0400)))
-                {
-                    ^NVM3.NVD3 ()
-                }
-
-                If ((CondRefOf (\_SB.PCI0.SAT0.NVM3.RPOF) && (Arg0 & 0x0400)))
-                {
-                    ^NVM3.RPOF ()
-                }
-            }
-
-            Device (VOL0)
-            {
-                Name (_ADR, 0x0080FFFF)  // _ADR: Address
-                Name (_PR0, Package (0x01)  // _PR0: Power Resources for D0
-                {
-                    V0PR
-                })
-                Name (_PR3, Package (0x01)  // _PR3: Power Resources for D3hot
-                {
-                    V0PR
-                })
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    Return (RSTD (Arg0, Arg1, Arg2, Arg3, RefOf (VL0M)))
-                }
-
-                PowerResource (V0PR, 0x00, 0x0000)
-                {
-                    Name (_STA, One)  // _STA: Status
-                    Method (_ON, 0, NotSerialized)  // _ON_: Power On
-                    {
-                        ADBG (Concatenate ("VOL0._ON:", ToHexString (VL0M)))
-                        If (VR3A)
-                        {
-                            CPON (VL0M)
-                            _STA = One
-                        }
-                        Else
-                        {
-                            ADBG ("Global RTD3 lock")
-                        }
-                    }
-
-                    Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
-                    {
-                        ADBG (Concatenate ("VOL0._OFF:", ToHexString (VL0M)))
-                        If (VR3A)
-                        {
-                            CPOF (VL0M)
-                            _STA = Zero
-                        }
-                        Else
-                        {
-                            ADBG ("Global RTD3 lock")
-                        }
-                    }
-                }
-            }
-
-            Device (VOL1)
-            {
-                Name (_ADR, 0x0081FFFF)  // _ADR: Address
-                Name (_PR0, Package (0x01)  // _PR0: Power Resources for D0
-                {
-                    V1PR
-                })
-                Name (_PR3, Package (0x01)  // _PR3: Power Resources for D3hot
-                {
-                    V1PR
-                })
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    Return (RSTD (Arg0, Arg1, Arg2, Arg3, RefOf (VL1M)))
-                }
-
-                PowerResource (V1PR, 0x00, 0x0000)
-                {
-                    Name (_STA, One)  // _STA: Status
-                    Method (_ON, 0, NotSerialized)  // _ON_: Power On
-                    {
-                        ADBG (Concatenate ("VOL1._ON:", ToHexString (VL1M)))
-                        If (VR3A)
-                        {
-                            CPON (VL1M)
-                            _STA = One
-                        }
-                        Else
-                        {
-                            ADBG ("Global RTD3 lock")
-                        }
-                    }
-
-                    Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
-                    {
-                        ADBG (Concatenate ("VOL1._OFF:", ToHexString (VL1M)))
-                        If (VR3A)
-                        {
-                            CPOF (VL1M)
-                            _STA = Zero
-                        }
-                        Else
-                        {
-                            ADBG ("Global RTD3 lock")
-                        }
-                    }
-                }
-            }
-
-            Device (VOL2)
-            {
-                Name (_ADR, 0x0082FFFF)  // _ADR: Address
-                Name (_PR0, Package (0x01)  // _PR0: Power Resources for D0
-                {
-                    V2PR
-                })
-                Name (_PR3, Package (0x01)  // _PR3: Power Resources for D3hot
-                {
-                    V2PR
-                })
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    Return (RSTD (Arg0, Arg1, Arg2, Arg3, RefOf (VL2M)))
-                }
-
-                PowerResource (V2PR, 0x00, 0x0000)
-                {
-                    Name (_STA, One)  // _STA: Status
-                    Method (_ON, 0, NotSerialized)  // _ON_: Power On
-                    {
-                        ADBG (Concatenate ("VOL2._ON:", ToHexString (VL2M)))
-                        If (VR3A)
-                        {
-                            CPON (VL2M)
-                            _STA = One
-                        }
-                        Else
-                        {
-                            ADBG ("Global RTD3 lock")
-                        }
-                    }
-
-                    Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
-                    {
-                        ADBG (Concatenate ("VOL2._OFF:", ToHexString (VL2M)))
-                        If (VR3A)
-                        {
-                            CPOF (VL2M)
-                            _STA = Zero
-                        }
-                        Else
-                        {
-                            ADBG ("Global RTD3 lock")
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Device (GPI0)
-        {
-            Method (_HID, 0, NotSerialized)  // _HID: Hardware ID
-            {
-                If ((GPHD == One))
-                {
-                    Return ("PNP0C02")
-                }
-
-                If ((PCHS == PCHH))
-                {
-                    Return ("INT3450")
-                }
-
-                Return ("INT34BB")
-            }
-
-            Name (LINK, "\\_SB.PCI0.GPI0")
-            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-            {
-                Name (RBUF, ResourceTemplate ()
-                {
-                    Memory32Fixed (ReadWrite,
-                        0x00000000,         // Address Base
-                        0x00010000,         // Address Length
-                        _Y17)
-                    Memory32Fixed (ReadWrite,
-                        0x00000000,         // Address Base
-                        0x00010000,         // Address Length
-                        _Y18)
-                    Memory32Fixed (ReadWrite,
-                        0x00000000,         // Address Base
-                        0x00010000,         // Address Length
-                        _Y1A)
-                    Interrupt (ResourceConsumer, Level, ActiveLow, Shared, ,, _Y19)
-                    {
-                        0x0000000E,
-                    }
-                })
-                Name (CBUF, ResourceTemplate ()
-                {
-                    Memory32Fixed (ReadWrite,
-                        0x00000000,         // Address Base
-                        0x00010000,         // Address Length
-                        _Y1B)
-                })
-                CreateDWordField (RBUF, \_SB.PCI0.GPI0._CRS._Y17._BAS, COM0)  // _BAS: Base Address
-                CreateDWordField (RBUF, \_SB.PCI0.GPI0._CRS._Y18._BAS, COM1)  // _BAS: Base Address
-                CreateDWordField (RBUF, \_SB.PCI0.GPI0._CRS._Y19._INT, IRQN)  // _INT: Interrupts
-                COM0 = (SBRG + 0x006E0000)
-                COM1 = (SBRG + 0x006D0000)
-                IRQN = SGIR /* \SGIR */
-                If ((PCHS == PCHH))
-                {
-                    CreateDWordField (RBUF, \_SB.PCI0.GPI0._CRS._Y1A._BAS, CMH3)  // _BAS: Base Address
-                    CMH3 = (SBRG + 0x006B0000)
-                    CreateDWordField (CBUF, \_SB.PCI0.GPI0._CRS._Y1B._BAS, CMH4)  // _BAS: Base Address
-                    CMH4 = (SBRG + 0x006A0000)
-                    Return (ConcatenateResTemplate (RBUF, CBUF))
-                }
-                Else
-                {
-                    CreateDWordField (RBUF, \_SB.PCI0.GPI0._CRS._Y1A._BAS, CML4)  // _BAS: Base Address
-                    CML4 = (SBRG + 0x006A0000)
-                    Return (RBUF) /* \_SB_.PCI0.GPI0._CRS.RBUF */
-                }
-            }
-
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((GPHD == One))
-                {
-                    Return (0x03)
-                }
-
-                Return (0x0F)
-            }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Method (SOD3, 3, Serialized)
-        {
-            Name (STMP, Zero)
-            OperationRegion (ICB1, SystemMemory, (GPCB () + Arg0), 0x88)
-            If (Arg1)
-            {
-                Field (ICB1, ByteAcc, NoLock, Preserve)
-                {
-                    Offset (0x84), 
-                    PMEC,   8
-                }
-
-                PMEC = 0x03
-                STMP = PMEC /* \_SB_.PCI0.SOD3.PMEC */
-            }
-
-            If ((Arg1 && Arg2))
-            {
-                Field (ICB1, DWordAcc, NoLock, Preserve)
-                {
-                    Offset (0x10), 
-                    BAR0,   64
-                }
-
-                BAR0 = Zero
-            }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Method (SPIH, 1, Serialized)
-        {
-            OperationRegion (ICB1, SystemMemory, Arg0, 0x20)
-            Field (ICB1, DWordAcc, NoLock, Preserve)
-            {
-                Offset (0x10), 
-                BAR0,   64, 
-                BAR1,   64
-            }
-
-            Name (BUF0, ResourceTemplate ()
-            {
-                Memory32Fixed (ReadWrite,
-                    0x00000000,         // Address Base
-                    0x00001000,         // Address Length
-                    _Y1C)
-            })
-            Name (BUF1, ResourceTemplate ()
-            {
-                Memory32Fixed (ReadWrite,
-                    0x00000000,         // Address Base
-                    0x00001000,         // Address Length
-                    _Y1D)
-            })
-            CreateDWordField (BUF0, \_SB.PCI0.SPIH._Y1C._BAS, ADR0)  // _BAS: Base Address
-            CreateDWordField (BUF1, \_SB.PCI0.SPIH._Y1D._BAS, ADR1)  // _BAS: Base Address
-            ADR0 = (BAR0 & 0xFFFFFFFFFFFFF000)
-            ADR1 = (BAR1 & 0xFFFFFFFFFFFFF000)
-            ConcatenateResTemplate (BUF0, BUF1, Local0)
-            Return (Local0)
-        }
-
-        Device (SPI0)
-        {
-            If ((SM00 == 0x02))
-            {
-                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (SPIH (SC00))
-                }
-
-                Name (_STA, 0x03)  // _STA: Status
-            }
-
-            If ((SM00 == One))
-            {
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    If (PCIC (Arg0))
-                    {
-                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                    }
-
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-
-                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                {
-                    SOD3 (SC00, One, One)
-                }
-
-                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                {
-                }
-            }
-
-            If (((SM00 == One) || (SM00 == Zero)))
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return (0x001E0002)
-                }
-            }
-        }
-
-        Device (SPI1)
-        {
-            If ((SM01 == 0x02))
-            {
-                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (SPIH (SC01))
-                }
-
-                Name (_STA, 0x03)  // _STA: Status
-            }
-
-            If ((SM01 == One))
-            {
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    If (PCIC (Arg0))
-                    {
-                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                    }
-
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-
-                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                {
-                    SOD3 (SC01, One, One)
-                }
-
-                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                {
-                }
-            }
-
-            If (((SM01 == One) || (SM01 == Zero)))
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return (0x001E0003)
-                }
-            }
-        }
-
-        Device (SPI2)
-        {
-            If ((SM02 == 0x02))
-            {
-                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (SPIH (SC02))
-                }
-
-                Name (_STA, 0x03)  // _STA: Status
-            }
-
-            If ((SM02 == One))
-            {
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    If (PCIC (Arg0))
-                    {
-                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                    }
-
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-
-                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                {
-                    SOD3 (SC02, One, One)
-                }
-
-                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                {
-                }
-            }
-
-            If (((SM02 == One) || (SM02 == Zero)))
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return (0x00120006)
-                }
-            }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Method (I2CH, 1, Serialized)
-        {
-            OperationRegion (ICB1, SystemMemory, Arg0, 0x20)
-            Field (ICB1, DWordAcc, NoLock, Preserve)
-            {
-                Offset (0x10), 
-                BAR0,   64, 
-                BAR1,   64
-            }
-
-            Name (BUF0, ResourceTemplate ()
-            {
-                Memory32Fixed (ReadWrite,
-                    0x00000000,         // Address Base
-                    0x00001000,         // Address Length
-                    _Y1E)
-            })
-            Name (BUF1, ResourceTemplate ()
-            {
-                Memory32Fixed (ReadWrite,
-                    0x00000000,         // Address Base
-                    0x00001000,         // Address Length
-                    _Y1F)
-            })
-            CreateDWordField (BUF0, \_SB.PCI0.I2CH._Y1E._BAS, ADR0)  // _BAS: Base Address
-            CreateDWordField (BUF1, \_SB.PCI0.I2CH._Y1F._BAS, ADR1)  // _BAS: Base Address
-            ADR0 = (BAR0 & 0xFFFFFFFFFFFFF000)
-            ADR1 = (BAR1 & 0xFFFFFFFFFFFFF000)
-            ConcatenateResTemplate (BUF0, BUF1, Local0)
-            Return (Local0)
-        }
-
-        Device (I2C0)
-        {
-            If ((IM00 == 0x02))
-            {
-                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (I2CH (IC00))
-                }
-
-                Name (_STA, 0x03)  // _STA: Status
-            }
-
-            If ((IM00 == One))
-            {
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    If (PCIC (Arg0))
-                    {
-                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                    }
-
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-
-                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                {
-                    SOD3 (IC00, One, One)
-                }
-
-                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                {
-                }
-            }
-
-            If (((IM00 == One) || (IM00 == Zero)))
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return (0x00150000)
-                }
-            }
-        }
-
-        Device (I2C1)
-        {
-            If ((IM01 == 0x02))
-            {
-                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (I2CH (IC01))
-                }
-
-                Name (_STA, 0x03)  // _STA: Status
-            }
-
-            If ((IM01 == One))
-            {
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    If (PCIC (Arg0))
-                    {
-                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                    }
-
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-
-                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                {
-                    SOD3 (IC01, One, One)
-                }
-
-                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                {
-                }
-            }
-
-            If (((IM01 == One) || (IM01 == Zero)))
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return (0x00150001)
-                }
-            }
-        }
-
-        Device (I2C2)
-        {
-            If ((IM02 == 0x02))
-            {
-                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (I2CH (IC02))
-                }
-
-                Name (_STA, 0x03)  // _STA: Status
-            }
-
-            If ((IM02 == One))
-            {
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    If (PCIC (Arg0))
-                    {
-                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                    }
-
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-
-                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                {
-                    SOD3 (IC02, One, One)
-                }
-
-                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                {
-                }
-            }
-
-            If (((IM02 == One) || (IM02 == Zero)))
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return (0x00150002)
-                }
-            }
-        }
-
-        Device (I2C3)
-        {
-            If ((IM03 == 0x02))
-            {
-                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (I2CH (IC03))
-                }
-
-                Name (_STA, 0x03)  // _STA: Status
-            }
-
-            If ((IM03 == One))
-            {
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    If (PCIC (Arg0))
-                    {
-                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                    }
-
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-
-                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                {
-                    SOD3 (IC03, One, One)
-                }
-
-                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                {
-                }
-            }
-
-            If (((IM03 == One) || (IM03 == Zero)))
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return (0x00150003)
-                }
-            }
-        }
-
-        Device (I2C4)
-        {
-            If ((IM04 == 0x02))
-            {
-                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (I2CH (IC04))
-                }
-
-                Name (_STA, 0x03)  // _STA: Status
-            }
-
-            If ((IM04 == One))
-            {
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    If (PCIC (Arg0))
-                    {
-                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                    }
-
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-
-                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                {
-                    SOD3 (IC04, One, One)
-                }
-
-                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                {
-                }
-            }
-
-            If (((IM04 == One) || (IM04 == Zero)))
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return (0x00190000)
-                }
-            }
-        }
-
-        Device (I2C5)
-        {
-            If ((IM05 == 0x02))
-            {
-                Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (I2CH (IC05))
-                }
-
-                Name (_STA, 0x03)  // _STA: Status
-            }
-
-            If ((IM05 == One))
-            {
-                Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-                {
-                    If (PCIC (Arg0))
-                    {
-                        Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                    }
-
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-
-                Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                {
-                    SOD3 (IC05, One, One)
-                }
-
-                Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                {
-                }
-            }
-
-            If (((IM05 == One) || (IM05 == Zero)))
-            {
-                Method (_ADR, 0, NotSerialized)  // _ADR: Address
-                {
-                    Return (0x00190001)
-                }
-            }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Method (UDSM, 1, Serialized)
-        {
-            If ((Arg0 == ToUUID ("f7af8347-a966-49fe-9022-7a9deeebdb27")))
-            {
-                Return (One)
-            }
-
-            Return (Zero)
-        }
-
-        Method (UDMA, 2, Serialized)
-        {
-            Switch (ToInteger (Arg0))
-            {
-                Case (Zero)
-                {
-                    Return (Buffer (0x08)
-                    {
-                         0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // ........
-                    })
-                }
-                Case (One)
-                {
-                    Return (ToInteger (Arg1))
-                }
-
-            }
-
-            Return (Buffer (0x08)
-            {
-                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // ........
-            })
-        }
-
-        Device (UA00)
-        {
-            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-            {
-                If (PCIC (Arg0))
-                {
-                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                }
-
-                If (UDSM (Arg0))
-                {
-                    Return (UDMA (Arg2, UD00))
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
-
-            Method (_ADR, 0, NotSerialized)  // _ADR: Address
-            {
-                Return (0x001E0000)
-            }
-
-            Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-            {
-                SOD3 (UC00, One, One)
-            }
-
-            Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-            {
-            }
-        }
-
-        Device (UA01)
-        {
-            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-            {
-                If (PCIC (Arg0))
-                {
-                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                }
-
-                If (UDSM (Arg0))
-                {
-                    Return (UDMA (Arg2, UD01))
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
-
-            Method (_ADR, 0, NotSerialized)  // _ADR: Address
-            {
-                Return (0x001E0001)
-            }
-
-            Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-            {
-                SOD3 (UC01, One, One)
-            }
-
-            Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-            {
-            }
-        }
-
-        Device (UA02)
-        {
-            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-            {
-                If (PCIC (Arg0))
-                {
-                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                }
-
-                If (UDSM (Arg0))
-                {
-                    Return (UDMA (Arg2, UD02))
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
-
-            Method (_ADR, 0, NotSerialized)  // _ADR: Address
-            {
-                Return (0x00190002)
-            }
-
-            Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-            {
-                SOD3 (UC02, One, One)
-            }
-
-            Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-            {
-            }
-        }
-    }
-
-    Scope (_SB)
-    {
-        Device (URSC)
-        {
-            Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
-            Name (_STA, 0x03)  // _STA: Status
-            Name (_UID, 0x05)  // _UID: Unique ID
-            Method (UARB, 2, Serialized)
-            {
-                Local0 = Buffer (0x02)
-                    {
-                         0x79, 0x00                                       // y.
-                    }
-                If (((Arg0 == 0x02) || (Arg0 == 0x03)))
-                {
-                    OperationRegion (UACF, SystemMemory, Arg1, 0x20)
-                    Field (UACF, DWordAcc, NoLock, Preserve)
-                    {
-                        Offset (0x10), 
-                        BAR0,   64, 
-                        BAR1,   64
-                    }
-
-                    Name (BUF1, ResourceTemplate ()
-                    {
-                        Memory32Fixed (ReadWrite,
-                            0x00000000,         // Address Base
-                            0x00000FF8,         // Address Length
-                            _Y20)
-                    })
-                    Name (BUF2, ResourceTemplate ()
-                    {
-                        Memory32Fixed (ReadWrite,
-                            0x00000000,         // Address Base
-                            0x00001000,         // Address Length
-                            _Y21)
-                    })
-                    CreateDWordField (BUF1, \_SB.URSC.UARB._Y20._BAS, ADR1)  // _BAS: Base Address
-                    CreateDWordField (BUF2, \_SB.URSC.UARB._Y21._BAS, ADR2)  // _BAS: Base Address
-                    Local1 = (BAR0 & 0xFFFFFFFFFFFFF000)
-                    ADR1 = (Local1 + 0x08)
-                    ADR2 = (BAR1 & 0xFFFFFFFFFFFFF000)
-                    ConcatenateResTemplate (BUF1, BUF2, Local0)
-                }
-
-                Return (Local0)
-            }
-
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-            {
-                Local0 = ResourceTemplate ()
-                    {
-                        Memory32Fixed (ReadWrite,
-                            0xFE038000,         // Address Base
-                            0x00001000,         // Address Length
-                            )
-                    }
-                ConcatenateResTemplate (Local0, UARB (UM00, UC00), Local1)
-                Local0 = Local1
-                ConcatenateResTemplate (Local0, UARB (UM01, UC01), Local1)
-                Local0 = Local1
-                ConcatenateResTemplate (Local0, UARB (UM02, UC02), Local1)
-                Local0 = Local1
-                Return (Local0)
-            }
-        }
-
-        Method (UARH, 2, Serialized)
-        {
-            OperationRegion (UACF, SystemMemory, Arg0, 0x18)
-            Field (UACF, DWordAcc, NoLock, Preserve)
-            {
-                Offset (0x10), 
-                BAR0,   64
-            }
-
-            Name (BUF0, ResourceTemplate ()
-            {
-                Memory32Fixed (ReadWrite,
-                    0x00000000,         // Address Base
-                    0x00000008,         // Address Length
-                    _Y22)
-            })
-            Name (IBUF, ResourceTemplate ()
-            {
-                Interrupt (ResourceConsumer, Level, ActiveLow, Shared, ,, _Y23)
-                {
-                    0x00000014,
-                }
-            })
-            CreateDWordField (BUF0, \_SB.UARH._Y22._BAS, ADR0)  // _BAS: Base Address
-            CreateDWordField (IBUF, \_SB.UARH._Y23._INT, IRQN)  // _INT: Interrupts
-            Local0 = (BAR0 & 0xFFFFFFFFFFFFF000)
-            ADR0 = Local0
-            IRQN = Arg1
-            ConcatenateResTemplate (BUF0, IBUF, Local1)
-            Return (Local1)
-        }
-
-        Method (UAPG, 3, Serialized)
-        {
-            If ((Arg1 != 0x02))
-            {
-                Return (Arg1)
-            }
-
-            OperationRegion (UACF, SystemMemory, Arg2, 0x18)
-            Field (UACF, DWordAcc, NoLock, Preserve)
-            {
-                Offset (0x10), 
-                BAR0,   64
-            }
-
-            OperationRegion (UAB0, SystemMemory, (BAR0 & 0xFFFFFFFFFFFFF000), 0x10)
-            Field (UAB0, ByteAcc, Lock, Preserve)
-            {
-                DLL,    8, 
-                DLH,    8, 
-                FCR,    8, 
-                LCR,    8
-            }
-
-            Local0 = LCR /* \_SB_.UAPG.LCR_ */
-            If ((Local0 && 0x7F))
-            {
-                Return (Zero)
-            }
-
-            Return (One)
-        }
-
-        Method (UHID, 1, Serialized)
-        {
-            If ((Arg0 == 0x03))
-            {
-                Return (0x0105D041)
-            }
-
-            Return (0x020CD041)
-        }
-
-        Method (UPS3, 2, Serialized)
-        {
-            Name (STMP, Zero)
-            If ((Arg0 == One))
-            {
-                OperationRegion (UACF, SystemMemory, Arg1, 0x88)
-                Field (UACF, DWordAcc, NoLock, Preserve)
-                {
-                    Offset (0x10), 
-                    BAR0,   64
-                }
-
-                Field (UACF, ByteAcc, NoLock, Preserve)
-                {
-                    Offset (0x84), 
-                    PMEC,   8
-                }
-
-                OperationRegion (UAB0, SystemMemory, (BAR0 & 0xFFFFFFFFFFFFF000), 0x82)
-                Field (UAB0, ByteAcc, NoLock, Preserve)
-                {
-                    Offset (0x81), 
-                    PPRR,   8
-                }
-
-                PPRR = Zero
-                PMEC = 0x03
-                STMP = PMEC /* \_SB_.UPS3.PMEC */
-            }
-        }
-
-        Method (UPS0, 2, Serialized)
-        {
-            Name (STMP, Zero)
-            If ((Arg0 == One))
-            {
-                OperationRegion (UACF, SystemMemory, Arg1, 0x88)
-                Field (UACF, DWordAcc, NoLock, Preserve)
-                {
-                    Offset (0x10), 
-                    BAR0,   64
-                }
-
-                Field (UACF, ByteAcc, NoLock, Preserve)
-                {
-                    Offset (0x84), 
-                    PMEC,   8
-                }
-
-                PMEC = Zero
-                STMP = PMEC /* \_SB_.UPS0.PMEC */
-                OperationRegion (UAB0, SystemMemory, (BAR0 & 0xFFFFFFFFFFFFF000), 0x82)
-                Field (UAB0, ByteAcc, NoLock, Preserve)
-                {
-                    Offset (0x81), 
-                    PPRR,   8
-                }
-
-                PPRR = 0x07
-            }
-        }
-
-        Method (UPSC, 1, Serialized)
-        {
-            OperationRegion (UACF, SystemMemory, (Arg0 + 0x84), 0x04)
-            Field (UACF, ByteAcc, NoLock, Preserve)
-            {
-                PMEC,   8
-            }
-
-            Return ((PMEC & 0x03))
-        }
-
-        If (((UM00 == 0x02) || (UM00 == 0x03)))
-        {
-            Device (UAH0)
-            {
-                Name (_DDN, "SerialIoUart0")  // _DDN: DOS Device Name
-                Name (_UID, "SerialIoUart0")  // _UID: Unique ID
-                Method (_HID, 0, NotSerialized)  // _HID: Hardware ID
-                {
-                    Return (UHID (UM00))
-                }
-
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (UARH (UC00, UI00))
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    If ((UM00 == 0x03))
-                    {
-                        If ((UP00 == 0x02))
-                        {
-                            UP00 = UAPG (UM00, UP00, UC00)
-                        }
-
-                        Return (0x0F)
-                    }
-
-                    Return (0x03)
-                }
-
-                If ((UM00 == 0x03))
-                {
-                    Method (_PSC, 0, NotSerialized)  // _PSC: Power State Current
-                    {
-                        Return (UPSC (UC00))
-                    }
-
-                    Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                    {
-                        UPS3 (UP00, UC00)
-                    }
-
-                    Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                    {
-                        UPS0 (UP00, UC00)
-                    }
-                }
-            }
-        }
-
-        If (((UM01 == 0x02) || (UM01 == 0x03)))
-        {
-            Device (UAH1)
-            {
-                Name (_DDN, "SerialIoUart1")  // _DDN: DOS Device Name
-                Name (_UID, "SerialIoUart1")  // _UID: Unique ID
-                Method (_HID, 0, NotSerialized)  // _HID: Hardware ID
-                {
-                    Return (UHID (UM01))
-                }
-
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (UARH (UC01, UI01))
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    If ((UM01 == 0x03))
-                    {
-                        If ((UP01 == 0x02))
-                        {
-                            UP01 = UAPG (UM01, UP01, UC01)
-                        }
-
-                        Return (0x0F)
-                    }
-
-                    Return (0x03)
-                }
-
-                If ((UM01 == 0x03))
-                {
-                    Method (_PSC, 0, NotSerialized)  // _PSC: Power State Current
-                    {
-                        Return (UPSC (UC01))
-                    }
-
-                    Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                    {
-                        UPS3 (UP01, UC01)
-                    }
-
-                    Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                    {
-                        UPS0 (UP01, UC01)
-                    }
-                }
-            }
-        }
-
-        If (((UM02 == 0x02) || (UM02 == 0x03)))
-        {
-            Device (UAH2)
-            {
-                Name (_DDN, "SerialIoUart2")  // _DDN: DOS Device Name
-                Name (_UID, "SerialIoUart2")  // _UID: Unique ID
-                Method (_HID, 0, NotSerialized)  // _HID: Hardware ID
-                {
-                    Return (UHID (UM02))
-                }
-
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Return (UARH (UC02, UI02))
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    If ((UM02 == 0x03))
-                    {
-                        If ((UP02 == 0x02))
-                        {
-                            UP02 = UAPG (UM02, UP02, UC02)
-                        }
-
-                        Return (0x0F)
-                    }
-
-                    Return (0x03)
-                }
-
-                If ((UM02 == 0x03))
-                {
-                    Method (_PSC, 0, NotSerialized)  // _PSC: Power State Current
-                    {
-                        Return (UPSC (UC02))
-                    }
-
-                    Method (_PS3, 0, NotSerialized)  // _PS3: Power State 3
-                    {
-                        UPS3 (UP02, UC02)
-                    }
-
-                    Method (_PS0, 0, NotSerialized)  // _PS0: Power State 0
-                    {
-                        UPS0 (UP02, UC02)
-                    }
-                }
-            }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Method (DLLR, 5, Serialized)
-        {
-            ADBG ("SD DLL restore flow")
-            Name (TEMP, Zero)
-            Name (EMPB, Zero)
-            EMPB = XBAS /* External reference */
-            EMPB |= (Arg0 << 0x14)
-            EMPB |= (Arg1 << 0x0F)
-            EMPB |= (Arg2 << 0x0C)
-            OperationRegion (EMPC, SystemMemory, EMPB, 0x0100)
-            Field (EMPC, DWordAcc, NoLock, Preserve)
-            {
-                Offset (0x04), 
-                    ,   1, 
-                MSE,    1, 
-                Offset (0x10), 
-                BAR0,   64, 
-                Offset (0x84), 
-                PSTA,   32
-            }
-
-            Name (OPST, Zero)
-            OPST = PSTA /* \_SB_.PCI0.DLLR.PSTA */
-            PSTA &= 0xFFFFFFFC
-            TEMP = PSTA /* \_SB_.PCI0.DLLR.PSTA */
-            Name (OMSE, Zero)
-            OMSE = MSE /* \_SB_.PCI0.DLLR.MSE_ */
-            MSE = Zero
-            Name (OBAR, Zero)
-            OBAR = BAR0 /* \_SB_.PCI0.DLLR.BAR0 */
-            BAR0 = Arg3
-            TEMP = BAR0 /* \_SB_.PCI0.DLLR.BAR0 */
-            MSE = One
-            OperationRegion (EMMI, SystemMemory, Arg3, Arg4)
-            Field (EMMI, DWordAcc, NoLock, Preserve)
-            {
-                Offset (0x834), 
-                FDLL,   8, 
-                Offset (0x840), 
-                ADLL,   8
-            }
-
-            Name (FDLV, Zero)
-            Name (ADLV, Zero)
-            FDLV = FDLL /* \_SB_.PCI0.DLLR.FDLL */
-            ADLV = ADLL /* \_SB_.PCI0.DLLR.ADLL */
-            ADBG (Concatenate ("Fixed DLL value ", ToHexString (FDLV)))
-            ADBG (Concatenate ("Auto DLL Value ", ToHexString (ADLV)))
-            If ((ADLV != Zero))
-            {
-                ADBG ("Auto tuning executed, restoring values")
-                ADLV *= 0x02
-                FDLL = ADLV /* \_SB_.PCI0.DLLR.ADLV */
-            }
-
-            MSE = Zero
-            BAR0 = OBAR /* \_SB_.PCI0.DLLR.OBAR */
-            MSE = OMSE /* \_SB_.PCI0.DLLR.OMSE */
-            PSTA = OPST /* \_SB_.PCI0.DLLR.OPST */
-            TEMP = PSTA /* \_SB_.PCI0.DLLR.PSTA */
-        }
-
-        Device (PUFS)
-        {
-            Name (_ADR, 0x00120005)  // _ADR: Address
-            Name (_DDN, "Intel(R) UFS Controller")  // _DDN: DOS Device Name
-            Device (CARD)
-            {
-                Name (_ADR, 0x08)  // _ADR: Address
-                Method (_RMV, 0, NotSerialized)  // _RMV: Removal Status
-                {
-                    Return (Zero)
-                }
-            }
-        }
-
-        Device (PEMC)
-        {
-            Name (_ADR, 0x001A0000)  // _ADR: Address
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((EMCE == Zero))
-                {
-                    Return (Zero)
-                }
-                Else
-                {
-                    Return (0x0F)
-                }
-            }
-
-            OperationRegion (SCSR, PCI_Config, Zero, 0x0100)
-            Field (SCSR, WordAcc, NoLock, Preserve)
-            {
-                Offset (0x84), 
-                PSTA,   32, 
-                Offset (0xA2), 
-                    ,   2, 
-                PGEN,   1
-            }
-
-            Method (_PS0, 0, Serialized)  // _PS0: Power State 0
-            {
-                Stall (0x32)
-                PGEN = Zero
-                PCRA (0x52, 0x1C20, Zero)
-                PCRA (0x52, 0x4820, Zero)
-                PSTA &= 0xFFFFFFFC
-                TEMP = PSTA /* \_SB_.PCI0.PEMC.PSTA */
-            }
-
-            Method (_PS3, 0, Serialized)  // _PS3: Power State 3
-            {
-                DLLR (Zero, 0x1A, Zero, 0xFE0D0000, 0x00010000)
-                PGEN = One
-                PSTA |= 0x03
-                TEMP = PSTA /* \_SB_.PCI0.PEMC.PSTA */
-            }
-
-            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-            {
-                If (PCIC (Arg0))
-                {
-                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                }
-
-                ADBG (Concatenate ("EMH4=", ToDecimalString (EMH4)))
-                If ((Arg0 == ToUUID ("f6c13ea5-65cd-461f-ab7a-29f7e8d5bd61")))
-                {
-                    If ((Arg1 >= Zero))
-                    {
-                        Switch (ToInteger (Arg2))
-                        {
-                            Case (Zero)
-                            {
-                                If ((EMH4 == One))
-                                {
-                                    Return (Buffer (0x02)
-                                    {
-                                         0x61, 0x02                                       // a.
-                                    })
-                                }
-
-                                Return (Buffer (0x02)
-                                {
-                                     0x21, 0x02                                       // !.
-                                })
-                            }
-                            Case (0x05)
-                            {
-                                Return (Buffer (One)
-                                {
-                                     0x03                                             // .
-                                })
-                            }
-                            Case (0x06)
-                            {
-                                Return (Buffer (One)
-                                {
-                                     0x05                                             // .
-                                })
-                            }
-                            Case (0x09)
-                            {
-                                Switch (EMDS)
-                                {
-                                    Case (Zero)
-                                    {
-                                        Return (Buffer (One)
-                                        {
-                                             0x00                                             // .
-                                        })
-                                    }
-                                    Case (One)
-                                    {
-                                        Return (Buffer (One)
-                                        {
-                                             0x01                                             // .
-                                        })
-                                    }
-                                    Case (0x04)
-                                    {
-                                        Return (Buffer (One)
-                                        {
-                                             0x04                                             // .
-                                        })
-                                    }
-
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
-
-            Device (CARD)
-            {
-                Name (_ADR, 0x08)  // _ADR: Address
-                Method (_RMV, 0, NotSerialized)  // _RMV: Removal Status
-                {
-                    Return (Zero)
-                }
-            }
-        }
-
-        Device (PSDC)
-        {
-            Name (_ADR, 0x00140005)  // _ADR: Address
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((SDCE == Zero))
-                {
-                    Return (Zero)
-                }
-                Else
-                {
-                    Return (0x0F)
-                }
-            }
-
-            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-            {
-                Name (SBFI, ResourceTemplate ()
-                {
-                    GpioInt (Edge, ActiveBoth, SharedAndWake, PullNone, 0x2710,
-                        "\\_SB.PCI0.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                    GpioIo (Shared, PullDefault, 0x0000, 0x0000, IoRestrictionInputOnly,
-                        "\\_SB.PCI0.GPI0", 0x00, ResourceConsumer, ,
-                        )
-                        {   // Pin list
-                            0x0000
-                        }
-                })
-                CreateWordField (SBFI, 0x17, SDIP)
-                CreateWordField (SBFI, 0x3F, SDGP)
-                If ((PCHS == PCHL))
-                {
-                    SDIP = GNUM (0x04090027)
-                    SDGP = GNUM (0x04090027)
-                }
-                Else
-                {
-                    SDIP = GNUM (0x030C0006)
-                    SDGP = GNUM (0x030C0006)
-                }
-
-                Return (SBFI) /* \_SB_.PCI0.PSDC._CRS.SBFI */
-            }
-
-            Name (_S0W, 0x03)  // _S0W: S0 Device Wake State
-            OperationRegion (SCSR, PCI_Config, Zero, 0x0100)
-            Field (SCSR, WordAcc, NoLock, Preserve)
-            {
-                Offset (0x84), 
-                PSTA,   32, 
-                Offset (0xA2), 
-                    ,   2, 
-                PGEN,   1
-            }
-
-            Method (SDPW, 1, Serialized)
-            {
-                If (!SDPH)
-                {
-                    Return (Zero)
-                }
-
-                Name (GPIO, Zero)
-                If ((PCHS == PCHL))
-                {
-                    GPIO = 0x04000011
-                }
-                Else
-                {
-                    GPIO = 0x03000011
-                }
-
-                If ((Arg0 == Zero))
-                {
-                    SPMV (GPIO, One)
-                }
-                Else
-                {
-                    SGOV (GPIO, Zero)
-                    SPMV (GPIO, Zero)
-                }
-            }
-
-            Method (_PS0, 0, Serialized)  // _PS0: Power State 0
-            {
-                PGEN = Zero
-                PCRA (0x53, 0x1C20, Zero)
-                PCRA (0x53, 0x4820, Zero)
-                PSTA &= 0xFFFFFFFC
-                TEMP = PSTA /* \_SB_.PCI0.PSDC.PSTA */
-                SDPW (Zero)
-            }
-
-            Method (_PS3, 0, Serialized)  // _PS3: Power State 3
-            {
-                SDPW (One)
-                PGEN = One
-                PSTA |= 0x03
-                TEMP = PSTA /* \_SB_.PCI0.PSDC.PSTA */
-            }
-
-            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-            {
-                If (PCIC (Arg0))
-                {
-                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                }
-
-                If ((Arg0 == ToUUID ("f6c13ea5-65cd-461f-ab7a-29f7e8d5bd61")))
-                {
-                    If ((Arg1 >= Zero))
-                    {
-                        Switch (ToInteger (Arg2))
-                        {
-                            Case (Zero)
-                            {
-                                Return (Buffer (One)
-                                {
-                                     0x19                                             // .
-                                })
-                            }
-                            Case (0x03)
-                            {
-                                Sleep (0x64)
-                                Return (Buffer (One)
-                                {
-                                     0x00                                             // .
-                                })
-                            }
-                            Case (0x04)
-                            {
-                                Sleep (0x64)
-                                Return (Buffer (One)
-                                {
-                                     0x00                                             // .
-                                })
-                            }
-
-                        }
-                    }
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Device (ISHD)
-        {
-            Name (_ADR, 0x00130000)  // _ADR: Address
-            Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
-            {
-                If (PCIC (Arg0))
-                {
-                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                }
-
-                If (CondRefOf (HIWC))
-                {
-                    If (HIWC (Arg0))
-                    {
-                        If (CondRefOf (HIDW))
-                        {
-                            Return (HIDW (Arg0, Arg1, Arg2, Arg3))
-                        }
-                    }
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Device (HECI)
-        {
-            Name (_ADR, 0x00160000)  // _ADR: Address
-            Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
-            {
-                If (PCIC (Arg0))
-                {
-                    Return (PCID (Arg0, Arg1, Arg2, Arg3))
-                }
-
-                If (CondRefOf (HIWC))
-                {
-                    If (HIWC (Arg0))
-                    {
-                        If (CondRefOf (HIDW))
-                        {
-                            Return (HIDW (Arg0, Arg1, Arg2, Arg3))
-                        }
-                    }
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Device (CNVW)
-        {
-            Name (_ADR, 0x00140003)  // _ADR: Address
-            OperationRegion (CWAR, PCI_Config, Zero, 0x0100)
-            Field (CWAR, WordAcc, NoLock, Preserve)
-            {
-                VDID,   32, 
-                    ,   1, 
-                WMSE,   1, 
-                WBME,   1, 
-                Offset (0x10), 
-                WBR0,   64, 
-                Offset (0x44), 
-                    ,   28, 
-                WFLR,   1, 
-                Offset (0x48), 
-                    ,   15, 
-                WIFR,   1, 
-                Offset (0xCC), 
-                WPMS,   32
-            }
-
-            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-            {
-                If ((Arg0 == ToUUID ("079ff457-64a8-44be-bd8a-6955052b9b92")))
-                {
-                    Switch (ToInteger (Arg2))
-                    {
-                        Case (Zero)
-                        {
-                            Switch (Arg1)
-                            {
-                                Case (One)
-                                {
-                                    Return (Buffer (One)
-                                    {
-                                         0x03                                             // .
-                                    })
-                                }
-
-                            }
-
-                            Return (Buffer (One)
-                            {
-                                 0x00                                             // .
-                            })
-                        }
-                        Case (One)
-                        {
-                            Return (RMRC) /* \RMRC */
-                        }
-
-                    }
-                }
-                Else
-                {
-                    Return (Buffer (One)
-                    {
-                         0x00                                             // .
-                    })
-                }
-            }
-
-            Method (_S0W, 0, NotSerialized)  // _S0W: S0 Device Wake State
-            {
-                Return (0x03)
-            }
-
-            Method (_PRW, 0, NotSerialized)  // _PRW: Power Resources for Wake
-            {
-                Return (GPRW (0x6D, 0x04))
-            }
-
-            Method (_DSW, 3, NotSerialized)  // _DSW: Device Sleep Wake
-            {
-            }
-
-            PowerResource (WRST, 0x05, 0x0000)
-            {
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    Return (One)
-                }
-
-                Method (_ON, 0, NotSerialized)  // _ON_: Power On
-                {
-                }
-
-                Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
-                {
-                }
-
-                Method (_RST, 0, NotSerialized)  // _RST: Device Reset
-                {
-                    If ((WFLR == One))
-                    {
-                        WBR0 = Zero
-                        WPMS = Zero
-                        WBME = Zero
-                        WMSE = Zero
-                        WIFR = One
-                    }
-                }
-            }
-
-            Name (_PRR, Package (0x01)  // _PRR: Power Resource for Reset
-            {
-                WRST
-            })
-        }
-
-        Method (CNIP, 0, NotSerialized)
-        {
-            If ((^CNVW.VDID != 0xFFFFFFFF))
-            {
-                Return (One)
-            }
-            Else
-            {
-                Return (Zero)
-            }
-        }
-
-        Method (SBTE, 1, Serialized)
-        {
-            If ((PCHS == PCHL))
-            {
-                Local0 = 0x04090000
-            }
-            Else
-            {
-                Local0 = 0x030C0000
-            }
-
-            SGOV (Local0, Arg0)
-        }
-
-        Method (GBTE, 0, NotSerialized)
-        {
-            If ((PCHS == PCHL))
-            {
-                Local0 = 0x04090000
-            }
-            Else
-            {
-                Local0 = 0x030C0000
-            }
-
-            Return (GGOV (Local0))
-        }
-
-        Method (AOLX, 0, Serialized)
-        {
-            Name (AODS, Package (0x03)
-            {
-                Zero, 
-                0x12, 
-                Zero
-            })
-            If ((CBTA == One))
-            {
-                AODS [0x02] = One
-            }
-
-            Return (AODS) /* \_SB_.PCI0.AOLX.AODS */
-        }
-    }
-
+    
     If ((\_SB.PCI0.CNIP () & (CBTC == One)))
     {
         If ((PCHS == 0x02))
@@ -19323,366 +26090,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 {
                     Return (AOLX ())
                 }
-            }
-        }
-    }
-
-    If ((PTHM == 0x02))
-    {
-        Scope (_SB.PCI0)
-        {
-            Device (PCHT)
-            {
-                Name (_HID, "INTC1001")  // _HID: Hardware ID
-                Method (_STA, 0, Serialized)  // _STA: Status
-                {
-                    Return (0x0F)
-                }
-
-                Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-                {
-                    Memory32Fixed (ReadWrite,
-                        0xFE100000,         // Address Base
-                        0x00100000,         // Address Length
-                        )
-                    Memory32Fixed (ReadWrite,
-                        0xFC800000,         // Address Base
-                        0x00800000,         // Address Length
-                        )
-                })
-            }
-        }
-    }
-
-    Scope (_SB.PCI0.LPCB)
-    {
-        Device (HPET)
-        {
-            Name (_HID, EisaId ("PNP0103") /* HPET System Timer */)  // _HID: Hardware ID
-            Name (_UID, Zero)  // _UID: Unique ID
-            Name (BUF0, ResourceTemplate ()
-            {
-                Memory32Fixed (ReadWrite,
-                    0xFED00000,         // Address Base
-                    0x00000400,         // Address Length
-                    _Y24)
-            })
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If (HPTE)
-                {
-                    Return (0x0F)
-                }
-
-                Return (Zero)
-            }
-
-            Method (XCRS, 0, Serialized)
-            {
-                If (HPTE)
-                {
-                    CreateDWordField (BUF0, \_SB.PCI0.LPCB.HPET._Y24._BAS, HPT0)  // _BAS: Base Address
-                    HPT0 = HPTB /* \HPTB */
-                }
-
-                Return (BUF0) /* \_SB_.PCI0.LPCB.HPET.BUF0 */
-            }
-        }
-
-        Device (IPIC)
-        {
-            Name (_HID, EisaId ("PNP0000") /* 8259-compatible Programmable Interrupt Controller */)  // _HID: Hardware ID
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-            {
-                IO (Decode16,
-                    0x0020,             // Range Minimum
-                    0x0020,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x0024,             // Range Minimum
-                    0x0024,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x0028,             // Range Minimum
-                    0x0028,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x002C,             // Range Minimum
-                    0x002C,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x0030,             // Range Minimum
-                    0x0030,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x0034,             // Range Minimum
-                    0x0034,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x0038,             // Range Minimum
-                    0x0038,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x003C,             // Range Minimum
-                    0x003C,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x00A0,             // Range Minimum
-                    0x00A0,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x00A4,             // Range Minimum
-                    0x00A4,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x00A8,             // Range Minimum
-                    0x00A8,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x00AC,             // Range Minimum
-                    0x00AC,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x00B0,             // Range Minimum
-                    0x00B0,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x00B4,             // Range Minimum
-                    0x00B4,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x00B8,             // Range Minimum
-                    0x00B8,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x00BC,             // Range Minimum
-                    0x00BC,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x04D0,             // Range Minimum
-                    0x04D0,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IRQNoFlags ()
-                    {2}
-            })
-        }
-
-        Device (MATH)
-        {
-            Name (_HID, EisaId ("PNP0C04") /* x87-compatible Floating Point Processing Unit */)  // _HID: Hardware ID
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-            {
-                IO (Decode16,
-                    0x00F0,             // Range Minimum
-                    0x00F0,             // Range Maximum
-                    0x01,               // Alignment
-                    0x01,               // Length
-                    )
-                IRQNoFlags ()
-                    {13}
-            })
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((PCHS == PCHH))
-                {
-                    Return (0x1F)
-                }
-                Else
-                {
-                    Return (Zero)
-                }
-            }
-        }
-
-        Device (LDRC)
-        {
-            Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
-            Name (_UID, 0x02)  // _UID: Unique ID
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-            {
-                IO (Decode16,
-                    0x002E,             // Range Minimum
-                    0x002E,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x004E,             // Range Minimum
-                    0x004E,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x0061,             // Range Minimum
-                    0x0061,             // Range Maximum
-                    0x01,               // Alignment
-                    0x01,               // Length
-                    )
-                IO (Decode16,
-                    0x0063,             // Range Minimum
-                    0x0063,             // Range Maximum
-                    0x01,               // Alignment
-                    0x01,               // Length
-                    )
-                IO (Decode16,
-                    0x0065,             // Range Minimum
-                    0x0065,             // Range Maximum
-                    0x01,               // Alignment
-                    0x01,               // Length
-                    )
-                IO (Decode16,
-                    0x0067,             // Range Minimum
-                    0x0067,             // Range Maximum
-                    0x01,               // Alignment
-                    0x01,               // Length
-                    )
-                IO (Decode16,
-                    0x0070,             // Range Minimum
-                    0x0070,             // Range Maximum
-                    0x01,               // Alignment
-                    0x01,               // Length
-                    )
-                IO (Decode16,
-                    0x0080,             // Range Minimum
-                    0x0080,             // Range Maximum
-                    0x01,               // Alignment
-                    0x01,               // Length
-                    )
-                IO (Decode16,
-                    0x0092,             // Range Minimum
-                    0x0092,             // Range Maximum
-                    0x01,               // Alignment
-                    0x01,               // Length
-                    )
-                IO (Decode16,
-                    0x00B2,             // Range Minimum
-                    0x00B2,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-                IO (Decode16,
-                    0x0680,             // Range Minimum
-                    0x0680,             // Range Maximum
-                    0x01,               // Alignment
-                    0x20,               // Length
-                    )
-                IO (Decode16,
-                    0x164E,             // Range Minimum
-                    0x164E,             // Range Maximum
-                    0x01,               // Alignment
-                    0x02,               // Length
-                    )
-            })
-        }
-
-        Device (RTC)
-        {
-            Name (_HID, EisaId ("PNP0B00") /* AT Real-Time Clock */)  // _HID: Hardware ID
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-            {
-                IO (Decode16,
-                    0x0070,             // Range Minimum
-                    0x0070,             // Range Maximum
-                    0x01,               // Alignment
-                    0x08,               // Length
-                    )
-                IRQNoFlags ()
-                    {}
-            })
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((STAS == One))
-                {
-                    Return (0x0F)
-                }
-                Else
-                {
-                    Return (Zero)
-                }
-            }
-        }
-
-        Device (TIMR)
-        {
-            Name (_HID, EisaId ("PNP0100") /* PC-class System Timer */)  // _HID: Hardware ID
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-            {
-                IO (Decode16,
-                    0x0040,             // Range Minimum
-                    0x0040,             // Range Maximum
-                    0x01,               // Alignment
-                    0x04,               // Length
-                    )
-                IO (Decode16,
-                    0x0050,             // Range Minimum
-                    0x0050,             // Range Maximum
-                    0x10,               // Alignment
-                    0x04,               // Length
-                    )
-                IRQNoFlags ()
-                    {}
-            })
-        }
-
-        Device (CWDT)
-        {
-            Name (_HID, EisaId ("INT3F0D") /* ACPI Motherboard Resources */)  // _HID: Hardware ID
-            Name (_CID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _CID: Compatible ID
-            Method (_STA, 0, Serialized)  // _STA: Status
-            {
-                Return (0x0F)
-            }
-
-            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-            {
-                Name (RBUF, ResourceTemplate ()
-                {
-                    IO (Decode16,
-                        0x0000,             // Range Minimum
-                        0x0000,             // Range Maximum
-                        0x04,               // Alignment
-                        0x04,               // Length
-                        _Y25)
-                })
-                CreateWordField (RBUF, \_SB.PCI0.LPCB.CWDT._CRS._Y25._MIN, OMIN)  // _MIN: Minimum Base Address
-                CreateWordField (RBUF, \_SB.PCI0.LPCB.CWDT._CRS._Y25._MAX, OMAX)  // _MAX: Maximum Base Address
-                OMIN = (PMBS + 0x54)
-                OMAX = (PMBS + 0x54)
-                Return (RBUF) /* \_SB_.PCI0.LPCB.CWDT._CRS.RBUF */
             }
         }
     }
@@ -20203,7 +26610,90 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
     }
 
     Name (TDMA, 0x80000000)
-    Scope (_GPE)
+    
+
+    Method (STPC, 2, Serialized)
+    {
+        Name (DEVI, Zero)
+        Name (MENT, 0x02)
+        DEVI = Arg0
+        If (((DEVI + MENT) > Arg1))
+        {
+            Return (Zero)
+        }
+
+        Local0 = Zero
+        If (((RPS0 > Zero) && RPN0))
+        {
+            If ((RPT0 == One))
+            {
+                If ((RPS0 < 0x0A))
+                {
+                    Local1 = Concatenate ("RP0", ToDecimalString (RPS0))
+                    Local0 = One
+                }
+                ElseIf ((RPS0 < 0x19))
+                {
+                    Local1 = Concatenate ("RP", ToDecimalString (RPS0))
+                    Local0 = One
+                }
+            }
+
+            If ((RPT0 == 0x02))
+            {
+                If ((RPS0 < 0x03))
+                {
+                    Local1 = Concatenate ("PEG", ToDecimalString (RPS0))
+                    Local0 = One
+                }
+            }
+        }
+
+        If ((Local0 == One))
+        {
+            DerefOf (\_SB.PEPD.DEVY [DEVI]) [Zero] = Concatenate ("\\_SB.PCI0.", Local1
+                )
+            DerefOf (\_SB.PEPD.DEVY [DEVI]) [One] = One
+            DEVI++
+        }
+
+        Local0 = Zero
+        If (((RPS1 > Zero) && RPN1))
+        {
+            If ((RPT1 == One))
+            {
+                If ((RPS1 < 0x0A))
+                {
+                    Local1 = Concatenate ("RP0", ToDecimalString (RPS1))
+                    Local0 = One
+                }
+                ElseIf ((RPS1 < 0x19))
+                {
+                    Local1 = Concatenate ("RP", ToDecimalString (RPS1))
+                    Local0 = One
+                }
+            }
+
+            If ((RPT1 == 0x02))
+            {
+                If ((RPS1 < 0x03))
+                {
+                    Local1 = Concatenate ("PEG", ToDecimalString (RPS1))
+                    Local0 = One
+                }
+            }
+        }
+
+        If ((Local0 == One))
+        {
+            DerefOf (\_SB.PEPD.DEVY [DEVI]) [Zero] = Concatenate ("\\_SB.PCI0.", Local1
+                )
+            DerefOf (\_SB.PEPD.DEVY [DEVI]) [One] = One
+            DEVI++
+        }
+
+        Return (One)
+    }Scope (_GPE)
     {
         Method (OSUP, 2, Serialized)
         {
@@ -20779,2121 +27269,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
 
             ADBG ("End-of-TINI")
         }
-    }
 
-    Scope (_SB)
-    {
-        Method (THDR, 3, Serialized)
-        {
-            ADBG ("THDR")
-            CAGS (Arg0)
-            Sleep (0x64)
-            \_GPE.XTBT (Arg1, Arg2)
-        }
-    }
-
-    Scope (_SB)
-    {
-        Method (CGWR, 2, Serialized)
-        {
-            If (CondRefOf (\_SB.SGOV))
-            {
-                SGOV (Arg0, Arg1)
-            }
-        }
-
-        Method (CGRD, 2, Serialized)
-        {
-            Local0 = One
-            If ((Arg1 == Zero))
-            {
-                If (CondRefOf (\_SB.GGOV))
-                {
-                    Local0 = GGOV (Arg0)
-                }
-            }
-            ElseIf ((Arg1 == One))
-            {
-                If (CondRefOf (\_SB.GGIV))
-                {
-                    Local0 = GGIV (Arg0)
-                }
-            }
-
-            Return (Local0)
-        }
-
-        Method (WRGP, 2, Serialized)
-        {
-            Local0 = Arg0
-            Local1 = Arg0
-            Local0 &= 0xFFFFFFFF
-            Local1 >>= 0x20
-            If (((Local0 & 0xFF) == One))
-            {
-                CGWR (Local1, Arg1)
-            }
-        }
-
-        Method (RDGP, 2, Serialized)
-        {
-            Local7 = One
-            Local0 = Arg0
-            Local1 = Arg0
-            Local0 &= 0xFFFFFFFF
-            Local1 >>= 0x20
-            If (((Local0 & 0xFF) == One))
-            {
-                Local7 = CGRD (Local1, Arg1)
-            }
-
-            Return (Local7)
-        }
-    }
-
-    Scope (_SB)
-    {
-        Method (TBFP, 2, NotSerialized)
-        {
-            If (Arg0)
-            {
-                If ((Arg1 == One))
-                {
-                    CGWR (FPG0, FP0L)
-                }
-                Else
-                {
-                    CGWR (FPG1, FP1L)
-                }
-            }
-            ElseIf ((Arg1 == One))
-            {
-                CGWR (FPG0, !FP0L)
-            }
-            Else
-            {
-                CGWR (FPG1, !FP1L)
-            }
-        }
-
-        Device (WMTF)
-        {
-            Name (_HID, "PNP0C14" /* Windows Management Instrumentation Device */)  // _HID: Hardware ID
-            Name (_UID, "TBFP")  // _UID: Unique ID
-            Name (_WDG, Buffer (0x14)
-            {
-                /* 0000 */  0x48, 0xFD, 0xCC, 0x86, 0x5E, 0x20, 0x77, 0x4A,  // H...^ wJ
-                /* 0008 */  0x9C, 0x48, 0x20, 0x21, 0xCB, 0xED, 0xE3, 0x41,  // .H !...A
-                /* 0010 */  0x54, 0x46, 0x01, 0x02                           // TF..
-            })
-            Method (WMTF, 3, NotSerialized)
-            {
-                CreateByteField (Arg2, Zero, FP)
-                If (FP)
-                {
-                    TBFP (One, One)
-                }
-                Else
-                {
-                    TBFP (Zero, One)
-                }
-            }
-        }
-    }
-
-    Scope (_SB)
-    {
-        Method (PERB, 5, Serialized)
-        {
-            ADBG ("PERB")
-            Local7 = Arg0
-            Local7 |= (Arg1 << 0x14)
-            Local7 |= (Arg2 << 0x0F)
-            Local7 |= (Arg3 << 0x0C)
-            Local7 |= Arg4
-            OperationRegion (PCI0, SystemMemory, Local7, One)
-            Field (PCI0, ByteAcc, NoLock, Preserve)
-            {
-                TEMP,   8
-            }
-
-            Return (TEMP) /* \_SB_.PERB.TEMP */
-        }
-
-        Method (PEWB, 6, Serialized)
-        {
-            ADBG ("PEWB")
-            Local7 = Arg0
-            Local7 |= (Arg1 << 0x14)
-            Local7 |= (Arg2 << 0x0F)
-            Local7 |= (Arg3 << 0x0C)
-            Local7 |= Arg4
-            OperationRegion (PCI0, SystemMemory, Local7, One)
-            Field (PCI0, ByteAcc, NoLock, Preserve)
-            {
-                TEMP,   8
-            }
-
-            TEMP = Arg5
-        }
-
-        Method (PERW, 5, Serialized)
-        {
-            ADBG ("PERW")
-            Local7 = Arg0
-            Local7 |= (Arg1 << 0x14)
-            Local7 |= (Arg2 << 0x0F)
-            Local7 |= (Arg3 << 0x0C)
-            Local7 |= Arg4
-            OperationRegion (PCI0, SystemMemory, Local7, 0x02)
-            Field (PCI0, ByteAcc, NoLock, Preserve)
-            {
-                TEMP,   16
-            }
-
-            Return (TEMP) /* \_SB_.PERW.TEMP */
-        }
-
-        Method (PEWW, 6, Serialized)
-        {
-            ADBG ("PEWW")
-            Local7 = Arg0
-            Local7 |= (Arg1 << 0x14)
-            Local7 |= (Arg2 << 0x0F)
-            Local7 |= (Arg3 << 0x0C)
-            Local7 |= Arg4
-            OperationRegion (PCI0, SystemMemory, Local7, 0x02)
-            Field (PCI0, ByteAcc, NoLock, Preserve)
-            {
-                TEMP,   16
-            }
-
-            TEMP = Arg5
-        }
-
-        Method (PERD, 5, Serialized)
-        {
-            ADBG ("PERD")
-            Local7 = Arg0
-            Local7 |= (Arg1 << 0x14)
-            Local7 |= (Arg2 << 0x0F)
-            Local7 |= (Arg3 << 0x0C)
-            Local7 |= Arg4
-            OperationRegion (PCI0, SystemMemory, Local7, 0x04)
-            Field (PCI0, ByteAcc, NoLock, Preserve)
-            {
-                TEMP,   32
-            }
-
-            Return (TEMP) /* \_SB_.PERD.TEMP */
-        }
-
-        Method (PEWD, 6, Serialized)
-        {
-            ADBG ("PEWD")
-            Local7 = Arg0
-            Local7 |= (Arg1 << 0x14)
-            Local7 |= (Arg2 << 0x0F)
-            Local7 |= (Arg3 << 0x0C)
-            Local7 |= Arg4
-            OperationRegion (PCI0, SystemMemory, Local7, 0x04)
-            Field (PCI0, ByteAcc, NoLock, Preserve)
-            {
-                TEMP,   32
-            }
-
-            TEMP = Arg5
-        }
-
-        Method (STDC, 5, Serialized)
-        {
-            ADBG ("STDC")
-            Local7 = PERW (Arg0, Arg1, Arg2, Arg3, Zero)
-            If ((Local7 == 0xFFFF))
-            {
-                ADBG ("Referenced device is not present")
-                Return (Zero)
-            }
-
-            Local0 = PERW (Arg0, Arg1, Arg2, Arg3, 0x06)
-            If (((Local0 & 0x10) == Zero))
-            {
-                ADBG ("No Capabilities linked list is available")
-                Return (Zero)
-            }
-
-            Local2 = PERB (Arg0, Arg1, Arg2, Arg3, 0x34)
-            While (One)
-            {
-                Local2 &= 0xFC
-                If ((Local2 == Zero))
-                {
-                    ADBG ("Capability ID is not found")
-                    Return (Zero)
-                }
-
-                Local1 = PERB (Arg0, Arg1, Arg2, Arg3, Local2)
-                If ((Arg4 == Local1))
-                {
-                    ADBG ("Capability ID is found")
-                    ADBG ("Capability Offset : ")
-                    ADBG (Local2)
-                    Return (Local2)
-                }
-
-                Local2 = PERB (Arg0, Arg1, Arg2, Arg3, (Local2 + One))
-                Return (Zero)
-            }
-        }
-    }
-
-    Method (STPC, 2, Serialized)
-    {
-        Name (DEVI, Zero)
-        Name (MENT, 0x02)
-        DEVI = Arg0
-        If (((DEVI + MENT) > Arg1))
-        {
-            Return (Zero)
-        }
-
-        Local0 = Zero
-        If (((RPS0 > Zero) && RPN0))
-        {
-            If ((RPT0 == One))
-            {
-                If ((RPS0 < 0x0A))
-                {
-                    Local1 = Concatenate ("RP0", ToDecimalString (RPS0))
-                    Local0 = One
-                }
-                ElseIf ((RPS0 < 0x19))
-                {
-                    Local1 = Concatenate ("RP", ToDecimalString (RPS0))
-                    Local0 = One
-                }
-            }
-
-            If ((RPT0 == 0x02))
-            {
-                If ((RPS0 < 0x03))
-                {
-                    Local1 = Concatenate ("PEG", ToDecimalString (RPS0))
-                    Local0 = One
-                }
-            }
-        }
-
-        If ((Local0 == One))
-        {
-            DerefOf (\_SB.PEPD.DEVY [DEVI]) [Zero] = Concatenate ("\\_SB.PCI0.", Local1
-                )
-            DerefOf (\_SB.PEPD.DEVY [DEVI]) [One] = One
-            DEVI++
-        }
-
-        Local0 = Zero
-        If (((RPS1 > Zero) && RPN1))
-        {
-            If ((RPT1 == One))
-            {
-                If ((RPS1 < 0x0A))
-                {
-                    Local1 = Concatenate ("RP0", ToDecimalString (RPS1))
-                    Local0 = One
-                }
-                ElseIf ((RPS1 < 0x19))
-                {
-                    Local1 = Concatenate ("RP", ToDecimalString (RPS1))
-                    Local0 = One
-                }
-            }
-
-            If ((RPT1 == 0x02))
-            {
-                If ((RPS1 < 0x03))
-                {
-                    Local1 = Concatenate ("PEG", ToDecimalString (RPS1))
-                    Local0 = One
-                }
-            }
-        }
-
-        If ((Local0 == One))
-        {
-            DerefOf (\_SB.PEPD.DEVY [DEVI]) [Zero] = Concatenate ("\\_SB.PCI0.", Local1
-                )
-            DerefOf (\_SB.PEPD.DEVY [DEVI]) [One] = One
-            DEVI++
-        }
-
-        Return (One)
-    }
-
-    Scope (\)
-    {
-        Device (CHUB)
-        {
-            Name (_HID, EisaId ("INT339B"))  // _HID: Hardware ID
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((CHEN == One))
-                {
-                    Return (0x0F)
-                }
-
-                Return (Zero)
-            }
-
-            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-            {
-                If ((Arg0 == ToUUID ("1730e71d-e5dd-4a34-be57-4d76b6a2fe37")))
-                {
-                    If ((ToInteger (Arg1) >= Zero))
-                    {
-                        Switch (ToInteger (Arg2))
-                        {
-                            Case (Zero)
-                            {
-                                Return (Buffer (One)
-                                {
-                                     0x03                                             // .
-                                })
-                            }
-                            Case (One)
-                            {
-                                Switch (ToInteger (DerefOf (Arg3 [Zero])))
-                                {
-                                    Case (Zero)
-                                    {
-                                    }
-
-                                }
-                            }
-
-                        }
-
-                        Return (Zero)
-                    }
-
-                    Return (Zero)
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
-        }
-    }
-
-    Mutex (MUTX, 0x00)
-    Mutex (OSUM, 0x00)
-    Event (WFEV)
-    OperationRegion (PRT0, SystemIO, 0x80, 0x02)
-    Field (PRT0, WordAcc, Lock, Preserve)
-    {
-        P80B,   16
-    }
-
-    Name (P80T, Zero)
-    Method (D8XH, 2, Serialized)
-    {
-        If ((Arg0 == Zero))
-        {
-            P80T = ((P80T & 0xFF00) | Arg1)
-        }
-
-        If ((Arg0 == One))
-        {
-            P80T = ((P80T & 0xFF) | (Arg1 << 0x08))
-        }
-
-        P80B = P80T /* \P80T */
-    }
-
-    Method (P8XH, 2, Serialized)
-    {
-        If (CondRefOf (MDBG))
-        {
-            D8XH (Arg0, Arg1)
-        }
-    }
-
-    Method (SDBG, 1, Serialized)
-    {
-        OperationRegion (U3F8, SystemIO, 0x03F8, 0x10)
-        Field (U3F8, ByteAcc, Lock, Preserve)
-        {
-            TXBF,   8, 
-            DLM,    8, 
-            FCR,    8, 
-            LCR,    8
-        }
-
-        LCR = 0x83
-        TXBF = One
-        DLM = Zero
-        FCR = 0xE1
-        LCR = 0x03
-        DLM = Zero
-        ToHexString (Arg0, Local3)
-        Local4 = SizeOf (Local3)
-        Local5 = Zero
-        While ((Local5 < Local4))
-        {
-            Mid (Local3, Local5, One, TXBF) /* \SDBG.TXBF */
-            Stall (0x64)
-            Local5++
-        }
-
-        Stall (0x64)
-        TXBF = 0x0D
-        Stall (0x64)
-        TXBF = 0x0A
-    }
-
-    Method (ADBG, 1, Serialized)
-    {
-        If (CondRefOf (SRLD))
-        {
-            If ((SRLD == One))
-            {
-                SDBG (Arg0)
-            }
-        }
-
-        If (CondRefOf (MDBG))
-        {
-            Return (MDBG (Arg0))
-        }
-
-        Return (Zero)
-    }
-
-    OperationRegion (SPRT, SystemIO, 0xB2, 0x02)
-    Field (SPRT, ByteAcc, Lock, Preserve)
-    {
-        SSMP,   8
-    }
-
-    Name (AM00, Package (0x02)
-    {
-        Zero, 
-        Zero
-    })
-    Method (_PIC, 1, NotSerialized)  // _PIC: Interrupt Model
-    {
-        GPIC = Arg0
-        PICM = Arg0
-    }
-
-    Method (RPTS, 1, NotSerialized)
-    {
-        D8XH (Zero, Arg0)
-        D8XH (One, Zero)
-        ADBG (Concatenate ("_PTS=", ToHexString (Arg0)))
-        If ((TBTS == One))
-        {
-            TRD3 = One
-            Reset (WFEV)
-            If ((RTBT == One))
-            {
-                TOFF = Zero
-            }
-        }
-
-        If (CondRefOf (\_SB.TPM.PTS))
-        {
-            \_SB.TPM.PTS (Arg0)
-        }
-    }
-
-    Method (PBCL, 0, NotSerialized)
-    {
-        Return (Package (0x67)
-        {
-            0x50, 
-            0x32, 
-            Zero, 
-            One, 
-            0x02, 
-            0x03, 
-            0x04, 
-            0x05, 
-            0x06, 
-            0x07, 
-            0x08, 
-            0x09, 
-            0x0A, 
-            0x0B, 
-            0x0C, 
-            0x0D, 
-            0x0E, 
-            0x0F, 
-            0x10, 
-            0x11, 
-            0x12, 
-            0x13, 
-            0x14, 
-            0x15, 
-            0x16, 
-            0x17, 
-            0x18, 
-            0x19, 
-            0x1A, 
-            0x1B, 
-            0x1C, 
-            0x1D, 
-            0x1E, 
-            0x1F, 
-            0x20, 
-            0x21, 
-            0x22, 
-            0x23, 
-            0x24, 
-            0x25, 
-            0x26, 
-            0x27, 
-            0x28, 
-            0x29, 
-            0x2A, 
-            0x2B, 
-            0x2C, 
-            0x2D, 
-            0x2E, 
-            0x2F, 
-            0x30, 
-            0x31, 
-            0x32, 
-            0x33, 
-            0x34, 
-            0x35, 
-            0x36, 
-            0x37, 
-            0x38, 
-            0x39, 
-            0x3A, 
-            0x3B, 
-            0x3C, 
-            0x3D, 
-            0x3E, 
-            0x3F, 
-            0x40, 
-            0x41, 
-            0x42, 
-            0x43, 
-            0x44, 
-            0x45, 
-            0x46, 
-            0x47, 
-            0x48, 
-            0x49, 
-            0x4A, 
-            0x4B, 
-            0x4C, 
-            0x4D, 
-            0x4E, 
-            0x4F, 
-            0x50, 
-            0x51, 
-            0x52, 
-            0x53, 
-            0x54, 
-            0x55, 
-            0x56, 
-            0x57, 
-            0x58, 
-            0x59, 
-            0x5A, 
-            0x5B, 
-            0x5C, 
-            0x5D, 
-            0x5E, 
-            0x5F, 
-            0x60, 
-            0x61, 
-            0x62, 
-            0x63, 
-            0x64
-        })
-    }
-
-    Method (RWAK, 1, Serialized)
-    {
-        D8XH (One, 0xAB)
-        ADBG ("_WAK")
-        If ((TBTS == One))
-        {
-            TRD3 = Zero
-        }
-
-        If (NEXP)
-        {
-            If ((OSCC & One))
-            {
-                NHPG ()
-            }
-
-            If ((OSCC & 0x04))
-            {
-                NPME ()
-            }
-        }
-
-        If (((Arg0 == 0x03) || (Arg0 == 0x04)))
-        {
-            If ((TBTS == One))
-            {
-                If ((RPN0 == One))
-                {
-                    Acquire (OSUM, 0xFFFF)
-                    \_GPE.TINI (Zero, RPS0, RPT0, Arg0)
-                    Release (OSUM)
-                }
-
-                If ((RPN1 == One))
-                {
-                    Acquire (OSUM, 0xFFFF)
-                    \_GPE.TINI (Zero, RPS1, RPT1, Arg0)
-                    Release (OSUM)
-                }
-            }
-
-            If ((\_SB.PCI0.RP01.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP01, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP02.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP02, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP03.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP03, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP04.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP04, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP05.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP05, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP06.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP06, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP07.VDID != 0xFFFFFFFF))
-            {
-                If ((DSTS == Zero))
-                {
-                    Notify (\_SB.PCI0.RP07, Zero) // Bus Check
-                }
-            }
-
-            If ((\_SB.PCI0.RP08.VDID != 0xFFFFFFFF))
-            {
-                If ((DSTS == Zero))
-                {
-                    Notify (\_SB.PCI0.RP08, Zero) // Bus Check
-                }
-            }
-
-            If ((\_SB.PCI0.RP09.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP09, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP10.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP10, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP11.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP11, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP12.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP12, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP13.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP13, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP14.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP14, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP15.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP15, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP16.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP16, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP17.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP17, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP18.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP18, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP19.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP19, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP20.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP20, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP21.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP21, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP22.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP22, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP23.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP23, Zero) // Bus Check
-            }
-
-            If ((\_SB.PCI0.RP24.VDID != 0xFFFFFFFF))
-            {
-                Notify (\_SB.PCI0.RP24, Zero) // Bus Check
-            }
-
-            If ((UTCE && (\_SB.GGIV (0x030A0007) == Zero)))
-            {
-                Local0 = Zero
-                While ((Local0 < 0x0A))
-                {
-                    If ((\_SB.GGOV (0x030A0006) == Zero))
-                    {
-                        Break
-                    }
-                    Else
-                    {
-                        Sleep (0x64)
-                        Local0++
-                    }
-                }
-            }
-        }
-
-        If (((Arg0 == 0x03) || (Arg0 == 0x04)))
-        {
-            If (CondRefOf (\_SB.PCI0.PEG0.PEGP.INIO))
-            {
-                \_SB.PCI0.PEG0.PEGP.INIO (Arg0)
-            }
-        }
-
-        If ((TBTS == One))
-        {
-            Signal (WFEV)
-        }
-
-        Return (Package (0x02)
-        {
-            Zero, 
-            Zero
-        })
-    }
-
-    Method (GETB, 3, Serialized)
-    {
-        Local0 = (Arg0 * 0x08)
-        Local1 = (Arg1 * 0x08)
-        CreateField (Arg2, Local0, Local1, TBF3)
-        Return (TBF3) /* \GETB.TBF3 */
-    }
-
-    Method (PNOT, 0, Serialized)
-    {
-        If ((TCNT > One))
-        {
-            If ((PC00 & 0x08))
-            {
-                Notify (\_SB.PR00, 0x80) // Performance Capability Change
-            }
-
-            If ((PC01 & 0x08))
-            {
-                Notify (\_SB.PR01, 0x80) // Performance Capability Change
-            }
-
-            If ((PC02 & 0x08))
-            {
-                Notify (\_SB.PR02, 0x80) // Performance Capability Change
-            }
-
-            If ((PC03 & 0x08))
-            {
-                Notify (\_SB.PR03, 0x80) // Performance Capability Change
-            }
-
-            If ((PC04 & 0x08))
-            {
-                Notify (\_SB.PR04, 0x80) // Performance Capability Change
-            }
-
-            If ((PC05 & 0x08))
-            {
-                Notify (\_SB.PR05, 0x80) // Performance Capability Change
-            }
-
-            If ((PC06 & 0x08))
-            {
-                Notify (\_SB.PR06, 0x80) // Performance Capability Change
-            }
-
-            If ((PC07 & 0x08))
-            {
-                Notify (\_SB.PR07, 0x80) // Performance Capability Change
-            }
-
-            If ((PC08 & 0x08))
-            {
-                Notify (\_SB.PR08, 0x80) // Performance Capability Change
-            }
-
-            If ((PC09 & 0x08))
-            {
-                Notify (\_SB.PR09, 0x80) // Performance Capability Change
-            }
-
-            If ((PC10 & 0x08))
-            {
-                Notify (\_SB.PR10, 0x80) // Performance Capability Change
-            }
-
-            If ((PC11 & 0x08))
-            {
-                Notify (\_SB.PR11, 0x80) // Performance Capability Change
-            }
-
-            If ((PC12 & 0x08))
-            {
-                Notify (\_SB.PR12, 0x80) // Performance Capability Change
-            }
-
-            If ((PC13 & 0x08))
-            {
-                Notify (\_SB.PR13, 0x80) // Performance Capability Change
-            }
-
-            If ((PC14 & 0x08))
-            {
-                Notify (\_SB.PR14, 0x80) // Performance Capability Change
-            }
-
-            If ((PC15 & 0x08))
-            {
-                Notify (\_SB.PR15, 0x80) // Performance Capability Change
-            }
-        }
-        Else
-        {
-            Notify (\_SB.PR00, 0x80) // Performance Capability Change
-        }
-
-        If ((TCNT > One))
-        {
-            If (((PC00 & 0x08) && (PC00 & 0x10)))
-            {
-                Notify (\_SB.PR00, 0x81) // C-State Change
-            }
-
-            If (((PC01 & 0x08) && (PC01 & 0x10)))
-            {
-                Notify (\_SB.PR01, 0x81) // C-State Change
-            }
-
-            If (((PC02 & 0x08) && (PC02 & 0x10)))
-            {
-                Notify (\_SB.PR02, 0x81) // C-State Change
-            }
-
-            If (((PC03 & 0x08) && (PC03 & 0x10)))
-            {
-                Notify (\_SB.PR03, 0x81) // C-State Change
-            }
-
-            If (((PC04 & 0x08) && (PC04 & 0x10)))
-            {
-                Notify (\_SB.PR04, 0x81) // C-State Change
-            }
-
-            If (((PC05 & 0x08) && (PC05 & 0x10)))
-            {
-                Notify (\_SB.PR05, 0x81) // C-State Change
-            }
-
-            If (((PC06 & 0x08) && (PC06 & 0x10)))
-            {
-                Notify (\_SB.PR06, 0x81) // C-State Change
-            }
-
-            If (((PC07 & 0x08) && (PC07 & 0x10)))
-            {
-                Notify (\_SB.PR07, 0x81) // C-State Change
-            }
-
-            If (((PC08 & 0x08) && (PC08 & 0x10)))
-            {
-                Notify (\_SB.PR08, 0x81) // C-State Change
-            }
-
-            If (((PC09 & 0x08) && (PC09 & 0x10)))
-            {
-                Notify (\_SB.PR09, 0x81) // C-State Change
-            }
-
-            If (((PC10 & 0x08) && (PC10 & 0x10)))
-            {
-                Notify (\_SB.PR10, 0x81) // C-State Change
-            }
-
-            If (((PC11 & 0x08) && (PC11 & 0x10)))
-            {
-                Notify (\_SB.PR11, 0x81) // C-State Change
-            }
-
-            If (((PC12 & 0x08) && (PC12 & 0x10)))
-            {
-                Notify (\_SB.PR12, 0x81) // C-State Change
-            }
-
-            If (((PC13 & 0x08) && (PC13 & 0x10)))
-            {
-                Notify (\_SB.PR13, 0x81) // C-State Change
-            }
-
-            If (((PC14 & 0x08) && (PC14 & 0x10)))
-            {
-                Notify (\_SB.PR14, 0x81) // C-State Change
-            }
-
-            If (((PC15 & 0x08) && (PC15 & 0x10)))
-            {
-                Notify (\_SB.PR15, 0x81) // C-State Change
-            }
-        }
-        Else
-        {
-            Notify (\_SB.PR00, 0x81) // C-State Change
-        }
-    }
-
-    OperationRegion (MBAR, SystemMemory, (\_SB.PCI0.GMHB () + 0x5000), 0x1000)
-    Field (MBAR, ByteAcc, NoLock, Preserve)
-    {
-        Offset (0x938), 
-        PWRU,   4, 
-        Offset (0x9A0), 
-        PPL1,   15, 
-        PL1E,   1, 
-        CLP1,   1
-    }
-
-    Name (CLMP, Zero)
-    Name (PLEN, Zero)
-    Name (PLSV, 0x8000)
-    Name (CSEM, Zero)
-    Method (SPL1, 0, Serialized)
-    {
-        Name (PPUU, Zero)
-        If ((CSEM == One))
-        {
-            Return (Zero)
-        }
-
-        CSEM = One
-        PLSV = PPL1 /* \PPL1 */
-        PLEN = PL1E /* \PL1E */
-        CLMP = CLP1 /* \CLP1 */
-        If ((PWRU == Zero))
-        {
-            PPUU = One
-        }
-        Else
-        {
-            PPUU = (PWRU-- << 0x02)
-        }
-
-        Local0 = (PLVL * PPUU) /* \SPL1.PPUU */
-        Local1 = (Local0 / 0x03E8)
-        PPL1 = Local1
-        PL1E = One
-        CLP1 = One
-    }
-
-    Method (RPL1, 0, Serialized)
-    {
-        PPL1 = PLSV /* \PLSV */
-        PL1E = PLEN /* \PLEN */
-        CLP1 = CLMP /* \CLMP */
-        CSEM = Zero
-    }
-
-    Name (UAMS, Zero)
-    Name (GLCK, Zero)
-    Method (GUAM, 1, Serialized)
-    {
-        Switch (ToInteger (Arg0))
-        {
-            Case (Zero)
-            {
-                If ((GLCK == One))
-                {
-                    GLCK = Zero
-                    P8XH (Zero, 0xE1)
-                    P8XH (One, 0xAB)
-                    ADBG ("Exit Resiliency")
-                    If (PSCP)
-                    {
-                        If (CondRefOf (\_SB.PR00._PPC))
-                        {
-                            \_SB.CPPC = Zero
-                            PNOT ()
-                        }
-                    }
-
-                    If (PLCS)
-                    {
-                        RPL1 ()
-                    }
-                }
-            }
-            Case (One)
-            {
-                If ((GLCK == Zero))
-                {
-                    GLCK = One
-                    P8XH (Zero, 0xE0)
-                    P8XH (One, Zero)
-                    ADBG ("Enter Resiliency")
-                    If (PSCP)
-                    {
-                        If ((CondRefOf (\_SB.PR00._PSS) && CondRefOf (\_SB.PR00._PPC)))
-                        {
-                            If ((PC00 & 0x0400))
-                            {
-                                \_SB.CPPC = (SizeOf (\_SB.PR00.TPSS) - One)
-                            }
-                            Else
-                            {
-                                \_SB.CPPC = (SizeOf (\_SB.PR00.LPSS) - One)
-                            }
-
-                            PNOT ()
-                        }
-                    }
-
-                    If (PLCS)
-                    {
-                        SPL1 ()
-                    }
-                }
-            }
-            Default
-            {
-                Return (Zero)
-            }
-
-        }
-
-        UAMS = (Arg0 && !PWRS)
-        P_CS ()
-    }
-
-    Method (P_CS, 0, Serialized)
-    {
-        If (CondRefOf (\_SB.PCI0.PAUD.PUAM))
-        {
-            \_SB.PCI0.PAUD.PUAM ()
-        }
-
-        If ((OSYS == 0x07DC))
-        {
-            If (CondRefOf (\_SB.PCI0.XHC.DUAM))
-            {
-                \_SB.PCI0.XHC.DUAM ()
-            }
-        }
-    }
-
-    Method (TRAP, 2, Serialized)
-    {
-        SMIF = Arg1
-        If ((Arg0 == 0x02))
-        {
-            \_SB.DTSF = Arg1
-            \_SB.TRPD = Zero
-            Return (\_SB.DTSF) /* External reference */
-        }
-
-        If ((Arg0 == 0x04))
-        {
-            \_SB.TRPF = Zero
-        }
-
-        Return (SMIF) /* \SMIF */
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Method (PTMA, 0, NotSerialized)
-        {
-            Return (BGMA) /* External reference */
-        }
-
-        Method (PTMS, 0, NotSerialized)
-        {
-            Return (BGMS) /* External reference */
-        }
-
-        Method (PTIA, 0, NotSerialized)
-        {
-            Return (BGIA) /* External reference */
-        }
-
-        Method (_INI, 0, Serialized)  // _INI: Initialize
-        {
-            TBPE = One
-            OSYS = 0x03E8
-            If (CondRefOf (\_OSI, Local0))
-            {
-                If (_OSI ("Windows 2001"))
-                {
-                    OSYS = 0x07D1
-                }
-
-                If (_OSI ("Windows 2001 SP1"))
-                {
-                    OSYS = 0x07D1
-                }
-
-                If (_OSI ("Windows 2001 SP2"))
-                {
-                    OSYS = 0x07D2
-                }
-
-                If (_OSI ("Windows 2001.1"))
-                {
-                    OSYS = 0x07D3
-                }
-
-                If (_OSI ("Windows 2006"))
-                {
-                    OSYS = 0x07D6
-                }
-
-                If (_OSI ("Windows 2009"))
-                {
-                    OSYS = 0x07D9
-                }
-
-                If (_OSI ("Windows 2012"))
-                {
-                    OSYS = 0x07DC
-                }
-
-                If (_OSI ("Windows 2013"))
-                {
-                    OSYS = 0x07DD
-                }
-
-                If (_OSI ("Windows 2015"))
-                {
-                    OSYS = 0x07DF
-                }
-
-                If (_OSI ("Windows 2016"))
-                {
-                    OSYS = 0x07E0
-                }
-
-                If (_OSI ("Windows 2017"))
-                {
-                    OSYS = 0x07E1
-                }
-            }
-
-            If (CondRefOf (\_SB.DTSE))
-            {
-                If ((DTSE >= One))
-                {
-                    DSAE = One
-                }
-            }
-
-            If ((TBTS == One))
-            {
-                If ((RPN0 == One))
-                {
-                    Acquire (OSUM, 0xFFFF)
-                    \_GPE.TINI (Zero, RPS0, RPT0, Zero)
-                    Release (OSUM)
-                }
-
-                If ((RPN1 == One))
-                {
-                    Acquire (OSUM, 0xFFFF)
-                    \_GPE.TINI (Zero, RPS1, RPT1, Zero)
-                    Release (OSUM)
-                }
-
-                Signal (WFEV)
-            }
-
-            GOST ()
-        }
-    }
-
-    Scope (\)
-    {
-        Method (NHPG, 0, Serialized)
-        {
-            \_SB.PCI0.RP01.HPEX = Zero
-            \_SB.PCI0.RP02.HPEX = Zero
-            \_SB.PCI0.RP03.HPEX = Zero
-            \_SB.PCI0.RP04.HPEX = Zero
-            \_SB.PCI0.RP05.HPEX = Zero
-            \_SB.PCI0.RP06.HPEX = Zero
-            \_SB.PCI0.RP07.HPEX = Zero
-            \_SB.PCI0.RP08.HPEX = Zero
-            \_SB.PCI0.RP09.HPEX = Zero
-            \_SB.PCI0.RP10.HPEX = Zero
-            \_SB.PCI0.RP11.HPEX = Zero
-            \_SB.PCI0.RP12.HPEX = Zero
-            \_SB.PCI0.RP13.HPEX = Zero
-            \_SB.PCI0.RP14.HPEX = Zero
-            \_SB.PCI0.RP15.HPEX = Zero
-            \_SB.PCI0.RP16.HPEX = Zero
-            \_SB.PCI0.RP17.HPEX = Zero
-            \_SB.PCI0.RP18.HPEX = Zero
-            \_SB.PCI0.RP19.HPEX = Zero
-            \_SB.PCI0.RP20.HPEX = Zero
-            \_SB.PCI0.RP21.HPEX = Zero
-            \_SB.PCI0.RP22.HPEX = Zero
-            \_SB.PCI0.RP23.HPEX = Zero
-            \_SB.PCI0.RP24.HPEX = Zero
-            \_SB.PCI0.RP01.HPSX = One
-            \_SB.PCI0.RP02.HPSX = One
-            \_SB.PCI0.RP03.HPSX = One
-            \_SB.PCI0.RP04.HPSX = One
-            \_SB.PCI0.RP05.HPSX = One
-            \_SB.PCI0.RP06.HPSX = One
-            \_SB.PCI0.RP07.HPSX = One
-            \_SB.PCI0.RP08.HPSX = One
-            \_SB.PCI0.RP09.HPSX = One
-            \_SB.PCI0.RP10.HPSX = One
-            \_SB.PCI0.RP11.HPSX = One
-            \_SB.PCI0.RP12.HPSX = One
-            \_SB.PCI0.RP13.HPSX = One
-            \_SB.PCI0.RP14.HPSX = One
-            \_SB.PCI0.RP15.HPSX = One
-            \_SB.PCI0.RP16.HPSX = One
-            \_SB.PCI0.RP17.HPSX = One
-            \_SB.PCI0.RP18.HPSX = One
-            \_SB.PCI0.RP19.HPSX = One
-            \_SB.PCI0.RP20.HPSX = One
-            \_SB.PCI0.RP21.HPSX = One
-            \_SB.PCI0.RP22.HPSX = One
-            \_SB.PCI0.RP23.HPSX = One
-            \_SB.PCI0.RP24.HPSX = One
-        }
-
-        Method (NPME, 0, Serialized)
-        {
-            \_SB.PCI0.RP01.PMEX = Zero
-            \_SB.PCI0.RP02.PMEX = Zero
-            \_SB.PCI0.RP03.PMEX = Zero
-            \_SB.PCI0.RP04.PMEX = Zero
-            \_SB.PCI0.RP05.PMEX = Zero
-            \_SB.PCI0.RP06.PMEX = Zero
-            \_SB.PCI0.RP07.PMEX = Zero
-            \_SB.PCI0.RP08.PMEX = Zero
-            \_SB.PCI0.RP09.PMEX = Zero
-            \_SB.PCI0.RP10.PMEX = Zero
-            \_SB.PCI0.RP11.PMEX = Zero
-            \_SB.PCI0.RP12.PMEX = Zero
-            \_SB.PCI0.RP13.PMEX = Zero
-            \_SB.PCI0.RP14.PMEX = Zero
-            \_SB.PCI0.RP15.PMEX = Zero
-            \_SB.PCI0.RP16.PMEX = Zero
-            \_SB.PCI0.RP17.PMEX = Zero
-            \_SB.PCI0.RP18.PMEX = Zero
-            \_SB.PCI0.RP19.PMEX = Zero
-            \_SB.PCI0.RP20.PMEX = Zero
-            \_SB.PCI0.RP21.PMEX = Zero
-            \_SB.PCI0.RP22.PMEX = Zero
-            \_SB.PCI0.RP23.PMEX = Zero
-            \_SB.PCI0.RP24.PMEX = Zero
-            \_SB.PCI0.RP21.PMEX = Zero
-            \_SB.PCI0.RP22.PMEX = Zero
-            \_SB.PCI0.RP23.PMEX = Zero
-            \_SB.PCI0.RP24.PMEX = Zero
-            \_SB.PCI0.RP01.PMSX = One
-            \_SB.PCI0.RP02.PMSX = One
-            \_SB.PCI0.RP03.PMSX = One
-            \_SB.PCI0.RP04.PMSX = One
-            \_SB.PCI0.RP05.PMSX = One
-            \_SB.PCI0.RP06.PMSX = One
-            \_SB.PCI0.RP07.PMSX = One
-            \_SB.PCI0.RP08.PMSX = One
-            \_SB.PCI0.RP09.PMSX = One
-            \_SB.PCI0.RP10.PMSX = One
-            \_SB.PCI0.RP11.PMSX = One
-            \_SB.PCI0.RP12.PMSX = One
-            \_SB.PCI0.RP13.PMSX = One
-            \_SB.PCI0.RP14.PMSX = One
-            \_SB.PCI0.RP15.PMSX = One
-            \_SB.PCI0.RP16.PMSX = One
-            \_SB.PCI0.RP17.PMSX = One
-            \_SB.PCI0.RP18.PMSX = One
-            \_SB.PCI0.RP19.PMSX = One
-            \_SB.PCI0.RP20.PMSX = One
-            \_SB.PCI0.RP21.PMSX = One
-            \_SB.PCI0.RP22.PMSX = One
-            \_SB.PCI0.RP23.PMSX = One
-            \_SB.PCI0.RP24.PMSX = One
-        }
-
-        Name (PICM, Zero)
-        Name (PRWP, Package (0x02)
-        {
-            Zero, 
-            Zero
-        })
-        Method (GPRW, 2, NotSerialized)
-        {
-            PRWP [Zero] = Arg0
-            Local0 = (SS1 << One)
-            Local0 |= (SS2 << 0x02)
-            Local0 |= (SS3 << 0x03)
-            Local0 |= (SS4 << 0x04)
-            If (((One << Arg1) & Local0))
-            {
-                PRWP [One] = Arg1
-            }
-            Else
-            {
-                Local0 >>= One
-                FindSetLeftBit (Local0, PRWP [One])
-            }
-
-            Return (PRWP) /* \PRWP */
-        }
-    }
-
-    Scope (_SB)
-    {
-        Name (OSCI, Zero)
-        Name (OSCO, Zero)
-        Name (OSCP, Zero)
-        Method (_OSC, 4, Serialized)  // _OSC: Operating System Capabilities
-        {
-            CreateDWordField (Arg3, Zero, STS0)
-            CreateDWordField (Arg3, 0x04, CAP0)
-            If ((Arg0 == ToUUID ("0811b06e-4a27-44f9-8d60-3cbbc22e7b48") /* Platform-wide Capabilities */))
-            {
-                If ((Arg1 == One))
-                {
-                    OSCP = CAP0 /* \_SB_._OSC.CAP0 */
-                    If ((CAP0 & 0x04))
-                    {
-                        OSCO = 0x04
-                        If (((SGMD & 0x0F) != 0x02))
-                        {
-                            If ((RTD3 == Zero))
-                            {
-                                CAP0 &= 0x3B
-                                STS0 |= 0x10
-                            }
-                        }
-                    }
-                }
-                Else
-                {
-                    STS0 &= 0xFFFFFF00
-                    STS0 |= 0x0A
-                }
-            }
-            Else
-            {
-                STS0 &= 0xFFFFFF00
-                STS0 |= 0x06
-            }
-
-            Return (Arg3)
-        }
-
-        Device (EPC)
-        {
-            Name (_HID, EisaId ("INT0E0C"))  // _HID: Hardware ID
-            Name (_STR, Unicode ("Enclave Page Cache 1.0"))  // _STR: Description String
-            Name (_MLS, Package (0x01)  // _MLS: Multiple Language String
-            {
-                Package (0x02)
-                {
-                    "en", 
-                    Unicode ("Enclave Page Cache 1.0")
-                }
-            })
-            Name (RBUF, ResourceTemplate ()
-            {
-                QWordMemory (ResourceConsumer, PosDecode, MinNotFixed, MaxNotFixed, NonCacheable, ReadWrite,
-                    0x0000000000000000, // Granularity
-                    0x0000000000000000, // Range Minimum
-                    0x0000000000000000, // Range Maximum
-                    0x0000000000000000, // Translation Offset
-                    0x0000000000000001, // Length
-                    ,, _Y26, AddressRangeMemory, TypeStatic)
-            })
-            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-            {
-                CreateQWordField (RBUF, \_SB.EPC._Y26._MIN, EMIN)  // _MIN: Minimum Base Address
-                CreateQWordField (RBUF, \_SB.EPC._Y26._MAX, EMAX)  // _MAX: Maximum Base Address
-                CreateQWordField (RBUF, \_SB.EPC._Y26._LEN, ELEN)  // _LEN: Length
-                EMIN = EMNA /* External reference */
-                ELEN = ELNG /* External reference */
-                EMAX = ((EMNA + ELNG) - One)
-                Return (RBUF) /* \_SB_.EPC_.RBUF */
-            }
-
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((EPCS != Zero))
-                {
-                    Return (0x0F)
-                }
-
-                Return (Zero)
-            }
-        }
-    }
-
-    Scope (_SB.PCI0.I2C0)
-    {
-        If (((PLID != 0x14) && (PLID != 0x15)))
-        {
-            Device (PA01)
-            {
-                Name (_HID, "MAX34407")  // _HID: Hardware ID
-                Name (_CID, "MAX34407")  // _CID: Compatible ID
-                Name (_UID, One)  // _UID: Unique ID
-                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-                {
-                    Name (RBUF, ResourceTemplate ()
-                    {
-                        I2cSerialBusV2 (0x0010, ControllerInitiated, 0x00061A80,
-                            AddressingMode7Bit, "\\_SB.PCI0.I2C0",
-                            0x00, ResourceConsumer, , Exclusive,
-                            )
-                    })
-                    Return (RBUF) /* \_SB_.PCI0.I2C0.PA01._CRS.RBUF */
-                }
-
-                Method (_STA, 0, NotSerialized)  // _STA: Status
-                {
-                    If (POME)
-                    {
-                        Return (0x0F)
-                    }
-
-                    Return (Zero)
-                }
-
-                Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
-                {
-                    If ((Arg0 == ToUUID ("4993a436-e1ac-4dc7-b4f8-46a5008fb9e7")))
-                    {
-                        If ((Arg2 == Zero))
-                        {
-                            Return (Buffer (One)
-                            {
-                                 0x07                                             // .
-                            })
-                        }
-
-                        If ((Arg2 == One))
-                        {
-                            If ((Arg1 == Zero))
-                            {
-                                Name (PBUF, Package (0x08)
-                                {
-                                    "SYSTEM_PWR", 
-                                    0x02
-                                })
-                                Return (PBUF) /* \_SB_.PCI0.I2C0.PA01._DSM.PBUF */
-                            }
-                            Else
-                            {
-                                Return (Buffer (One)
-                                {
-                                     0x00                                             // .
-                                })
-                            }
-                        }
-
-                        If ((Arg2 == 0x02))
-                        {
-                            If ((Arg1 == Zero))
-                            {
-                                Name (CBUF, Package (0x01)
-                                {
-                                    One
-                                })
-                                Return (CBUF) /* \_SB_.PCI0.I2C0.PA01._DSM.CBUF */
-                            }
-                            Else
-                            {
-                                Return (Buffer (One)
-                                {
-                                     0x00                                             // .
-                                })
-                            }
-                        }
-
-                        Return (Buffer (One)
-                        {
-                             0x00                                             // .
-                        })
-                    }
-                    Else
-                    {
-                        Return (Buffer (One)
-                        {
-                             0x00                                             // .
-                        })
-                    }
-                }
-            }
-        }
-    }
-
-    Scope (_SB)
-    {
-        Device (COEX)
-        {
-            Name (_HID, EisaId ("INT3519"))  // _HID: Hardware ID
-            Name (_STR, Unicode ("CoExistence Manager"))  // _STR: Description String
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((COEM == One))
-                {
-                    Return (0x0F)
-                }
-                Else
-                {
-                    Return (Zero)
-                }
-            }
-        }
-    }
-
-    Scope (_SB)
-    {
-        Processor (PR00, 0x01, 0x00001810, 0x06){}
-        Processor (PR01, 0x02, 0x00001810, 0x06){}
-        Processor (PR02, 0x03, 0x00001810, 0x06){}
-        Processor (PR03, 0x04, 0x00001810, 0x06){}
-        Processor (PR04, 0x05, 0x00001810, 0x06){}
-        Processor (PR05, 0x06, 0x00001810, 0x06){}
-        Processor (PR06, 0x07, 0x00001810, 0x06){}
-        Processor (PR07, 0x08, 0x00001810, 0x06){}
-        Processor (PR08, 0x09, 0x00001810, 0x06){}
-        Processor (PR09, 0x0A, 0x00001810, 0x06){}
-        Processor (PR10, 0x0B, 0x00001810, 0x06){}
-        Processor (PR11, 0x0C, 0x00001810, 0x06){}
-        Processor (PR12, 0x0D, 0x00001810, 0x06){}
-        Processor (PR13, 0x0E, 0x00001810, 0x06){}
-        Processor (PR14, 0x0F, 0x00001810, 0x06){}
-        Processor (PR15, 0x10, 0x00001810, 0x06){}
-        Processor (PR16, 0x11, 0x00001810, 0x06){}
-        Processor (PR17, 0x12, 0x00001810, 0x06){}
-        Processor (PR18, 0x13, 0x00001810, 0x06){}
-        Processor (PR19, 0x14, 0x00001810, 0x06){}
-    }
-
-    Scope (_SB.PR00)
-    {
-        Name (CPC2, Package (0x15)
-        {
-            0x15, 
-            0x02, 
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x0000000000000771, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x08,               // Bit Offset
-                    0x00000000000000CE, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x10,               // Bit Offset
-                    0x0000000000000771, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x18,               // Bit Offset
-                    0x0000000000000771, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x08,               // Bit Offset
-                    0x0000000000000771, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x10,               // Bit Offset
-                    0x0000000000000774, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x0000000000000774, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x08,               // Bit Offset
-                    0x0000000000000774, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (SystemMemory, 
-                    0x00,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x0000000000000000, // Address
-                    ,)
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (SystemMemory, 
-                    0x00,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x0000000000000000, // Address
-                    ,)
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (SystemMemory, 
-                    0x00,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x0000000000000000, // Address
-                    ,)
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x40,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x00000000000000E7, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x40,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x00000000000000E8, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x02,               // Bit Width
-                    0x01,               // Bit Offset
-                    0x0000000000000777, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x01,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x0000000000000770, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            One, 
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x0A,               // Bit Width
-                    0x20,               // Bit Offset
-                    0x0000000000000774, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x18,               // Bit Offset
-                    0x0000000000000774, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            Zero
-        })
-        Name (CPOC, Package (0x15)
-        {
-            0x15, 
-            0x02, 
-            0xFF, 
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x08,               // Bit Offset
-                    0x00000000000000CE, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x10,               // Bit Offset
-                    0x0000000000000771, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x18,               // Bit Offset
-                    0x0000000000000771, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x08,               // Bit Offset
-                    0x0000000000000771, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x10,               // Bit Offset
-                    0x0000000000000774, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x0000000000000774, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x08,               // Bit Offset
-                    0x0000000000000774, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (SystemMemory, 
-                    0x00,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x0000000000000000, // Address
-                    ,)
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (SystemMemory, 
-                    0x00,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x0000000000000000, // Address
-                    ,)
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (SystemMemory, 
-                    0x00,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x0000000000000000, // Address
-                    ,)
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x40,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x00000000000000E7, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x40,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x00000000000000E8, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x02,               // Bit Width
-                    0x01,               // Bit Offset
-                    0x0000000000000777, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x01,               // Bit Width
-                    0x00,               // Bit Offset
-                    0x0000000000000770, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            One, 
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x0A,               // Bit Width
-                    0x20,               // Bit Offset
-                    0x0000000000000774, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            ResourceTemplate ()
-            {
-                Register (FFixedHW, 
-                    0x08,               // Bit Width
-                    0x18,               // Bit Offset
-                    0x0000000000000774, // Address
-                    0x04,               // Access Size
-                    )
-            }, 
-
-            Zero
-        })
-    }
-
-    Scope (_SB)
-    {
-        Device (PAGD)
-        {
-            Name (_HID, "ACPI000C" /* Processor Aggregator Device */)  // _HID: Hardware ID
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If (_OSI ("Processor Aggregator Device"))
-                {
-                    Return (0x0F)
-                }
-                Else
-                {
-                    Return (Zero)
-                }
-            }
-
-            Name (_PUR, Package (0x02)  // _PUR: Processor Utilization Request
-            {
-                One, 
-                Zero
-            })
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Device (PDRC)
-        {
-            Name (_HID, EisaId ("PNP0C02") /* PNP Motherboard Resources */)  // _HID: Hardware ID
-            Name (_UID, One)  // _UID: Unique ID
-            Name (BUF0, ResourceTemplate ()
-            {
-                Memory32Fixed (ReadWrite,
-                    0x00000000,         // Address Base
-                    0x00008000,         // Address Length
-                    _Y27)
-                Memory32Fixed (ReadWrite,
-                    0x00000000,         // Address Base
-                    0x00001000,         // Address Length
-                    _Y28)
-                Memory32Fixed (ReadWrite,
-                    0x00000000,         // Address Base
-                    0x00001000,         // Address Length
-                    _Y29)
-                Memory32Fixed (ReadWrite,
-                    0x00000000,         // Address Base
-                    0x00000000,         // Address Length
-                    _Y2A)
-                Memory32Fixed (ReadWrite,
-                    0xFED20000,         // Address Base
-                    0x00020000,         // Address Length
-                    )
-                Memory32Fixed (ReadOnly,
-                    0xFED90000,         // Address Base
-                    0x00004000,         // Address Length
-                    )
-                Memory32Fixed (ReadWrite,
-                    0xFED45000,         // Address Base
-                    0x0004B000,         // Address Length
-                    )
-                Memory32Fixed (ReadOnly,
-                    0xFEE00000,         // Address Base
-                    0x00100000,         // Address Length
-                    )
-                Memory32Fixed (ReadWrite,
-                    0x00000000,         // Address Base
-                    0x00000000,         // Address Length
-                    )
-                Memory32Fixed (ReadWrite,
-                    0x00000000,         // Address Base
-                    0x00000000,         // Address Length
-                    _Y2B)
-            })
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-            {
-                CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y27._BAS, MBR0)  // _BAS: Base Address
-                MBR0 = GMHB ()
-                CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y28._BAS, DBR0)  // _BAS: Base Address
-                DBR0 = GDMB ()
-                CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y29._BAS, EBR0)  // _BAS: Base Address
-                EBR0 = GEPB ()
-                CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y2A._BAS, XBR0)  // _BAS: Base Address
-                XBR0 = GPCB ()
-                CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y2A._LEN, XSZ0)  // _LEN: Length
-                XSZ0 = GPCL ()
-                If (!HPTE)
-                {
-                    CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y2B._BAS, HBAS)  // _BAS: Base Address
-                    CreateDWordField (BUF0, \_SB.PCI0.PDRC._Y2B._LEN, HLEN)  // _LEN: Length
-                    HBAS = HPTB /* \HPTB */
-                    HLEN = 0x0400
-                }
-
-                Return (BUF0) /* \_SB_.PCI0.PDRC.BUF0 */
-            }
-        }
-    }
-
-    Method (BRTN, 1, Serialized)
-    {
-        If (((DIDX & 0x0F00) == 0x0400))
-        {
-            Notify (\_SB.PCI0.GFX0.DD1F, Arg0)
-        }
-    }
-
-    Scope (_GPE)
-    {
         Method (_L69, 0, Serialized)  // _Lxx: Level-Triggered GPE, xx=0x00-0xFF
         {
             \_SB.PCI0.RP01.HPME ()
@@ -23816,6 +28192,893 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
             Notify (\_SB.PCI0.RP05, 0x02) // Device Wake
         }
     }
+    
+    Mutex (MUTX, 0x00)
+    Mutex (OSUM, 0x00)
+    Event (WFEV)
+    OperationRegion (PRT0, SystemIO, 0x80, 0x02)
+    Field (PRT0, WordAcc, Lock, Preserve)
+    {
+        P80B,   16
+    }
+
+    Name (P80T, Zero)
+    Method (D8XH, 2, Serialized)
+    {
+        If ((Arg0 == Zero))
+        {
+            P80T = ((P80T & 0xFF00) | Arg1)
+        }
+
+        If ((Arg0 == One))
+        {
+            P80T = ((P80T & 0xFF) | (Arg1 << 0x08))
+        }
+
+        P80B = P80T /* \P80T */
+    }
+
+    Method (P8XH, 2, Serialized)
+    {
+        If (CondRefOf (MDBG))
+        {
+            D8XH (Arg0, Arg1)
+        }
+    }
+
+    Method (SDBG, 1, Serialized)
+    {
+        OperationRegion (U3F8, SystemIO, 0x03F8, 0x10)
+        Field (U3F8, ByteAcc, Lock, Preserve)
+        {
+            TXBF,   8, 
+            DLM,    8, 
+            FCR,    8, 
+            LCR,    8
+        }
+
+        LCR = 0x83
+        TXBF = One
+        DLM = Zero
+        FCR = 0xE1
+        LCR = 0x03
+        DLM = Zero
+        ToHexString (Arg0, Local3)
+        Local4 = SizeOf (Local3)
+        Local5 = Zero
+        While ((Local5 < Local4))
+        {
+            Mid (Local3, Local5, One, TXBF) /* \SDBG.TXBF */
+            Stall (0x64)
+            Local5++
+        }
+
+        Stall (0x64)
+        TXBF = 0x0D
+        Stall (0x64)
+        TXBF = 0x0A
+    }
+
+    Method (ADBG, 1, Serialized)
+    {
+        If (CondRefOf (SRLD))
+        {
+            If ((SRLD == One))
+            {
+                SDBG (Arg0)
+            }
+        }
+
+        If (CondRefOf (MDBG))
+        {
+            Return (MDBG (Arg0))
+        }
+
+        Return (Zero)
+    }
+
+    OperationRegion (SPRT, SystemIO, 0xB2, 0x02)
+    Field (SPRT, ByteAcc, Lock, Preserve)
+    {
+        SSMP,   8
+    }
+
+    Name (AM00, Package (0x02)
+    {
+        Zero, 
+        Zero
+    })
+    Method (_PIC, 1, NotSerialized)  // _PIC: Interrupt Model
+    {
+        GPIC = Arg0
+        PICM = Arg0
+    }
+
+    Method (RPTS, 1, NotSerialized)
+    {
+        D8XH (Zero, Arg0)
+        D8XH (One, Zero)
+        ADBG (Concatenate ("_PTS=", ToHexString (Arg0)))
+        If ((TBTS == One))
+        {
+            TRD3 = One
+            Reset (WFEV)
+            If ((RTBT == One))
+            {
+                TOFF = Zero
+            }
+        }
+
+        If (CondRefOf (\_SB.TPM.PTS))
+        {
+            \_SB.TPM.PTS (Arg0)
+        }
+    }
+
+    Method (PBCL, 0, NotSerialized)
+    {
+        Return (Package (0x67)
+        {
+            0x50, 
+            0x32, 
+            Zero, 
+            One, 
+            0x02, 
+            0x03, 
+            0x04, 
+            0x05, 
+            0x06, 
+            0x07, 
+            0x08, 
+            0x09, 
+            0x0A, 
+            0x0B, 
+            0x0C, 
+            0x0D, 
+            0x0E, 
+            0x0F, 
+            0x10, 
+            0x11, 
+            0x12, 
+            0x13, 
+            0x14, 
+            0x15, 
+            0x16, 
+            0x17, 
+            0x18, 
+            0x19, 
+            0x1A, 
+            0x1B, 
+            0x1C, 
+            0x1D, 
+            0x1E, 
+            0x1F, 
+            0x20, 
+            0x21, 
+            0x22, 
+            0x23, 
+            0x24, 
+            0x25, 
+            0x26, 
+            0x27, 
+            0x28, 
+            0x29, 
+            0x2A, 
+            0x2B, 
+            0x2C, 
+            0x2D, 
+            0x2E, 
+            0x2F, 
+            0x30, 
+            0x31, 
+            0x32, 
+            0x33, 
+            0x34, 
+            0x35, 
+            0x36, 
+            0x37, 
+            0x38, 
+            0x39, 
+            0x3A, 
+            0x3B, 
+            0x3C, 
+            0x3D, 
+            0x3E, 
+            0x3F, 
+            0x40, 
+            0x41, 
+            0x42, 
+            0x43, 
+            0x44, 
+            0x45, 
+            0x46, 
+            0x47, 
+            0x48, 
+            0x49, 
+            0x4A, 
+            0x4B, 
+            0x4C, 
+            0x4D, 
+            0x4E, 
+            0x4F, 
+            0x50, 
+            0x51, 
+            0x52, 
+            0x53, 
+            0x54, 
+            0x55, 
+            0x56, 
+            0x57, 
+            0x58, 
+            0x59, 
+            0x5A, 
+            0x5B, 
+            0x5C, 
+            0x5D, 
+            0x5E, 
+            0x5F, 
+            0x60, 
+            0x61, 
+            0x62, 
+            0x63, 
+            0x64
+        })
+    }
+
+    Method (RWAK, 1, Serialized)
+    {
+        D8XH (One, 0xAB)
+        ADBG ("_WAK")
+        If ((TBTS == One))
+        {
+            TRD3 = Zero
+        }
+
+        If (NEXP)
+        {
+            If ((OSCC & One))
+            {
+                NHPG ()
+            }
+
+            If ((OSCC & 0x04))
+            {
+                NPME ()
+            }
+        }
+
+        If (((Arg0 == 0x03) || (Arg0 == 0x04)))
+        {
+            If ((TBTS == One))
+            {
+                If ((RPN0 == One))
+                {
+                    Acquire (OSUM, 0xFFFF)
+                    \_GPE.TINI (Zero, RPS0, RPT0, Arg0)
+                    Release (OSUM)
+                }
+
+                If ((RPN1 == One))
+                {
+                    Acquire (OSUM, 0xFFFF)
+                    \_GPE.TINI (Zero, RPS1, RPT1, Arg0)
+                    Release (OSUM)
+                }
+            }
+
+            If ((\_SB.PCI0.RP01.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP01, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP02.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP02, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP03.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP03, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP04.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP04, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP05.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP05, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP06.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP06, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP07.VDID != 0xFFFFFFFF))
+            {
+                If ((DSTS == Zero))
+                {
+                    Notify (\_SB.PCI0.RP07, Zero) // Bus Check
+                }
+            }
+
+            If ((\_SB.PCI0.RP08.VDID != 0xFFFFFFFF))
+            {
+                If ((DSTS == Zero))
+                {
+                    Notify (\_SB.PCI0.RP08, Zero) // Bus Check
+                }
+            }
+
+            If ((\_SB.PCI0.RP09.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP09, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP10.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP10, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP11.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP11, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP12.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP12, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP13.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP13, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP14.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP14, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP15.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP15, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP16.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP16, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP17.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP17, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP18.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP18, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP19.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP19, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP20.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP20, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP21.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP21, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP22.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP22, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP23.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP23, Zero) // Bus Check
+            }
+
+            If ((\_SB.PCI0.RP24.VDID != 0xFFFFFFFF))
+            {
+                Notify (\_SB.PCI0.RP24, Zero) // Bus Check
+            }
+
+            If ((UTCE && (\_SB.GGIV (0x030A0007) == Zero)))
+            {
+                Local0 = Zero
+                While ((Local0 < 0x0A))
+                {
+                    If ((\_SB.GGOV (0x030A0006) == Zero))
+                    {
+                        Break
+                    }
+                    Else
+                    {
+                        Sleep (0x64)
+                        Local0++
+                    }
+                }
+            }
+        }
+
+        If (((Arg0 == 0x03) || (Arg0 == 0x04)))
+        {
+            If (CondRefOf (\_SB.PCI0.PEG0.PEGP.INIO))
+            {
+                \_SB.PCI0.PEG0.PEGP.INIO (Arg0)
+            }
+        }
+
+        If ((TBTS == One))
+        {
+            Signal (WFEV)
+        }
+
+        Return (Package (0x02)
+        {
+            Zero, 
+            Zero
+        })
+    }
+
+    Method (GETB, 3, Serialized)
+    {
+        Local0 = (Arg0 * 0x08)
+        Local1 = (Arg1 * 0x08)
+        CreateField (Arg2, Local0, Local1, TBF3)
+        Return (TBF3) /* \GETB.TBF3 */
+    }
+
+    Method (PNOT, 0, Serialized)
+    {
+        If ((TCNT > One))
+        {
+            If ((PC00 & 0x08))
+            {
+                Notify (\_SB.PR00, 0x80) // Performance Capability Change
+            }
+
+            If ((PC01 & 0x08))
+            {
+                Notify (\_SB.PR01, 0x80) // Performance Capability Change
+            }
+
+            If ((PC02 & 0x08))
+            {
+                Notify (\_SB.PR02, 0x80) // Performance Capability Change
+            }
+
+            If ((PC03 & 0x08))
+            {
+                Notify (\_SB.PR03, 0x80) // Performance Capability Change
+            }
+
+            If ((PC04 & 0x08))
+            {
+                Notify (\_SB.PR04, 0x80) // Performance Capability Change
+            }
+
+            If ((PC05 & 0x08))
+            {
+                Notify (\_SB.PR05, 0x80) // Performance Capability Change
+            }
+
+            If ((PC06 & 0x08))
+            {
+                Notify (\_SB.PR06, 0x80) // Performance Capability Change
+            }
+
+            If ((PC07 & 0x08))
+            {
+                Notify (\_SB.PR07, 0x80) // Performance Capability Change
+            }
+
+            If ((PC08 & 0x08))
+            {
+                Notify (\_SB.PR08, 0x80) // Performance Capability Change
+            }
+
+            If ((PC09 & 0x08))
+            {
+                Notify (\_SB.PR09, 0x80) // Performance Capability Change
+            }
+
+            If ((PC10 & 0x08))
+            {
+                Notify (\_SB.PR10, 0x80) // Performance Capability Change
+            }
+
+            If ((PC11 & 0x08))
+            {
+                Notify (\_SB.PR11, 0x80) // Performance Capability Change
+            }
+
+            If ((PC12 & 0x08))
+            {
+                Notify (\_SB.PR12, 0x80) // Performance Capability Change
+            }
+
+            If ((PC13 & 0x08))
+            {
+                Notify (\_SB.PR13, 0x80) // Performance Capability Change
+            }
+
+            If ((PC14 & 0x08))
+            {
+                Notify (\_SB.PR14, 0x80) // Performance Capability Change
+            }
+
+            If ((PC15 & 0x08))
+            {
+                Notify (\_SB.PR15, 0x80) // Performance Capability Change
+            }
+        }
+        Else
+        {
+            Notify (\_SB.PR00, 0x80) // Performance Capability Change
+        }
+
+        If ((TCNT > One))
+        {
+            If (((PC00 & 0x08) && (PC00 & 0x10)))
+            {
+                Notify (\_SB.PR00, 0x81) // C-State Change
+            }
+
+            If (((PC01 & 0x08) && (PC01 & 0x10)))
+            {
+                Notify (\_SB.PR01, 0x81) // C-State Change
+            }
+
+            If (((PC02 & 0x08) && (PC02 & 0x10)))
+            {
+                Notify (\_SB.PR02, 0x81) // C-State Change
+            }
+
+            If (((PC03 & 0x08) && (PC03 & 0x10)))
+            {
+                Notify (\_SB.PR03, 0x81) // C-State Change
+            }
+
+            If (((PC04 & 0x08) && (PC04 & 0x10)))
+            {
+                Notify (\_SB.PR04, 0x81) // C-State Change
+            }
+
+            If (((PC05 & 0x08) && (PC05 & 0x10)))
+            {
+                Notify (\_SB.PR05, 0x81) // C-State Change
+            }
+
+            If (((PC06 & 0x08) && (PC06 & 0x10)))
+            {
+                Notify (\_SB.PR06, 0x81) // C-State Change
+            }
+
+            If (((PC07 & 0x08) && (PC07 & 0x10)))
+            {
+                Notify (\_SB.PR07, 0x81) // C-State Change
+            }
+
+            If (((PC08 & 0x08) && (PC08 & 0x10)))
+            {
+                Notify (\_SB.PR08, 0x81) // C-State Change
+            }
+
+            If (((PC09 & 0x08) && (PC09 & 0x10)))
+            {
+                Notify (\_SB.PR09, 0x81) // C-State Change
+            }
+
+            If (((PC10 & 0x08) && (PC10 & 0x10)))
+            {
+                Notify (\_SB.PR10, 0x81) // C-State Change
+            }
+
+            If (((PC11 & 0x08) && (PC11 & 0x10)))
+            {
+                Notify (\_SB.PR11, 0x81) // C-State Change
+            }
+
+            If (((PC12 & 0x08) && (PC12 & 0x10)))
+            {
+                Notify (\_SB.PR12, 0x81) // C-State Change
+            }
+
+            If (((PC13 & 0x08) && (PC13 & 0x10)))
+            {
+                Notify (\_SB.PR13, 0x81) // C-State Change
+            }
+
+            If (((PC14 & 0x08) && (PC14 & 0x10)))
+            {
+                Notify (\_SB.PR14, 0x81) // C-State Change
+            }
+
+            If (((PC15 & 0x08) && (PC15 & 0x10)))
+            {
+                Notify (\_SB.PR15, 0x81) // C-State Change
+            }
+        }
+        Else
+        {
+            Notify (\_SB.PR00, 0x81) // C-State Change
+        }
+    }
+
+    OperationRegion (MBAR, SystemMemory, (\_SB.PCI0.GMHB () + 0x5000), 0x1000)
+    Field (MBAR, ByteAcc, NoLock, Preserve)
+    {
+        Offset (0x938), 
+        PWRU,   4, 
+        Offset (0x9A0), 
+        PPL1,   15, 
+        PL1E,   1, 
+        CLP1,   1
+    }
+
+    Name (CLMP, Zero)
+    Name (PLEN, Zero)
+    Name (PLSV, 0x8000)
+    Name (CSEM, Zero)
+    Method (SPL1, 0, Serialized)
+    {
+        Name (PPUU, Zero)
+        If ((CSEM == One))
+        {
+            Return (Zero)
+        }
+
+        CSEM = One
+        PLSV = PPL1 /* \PPL1 */
+        PLEN = PL1E /* \PL1E */
+        CLMP = CLP1 /* \CLP1 */
+        If ((PWRU == Zero))
+        {
+            PPUU = One
+        }
+        Else
+        {
+            PPUU = (PWRU-- << 0x02)
+        }
+
+        Local0 = (PLVL * PPUU) /* \SPL1.PPUU */
+        Local1 = (Local0 / 0x03E8)
+        PPL1 = Local1
+        PL1E = One
+        CLP1 = One
+    }
+
+    Method (RPL1, 0, Serialized)
+    {
+        PPL1 = PLSV /* \PLSV */
+        PL1E = PLEN /* \PLEN */
+        CLP1 = CLMP /* \CLMP */
+        CSEM = Zero
+    }
+
+    Name (UAMS, Zero)
+    Name (GLCK, Zero)
+    Method (GUAM, 1, Serialized)
+    {
+        Switch (ToInteger (Arg0))
+        {
+            Case (Zero)
+            {
+                If ((GLCK == One))
+                {
+                    GLCK = Zero
+                    P8XH (Zero, 0xE1)
+                    P8XH (One, 0xAB)
+                    ADBG ("Exit Resiliency")
+                    If (PSCP)
+                    {
+                        If (CondRefOf (\_SB.PR00._PPC))
+                        {
+                            \_SB.CPPC = Zero
+                            PNOT ()
+                        }
+                    }
+
+                    If (PLCS)
+                    {
+                        RPL1 ()
+                    }
+                }
+            }
+            Case (One)
+            {
+                If ((GLCK == Zero))
+                {
+                    GLCK = One
+                    P8XH (Zero, 0xE0)
+                    P8XH (One, Zero)
+                    ADBG ("Enter Resiliency")
+                    If (PSCP)
+                    {
+                        If ((CondRefOf (\_SB.PR00._PSS) && CondRefOf (\_SB.PR00._PPC)))
+                        {
+                            If ((PC00 & 0x0400))
+                            {
+                                \_SB.CPPC = (SizeOf (\_SB.PR00.TPSS) - One)
+                            }
+                            Else
+                            {
+                                \_SB.CPPC = (SizeOf (\_SB.PR00.LPSS) - One)
+                            }
+
+                            PNOT ()
+                        }
+                    }
+
+                    If (PLCS)
+                    {
+                        SPL1 ()
+                    }
+                }
+            }
+            Default
+            {
+                Return (Zero)
+            }
+
+        }
+
+        UAMS = (Arg0 && !PWRS)
+        P_CS ()
+    }
+
+    Method (P_CS, 0, Serialized)
+    {
+        If (CondRefOf (\_SB.PCI0.PAUD.PUAM))
+        {
+            \_SB.PCI0.PAUD.PUAM ()
+        }
+
+        If ((OSYS == 0x07DC))
+        {
+            If (CondRefOf (\_SB.PCI0.XHC.DUAM))
+            {
+                \_SB.PCI0.XHC.DUAM ()
+            }
+        }
+    }
+
+    Method (TRAP, 2, Serialized)
+    {
+        SMIF = Arg1
+        If ((Arg0 == 0x02))
+        {
+            \_SB.DTSF = Arg1
+            \_SB.TRPD = Zero
+            Return (\_SB.DTSF) /* External reference */
+        }
+
+        If ((Arg0 == 0x04))
+        {
+            \_SB.TRPF = Zero
+        }
+
+        Return (SMIF) /* \SMIF */
+    }
+
+    Scope (_SB.PCI0.I2C0)
+    {
+        If (((PLID != 0x14) && (PLID != 0x15)))
+        {
+            Device (PA01)
+            {
+                Name (_HID, "MAX34407")  // _HID: Hardware ID
+                Name (_CID, "MAX34407")  // _CID: Compatible ID
+                Name (_UID, One)  // _UID: Unique ID
+                Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+                {
+                    Name (RBUF, ResourceTemplate ()
+                    {
+                        I2cSerialBusV2 (0x0010, ControllerInitiated, 0x00061A80,
+                            AddressingMode7Bit, "\\_SB.PCI0.I2C0",
+                            0x00, ResourceConsumer, , Exclusive,
+                            )
+                    })
+                    Return (RBUF) /* \_SB_.PCI0.I2C0.PA01._CRS.RBUF */
+                }
+
+                Method (_STA, 0, NotSerialized)  // _STA: Status
+                {
+                    If (POME)
+                    {
+                        Return (0x0F)
+                    }
+
+                    Return (Zero)
+                }
+
+                Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
+                {
+                    If ((Arg0 == ToUUID ("4993a436-e1ac-4dc7-b4f8-46a5008fb9e7")))
+                    {
+                        If ((Arg2 == Zero))
+                        {
+                            Return (Buffer (One)
+                            {
+                                 0x07                                             // .
+                            })
+                        }
+
+                        If ((Arg2 == One))
+                        {
+                            If ((Arg1 == Zero))
+                            {
+                                Name (PBUF, Package (0x08)
+                                {
+                                    "SYSTEM_PWR", 
+                                    0x02
+                                })
+                                Return (PBUF) /* \_SB_.PCI0.I2C0.PA01._DSM.PBUF */
+                            }
+                            Else
+                            {
+                                Return (Buffer (One)
+                                {
+                                     0x00                                             // .
+                                })
+                            }
+                        }
+
+                        If ((Arg2 == 0x02))
+                        {
+                            If ((Arg1 == Zero))
+                            {
+                                Name (CBUF, Package (0x01)
+                                {
+                                    One
+                                })
+                                Return (CBUF) /* \_SB_.PCI0.I2C0.PA01._DSM.CBUF */
+                            }
+                            Else
+                            {
+                                Return (Buffer (One)
+                                {
+                                     0x00                                             // .
+                                })
+                            }
+                        }
+
+                        Return (Buffer (One)
+                        {
+                             0x00                                             // .
+                        })
+                    }
+                    Else
+                    {
+                        Return (Buffer (One)
+                        {
+                             0x00                                             // .
+                        })
+                    }
+                }
+            }
+        }
+    }
+
+    Method (BRTN, 1, Serialized)
+    {
+        If (((DIDX & 0x0F00) == 0x0400))
+        {
+            Notify (\_SB.PCI0.GFX0.DD1F, Arg0)
+        }
+    }
+
+    
 
     If (CondRefOf (\_SB.PCI0.RP01.PXSX))
     {
@@ -24390,6 +29653,86 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                         })
                     }
                 }
+            }
+
+            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+            {
+                If ((PAHC () || PNVM ()))
+                {
+                    If (((S0ID == One) && (OSYS == 0x07DC)))
+                    {
+                        If (((PEPC & One) == One))
+                        {
+                            Return (Package (0x01)
+                            {
+                                PEPD
+                            })
+                        }
+                    }
+
+                    If (((S0ID == One) && (OSYS >= 0x07DF)))
+                    {
+                        Return (Package (0x01)
+                        {
+                            PEPD
+                        })
+                    }
+                }
+
+                Return (Package (0x00){})
+            }
+
+            OperationRegion (PCCX, PCI_Config, 0x09, 0x04)
+            Field (PCCX, ByteAcc, NoLock, Preserve)
+            {
+                PIXX,   8, 
+                SCCX,   8, 
+                BCCX,   8
+            }
+
+            Method (PAHC, 0, Serialized)
+            {
+                If ((BCCX == One))
+                {
+                    If ((SCCX == 0x06))
+                    {
+                        If ((PIXX == One))
+                        {
+                            Return (One)
+                        }
+                    }
+                }
+
+                Return (Zero)
+            }
+
+            Method (PNVM, 0, Serialized)
+            {
+                If ((BCCX == One))
+                {
+                    If ((SCCX == 0x08))
+                    {
+                        If ((PIXX == 0x02))
+                        {
+                            Return (One)
+                        }
+                    }
+                }
+
+                Return (Zero)
+            }
+
+            Method (PRAD, 0, Serialized)
+            {
+                If ((BCCX == One))
+                {
+                    If ((SCCX == 0x04))
+                    {
+                        Return (One)
+                    }
+                }
+
+                Return (Zero)
             }
         }
     }
@@ -24968,6 +30311,89 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                     }
                 }
             }
+        }
+    }
+
+    Scope (_SB.PCI0.RP02.PXSX)
+    {
+        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
+        {
+            If ((PAHC () || PNVM ()))
+            {
+                If (((S0ID == One) && (OSYS == 0x07DC)))
+                {
+                    If (((PEPC & One) == One))
+                    {
+                        Return (Package (0x01)
+                        {
+                            PEPD
+                        })
+                    }
+                }
+
+                If (((S0ID == One) && (OSYS >= 0x07DF)))
+                {
+                    Return (Package (0x01)
+                    {
+                        PEPD
+                    })
+                }
+            }
+
+            Return (Package (0x00){})
+        }
+
+        OperationRegion (PCCX, PCI_Config, 0x09, 0x04)
+        Field (PCCX, ByteAcc, NoLock, Preserve)
+        {
+            PIXX,   8, 
+            SCCX,   8, 
+            BCCX,   8
+        }
+
+        Method (PAHC, 0, Serialized)
+        {
+            If ((BCCX == One))
+            {
+                If ((SCCX == 0x06))
+                {
+                    If ((PIXX == One))
+                    {
+                        Return (One)
+                    }
+                }
+            }
+
+            Return (Zero)
+        }
+
+        Method (PNVM, 0, Serialized)
+        {
+            If ((BCCX == One))
+            {
+                If ((SCCX == 0x08))
+                {
+                    If ((PIXX == 0x02))
+                    {
+                        Return (One)
+                    }
+                }
+            }
+
+            Return (Zero)
+        }
+
+        Method (PRAD, 0, Serialized)
+        {
+            If ((BCCX == One))
+            {
+                If ((SCCX == 0x04))
+                {
+                    Return (One)
+                }
+            }
+
+            Return (Zero)
         }
     }
 
@@ -34780,340 +40206,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         }
     }
 
-    Scope (_SB)
-    {
-        Name (PDAT, Zero)
-        Name (DSSI, Zero)
-        Method (DSSV, 0, Serialized)
-        {
-            PDAT = SDAB /* \SDAB */
-            PDAT <<= 0x10
-            PDAT |= SDAA /* \_SB_.PDAT */
-        }
-
-        Device (WFDE)
-        {
-            Name (_HID, "PNP0C14" /* Windows Management Instrumentation Device */)  // _HID: Hardware ID
-            Name (_UID, "SampleDev")  // _UID: Unique ID
-            Name (_WDG, Buffer (0x3C)
-            {
-                /* 0000 */  0xEF, 0x9D, 0xC4, 0x2B, 0x15, 0x7B, 0x05, 0x4F,  // ...+.{.O
-                /* 0008 */  0x8B, 0xB7, 0xEE, 0x37, 0xB9, 0x54, 0x7C, 0x0B,  // ...7.T|.
-                /* 0010 */  0x44, 0x45, 0x01, 0x02, 0x3E, 0xA3, 0xFE, 0xA6,  // DE..>...
-                /* 0018 */  0xBF, 0xDA, 0xF5, 0x46, 0xBF, 0xC8, 0x46, 0x0D,  // ...F..F.
-                /* 0020 */  0x96, 0x1B, 0xEC, 0x9F, 0xD0, 0x00, 0x01, 0x08,  // ........
-                /* 0028 */  0x21, 0x12, 0x90, 0x05, 0x66, 0xD5, 0xD1, 0x11,  // !...f...
-                /* 0030 */  0xB2, 0xF0, 0x00, 0xA0, 0xC9, 0x06, 0x29, 0x10,  // ......).
-                /* 0038 */  0x43, 0x43, 0x01, 0x00                           // CC..
-            })
-            Method (WMDE, 3, NotSerialized)
-            {
-                If ((Arg1 == One))
-                {
-                    Return (One)
-                }
-
-                If ((Arg1 == 0x02))
-                {
-                    If ((DSSI == Zero))
-                    {
-                        DSSV ()
-                        DSSI = One
-                    }
-
-                    Return (One)
-                }
-
-                If ((Arg1 == 0x03))
-                {
-                    Return (PDAT) /* \_SB_.PDAT */
-                }
-            }
-
-            Method (_WED, 1, NotSerialized)  // _Wxx: Wake Event, xx=0x00-0xFF
-            {
-                If ((Arg0 == 0xD0))
-                {
-                    Return (PDAT) /* \_SB_.PDAT */
-                }
-
-                Return (Zero)
-            }
-
-            Name (WQCC, Buffer (0x043D)
-            {
-                /* 0000 */  0x46, 0x4F, 0x4D, 0x42, 0x01, 0x00, 0x00, 0x00,  // FOMB....
-                /* 0008 */  0x2D, 0x04, 0x00, 0x00, 0xB4, 0x0F, 0x00, 0x00,  // -.......
-                /* 0010 */  0x44, 0x53, 0x00, 0x01, 0x1A, 0x7D, 0xDA, 0x54,  // DS...}.T
-                /* 0018 */  0x28, 0xCE, 0x87, 0x00, 0x01, 0x06, 0x18, 0x42,  // (......B
-                /* 0020 */  0x10, 0x07, 0x10, 0x22, 0x21, 0x04, 0x12, 0x01,  // ..."!...
-                /* 0028 */  0xA1, 0xC8, 0x2C, 0x0C, 0x86, 0x10, 0x38, 0x2E,  // ..,...8.
-                /* 0030 */  0x24, 0x15, 0x07, 0x85, 0x12, 0x02, 0xA1, 0xFE,  // $.......
-                /* 0038 */  0x04, 0xF2, 0x2B, 0x00, 0xA1, 0x43, 0x01, 0x32,  // ..+..C.2
-                /* 0040 */  0x05, 0x18, 0x14, 0xE0, 0x14, 0x41, 0x04, 0xBD,  // .....A..
-                /* 0048 */  0x0A, 0xB0, 0x29, 0xC0, 0xA4, 0x00, 0x8B, 0x02,  // ..).....
-                /* 0050 */  0xB4, 0x0B, 0xB0, 0x2C, 0x40, 0xB7, 0x00, 0xE9,  // ...,@...
-                /* 0058 */  0xB0, 0x44, 0x24, 0x38, 0x4A, 0x0C, 0x38, 0x4A,  // .D$8J.8J
-                /* 0060 */  0x27, 0xB6, 0x70, 0xC3, 0x06, 0x2F, 0x14, 0x45,  // '.p../.E
-                /* 0068 */  0x33, 0x88, 0x92, 0xA0, 0x72, 0x01, 0xBE, 0x11,  // 3...r...
-                /* 0070 */  0x04, 0x5E, 0xAE, 0x00, 0xC9, 0x13, 0x90, 0x66,  // .^.....f
-                /* 0078 */  0x01, 0x86, 0x05, 0x58, 0x17, 0x20, 0x7B, 0x08,  // ...X. {.
-                /* 0080 */  0x54, 0xEA, 0x10, 0x50, 0x72, 0x86, 0x80, 0x1A,  // T..Pr...
-                /* 0088 */  0x40, 0xAB, 0x13, 0x10, 0x7E, 0xA5, 0x53, 0x42,  // @...~.SB
-                /* 0090 */  0x12, 0x84, 0x33, 0x56, 0xF1, 0xF8, 0x9A, 0x45,  // ..3V...E
-                /* 0098 */  0xD3, 0x73, 0x92, 0x73, 0x0C, 0x39, 0x1E, 0x17,  // .s.s.9..
-                /* 00A0 */  0x7A, 0x10, 0x3C, 0x84, 0x04, 0x10, 0x26, 0x7B,  // z.<...&{
-                /* 00A8 */  0xC8, 0x92, 0x0D, 0x83, 0xD2, 0x30, 0x16, 0xEA,  // .....0..
-                /* 00B0 */  0x62, 0xD4, 0xA8, 0x91, 0xB2, 0x01, 0x19, 0xA2,  // b.......
-                /* 00B8 */  0x24, 0x38, 0xD4, 0xA8, 0x3D, 0xBB, 0xE6, 0xC7,  // $8..=...
-                /* 00C0 */  0xA1, 0xD9, 0xB5, 0x3D, 0x16, 0x02, 0xC9, 0xA4,  // ...=....
-                /* 00C8 */  0x0D, 0x05, 0x25, 0x05, 0x42, 0xC2, 0x67, 0x4A,  // ..%.B.gJ
-                /* 00D0 */  0x66, 0x14, 0xF1, 0x48, 0x0D, 0x93, 0xC0, 0xA3,  // f..H....
-                /* 00D8 */  0x88, 0xEC, 0x19, 0x46, 0x63, 0xD0, 0xD8, 0x61,  // ...Fc..a
-                /* 00E0 */  0x78, 0x98, 0xC1, 0x0E, 0xE2, 0x30, 0x8E, 0x39,  // x....0.9
-                /* 00E8 */  0x72, 0x02, 0x4F, 0xE8, 0x48, 0x8F, 0xBC, 0xB0,  // r.O.H...
-                /* 00F0 */  0x79, 0x0A, 0x35, 0x46, 0x73, 0x50, 0x04, 0xFF,  // y.5FsP..
-                /* 00F8 */  0x51, 0x00, 0x2B, 0x11, 0x56, 0xA3, 0x8D, 0x7D,  // Q.+.V..}
-                /* 0100 */  0xBE, 0x1E, 0xCD, 0xC1, 0xC6, 0x38, 0x82, 0xE3,  // .....8..
-                /* 0108 */  0x4A, 0xF0, 0xFF, 0x0F, 0x13, 0xA4, 0xF7, 0xE9,  // J.......
-                /* 0110 */  0x10, 0x41, 0x78, 0x12, 0x3D, 0x0B, 0x61, 0xF5,  // .Ax.=.a.
-                /* 0118 */  0x0C, 0x24, 0x9C, 0x10, 0xC7, 0xCD, 0x61, 0x0E,  // .$....a.
-                /* 0120 */  0x58, 0x83, 0x40, 0xC9, 0x80, 0x10, 0xE4, 0x33,  // X.@....3
-                /* 0128 */  0xC1, 0xD1, 0x99, 0xC0, 0xEE, 0x8F, 0x02, 0xD2,  // ........
-                /* 0130 */  0x26, 0x40, 0xE3, 0x1D, 0x40, 0x20, 0x9D, 0x21,  // &@..@ .!
-                /* 0138 */  0x08, 0xA4, 0xAD, 0xC1, 0x08, 0xA6, 0x42, 0x28,  // ......B(
-                /* 0140 */  0xA1, 0x1C, 0x55, 0x38, 0x5B, 0x43, 0x11, 0x90,  // ..U8[C..
-                /* 0148 */  0x6F, 0x05, 0xAF, 0x0F, 0xA1, 0xD8, 0xD4, 0x42,  // o......B
-                /* 0150 */  0x1E, 0x5B, 0x90, 0xC6, 0xC0, 0x84, 0x1C, 0x2C,  // .[.....,
-                /* 0158 */  0x4C, 0xBC, 0xF6, 0x17, 0xC2, 0x1E, 0x12, 0x3A,  // L......:
-                /* 0160 */  0x0B, 0x38, 0xD2, 0x68, 0x50, 0x07, 0x05, 0x9F,  // .8.hP...
-                /* 0168 */  0x07, 0x7C, 0x16, 0x78, 0x3E, 0xF0, 0xA8, 0x0E,  // .|.x>...
-                /* 0170 */  0xCD, 0x83, 0x3B, 0xB0, 0xC7, 0x87, 0x07, 0x01,  // ..;.....
-                /* 0178 */  0x0F, 0x99, 0xDD, 0x10, 0x7C, 0xAE, 0xF0, 0xC9,  // ....|...
-                /* 0180 */  0x00, 0xEF, 0x1A, 0x50, 0x57, 0x82, 0x07, 0x02,  // ...PW...
-                /* 0188 */  0x36, 0x46, 0xC3, 0xF1, 0x21, 0x7A, 0xB8, 0xE1,  // 6F..!z..
-                /* 0190 */  0x4E, 0xE0, 0x10, 0x19, 0xA0, 0x67, 0xF5, 0x2C,  // N....g.,
-                /* 0198 */  0x80, 0x1D, 0xD6, 0xC9, 0x3C, 0x08, 0xBC, 0x4B,  // ....<..K
-                /* 01A0 */  0x34, 0x7B, 0x8B, 0x20, 0x04, 0xC7, 0xE3, 0x0B,  // 4{. ....
-                /* 01A8 */  0x04, 0x9B, 0x70, 0x02, 0xCB, 0x1F, 0x04, 0x6A,  // ..p....j
-                /* 01B0 */  0x64, 0x86, 0xF6, 0x74, 0x4F, 0xEB, 0x45, 0xC0,  // d..tO.E.
-                /* 01B8 */  0x07, 0x00, 0x13, 0x58, 0x2C, 0x84, 0x14, 0x40,  // ...X,..@
-                /* 01C0 */  0x68, 0x3C, 0xE0, 0x57, 0x7C, 0xE8, 0x20, 0xB7,  // h<.W|. .
-                /* 01C8 */  0x05, 0xCF, 0xD7, 0x47, 0x13, 0xE6, 0x64, 0x3C,  // ...G..d<
-                /* 01D0 */  0xA8, 0x51, 0xF8, 0x14, 0x10, 0xEE, 0xBC, 0x4D,  // .Q.....M
-                /* 01D8 */  0xE0, 0xC0, 0x10, 0xFA, 0x5F, 0x58, 0xD4, 0x31,  // ...._X.1
-                /* 01E0 */  0x85, 0x9F, 0x26, 0xE8, 0x41, 0x82, 0xA1, 0xB2,  // ..&.A...
-                /* 01E8 */  0xFF, 0x3F, 0xC4, 0x91, 0x9C, 0x90, 0x3F, 0x2B,  // .?....?+
-                /* 01F0 */  0x1E, 0x18, 0x7C, 0xC1, 0xA7, 0x08, 0x20, 0x03,  // ..|... .
-                /* 01F8 */  0x83, 0xBB, 0x42, 0xB0, 0x01, 0xC3, 0xBF, 0x4C,  // ..B....L
-                /* 0200 */  0x18, 0xD8, 0x17, 0x89, 0xCA, 0x20, 0xC9, 0x91,  // ..... ..
-                /* 0208 */  0xE3, 0x89, 0x06, 0x0C, 0xE8, 0x7D, 0x0E, 0x56,  // .....}.V
-                /* 0210 */  0x87, 0x16, 0x83, 0xF9, 0x3E, 0x13, 0xEC, 0xE5,  // ....>...
-                /* 0218 */  0xA1, 0x47, 0x20, 0xDD, 0x59, 0xAC, 0x15, 0x42,  // .G .Y..B
-                /* 0220 */  0x38, 0xAF, 0x30, 0x3E, 0xD6, 0x00, 0x93, 0x51,  // 8.0>...Q
-                /* 0228 */  0x3F, 0xD6, 0x80, 0xED, 0xE4, 0x03, 0x67, 0x00,  // ?.....g.
-                /* 0230 */  0x3C, 0x8E, 0x09, 0x10, 0x26, 0xFA, 0x5D, 0x20,  // <...&.] 
-                /* 0238 */  0x29, 0x0F, 0x04, 0x0A, 0xE3, 0x23, 0x0D, 0x70,  // )....#.p
-                /* 0240 */  0xF9, 0xFF, 0x1F, 0x69, 0x80, 0xDF, 0xC9, 0x00,  // ...i....
-                /* 0248 */  0x77, 0x7A, 0x00, 0xCF, 0x84, 0x5E, 0x2B, 0xD8,  // wz...^+.
-                /* 0250 */  0xFD, 0xC1, 0xE3, 0x08, 0x12, 0x38, 0xC2, 0x13,  // .....8..
-                /* 0258 */  0x11, 0x39, 0xD1, 0x40, 0x3E, 0x35, 0x3C, 0xC2,  // .9.@>5<.
-                /* 0260 */  0x3C, 0x07, 0x9C, 0xCE, 0xE1, 0x1C, 0xC9, 0x43,  // <......C
-                /* 0268 */  0xC0, 0xEB, 0x8C, 0xBD, 0x21, 0xE9, 0x1E, 0xF3,  // ....!...
-                /* 0270 */  0x3A, 0x63, 0xAC, 0x40, 0x27, 0x15, 0xC5, 0xF7,  // :c.@'...
-                /* 0278 */  0x99, 0x50, 0x11, 0xA2, 0x45, 0x09, 0x19, 0xE1,  // .P..E...
-                /* 0280 */  0x15, 0x22, 0xA4, 0x91, 0xA3, 0x45, 0x8C, 0x12,  // ."...E..
-                /* 0288 */  0x3F, 0x64, 0x9C, 0x27, 0x1A, 0x16, 0xEB, 0x28,  // ?d.'...(
-                /* 0290 */  0xA0, 0xF3, 0x87, 0x4F, 0x34, 0x80, 0xDF, 0xFF,  // ...O4...
-                /* 0298 */  0xFF, 0x89, 0x06, 0xFC, 0xF2, 0x4E, 0x24, 0xA0,  // .....N$.
-                /* 02A0 */  0x3B, 0x36, 0x79, 0x0E, 0x21, 0x9E, 0x46, 0x80,  // ;6y.!.F.
-                /* 02A8 */  0x8B, 0xF4, 0x47, 0x87, 0x4E, 0x75, 0x64, 0xA1,  // ..G.Nud.
-                /* 02B0 */  0xB2, 0xB1, 0x50, 0x0F, 0x82, 0x0A, 0x3F, 0x21,  // ..P...?!
-                /* 02B8 */  0xE8, 0xAC, 0x12, 0x37, 0xE6, 0xAB, 0xCA, 0x6B,  // ...7...k
-                /* 02C0 */  0x84, 0x4F, 0x6B, 0xBE, 0x4B, 0xB0, 0x41, 0x0B,  // .Ok.K.A.
-                /* 02C8 */  0x4E, 0xA7, 0x3D, 0x2E, 0x93, 0x42, 0x22, 0x21,  // N.=..B"!
-                /* 02D0 */  0x34, 0x20, 0xC3, 0x59, 0x16, 0x1C, 0x05, 0xF1,  // 4 .Y....
-                /* 02D8 */  0xE8, 0x7D, 0xE2, 0xF3, 0x51, 0x08, 0x6E, 0xC4,  // .}..Q.n.
-                /* 02E0 */  0xA3, 0x10, 0x3D, 0x2D, 0xE0, 0xC7, 0x72, 0x64,  // ..=-..rd
-                /* 02E8 */  0x27, 0xE6, 0x59, 0xF8, 0x70, 0x87, 0x3B, 0x72,  // '.Y.p.;r
-                /* 02F0 */  0xC0, 0x1D, 0x1C, 0x5B, 0xE1, 0xF1, 0xFB, 0x02,  // ...[....
-                /* 02F8 */  0x10, 0xE4, 0x7C, 0x83, 0x9D, 0xAC, 0x51, 0x5E,  // ..|...Q^
-                /* 0300 */  0x11, 0x3C, 0x42, 0xEC, 0x60, 0x7C, 0x4C, 0xE2,  // .<B.`|L.
-                /* 0308 */  0xE3, 0xF0, 0xD5, 0xE0, 0x7D, 0xC6, 0x04, 0xEC,  // ....}...
-                /* 0310 */  0x0C, 0x04, 0x9E, 0xFF, 0xFF, 0x19, 0x88, 0x0B,  // ........
-                /* 0318 */  0x3C, 0x22, 0x80, 0x02, 0xC8, 0x97, 0x02, 0x1F,  // <"......
-                /* 0320 */  0x11, 0x1E, 0x0C, 0xD8, 0x1C, 0x9E, 0x12, 0x7C,  // .......|
-                /* 0328 */  0xC4, 0x61, 0xF0, 0x3C, 0xDA, 0xA8, 0xA8, 0xAC,  // .a.<....
-                /* 0330 */  0x71, 0xA1, 0x06, 0xEB, 0x33, 0x0C, 0xC3, 0x3E,  // q...3..>
-                /* 0338 */  0x4F, 0x5F, 0x9A, 0x8E, 0xD2, 0xC7, 0x29, 0x0C,  // O_....).
-                /* 0340 */  0xAC, 0x87, 0xCF, 0x61, 0x8D, 0x16, 0xF6, 0xA8,  // ...a....
-                /* 0348 */  0x9F, 0x24, 0x7C, 0x0B, 0xF1, 0xCC, 0x8C, 0x11,  // .$|.....
-                /* 0350 */  0xD6, 0x47, 0x00, 0x20, 0x76, 0x7C, 0x40, 0x9D,  // .G. v|@.
-                /* 0358 */  0x79, 0x7C, 0x6E, 0xF0, 0x88, 0x22, 0x9E, 0xE7,  // y|n.."..
-                /* 0360 */  0xDB, 0x8F, 0x2F, 0x1B, 0xA7, 0xE4, 0x01, 0x59,  // ../....Y
-                /* 0368 */  0xE2, 0xE9, 0x01, 0x25, 0x8E, 0x42, 0xD2, 0x4E,  // ...%.B.N
-                /* 0370 */  0x0F, 0x28, 0x31, 0x70, 0x14, 0xC4, 0xA7, 0x07,  // .(1p....
-                /* 0378 */  0x07, 0x3D, 0x3D, 0x40, 0x0F, 0x76, 0x7A, 0x00,  // .==@.vz.
-                /* 0380 */  0xC5, 0xA9, 0x00, 0x37, 0x56, 0xB8, 0x63, 0xF3,  // ...7V.c.
-                /* 0388 */  0x21, 0xCC, 0x73, 0xC3, 0x1E, 0x1C, 0xC0, 0xF2,  // !.s.....
-                /* 0390 */  0xFF, 0x3F, 0x38, 0x00, 0xDF, 0xE1, 0xFA, 0xE0,  // .?8.....
-                /* 0398 */  0x00, 0xAE, 0x33, 0x80, 0x0F, 0x0E, 0xE0, 0x3A,  // ..3....:
-                /* 03A0 */  0x6E, 0x82, 0x67, 0xF4, 0xEC, 0x08, 0xF3, 0x88,  // n.g.....
-                /* 03A8 */  0x63, 0xAC, 0x73, 0x7D, 0xE4, 0xF1, 0x09, 0x00,  // c.s}....
-                /* 03B0 */  0x8E, 0x98, 0x73, 0x03, 0x6A, 0xB8, 0x96, 0x7B,  // ..s.j..{
-                /* 03B8 */  0x8A, 0x41, 0xDC, 0x11, 0x30, 0x07, 0x18, 0x1F,  // .A..0...
-                /* 03C0 */  0x1B, 0xB8, 0x40, 0x0A, 0xC9, 0x3B, 0x36, 0xA0,  // ..@..;6.
-                /* 03C8 */  0x04, 0xC1, 0x51, 0x10, 0x8F, 0xD1, 0x61, 0x8F,  // ..Q...a.
-                /* 03D0 */  0x0D, 0xD0, 0xC3, 0x1D, 0x1B, 0x40, 0x71, 0xFC,  // .....@q.
-                /* 03D8 */  0xC1, 0x9F, 0x38, 0xE0, 0x9F, 0xC3, 0xE0, 0x1C,  // ..8.....
-                /* 03E0 */  0x1C, 0xF8, 0xFF, 0xFF, 0xE0, 0x00, 0xF8, 0x08,  // ........
-                /* 03E8 */  0x75, 0x70, 0x00, 0x1D, 0x2C, 0x3F, 0x38, 0x80,  // up..,?8.
-                /* 03F0 */  0x67, 0xFC, 0xC0, 0x43, 0xA1, 0x4D, 0x9F, 0x1A,  // g..C.M..
-                /* 03F8 */  0x8D, 0x5A, 0x35, 0x28, 0x53, 0xA3, 0x4C, 0x83,  // .Z5(S.L.
-                /* 0400 */  0x5A, 0x7D, 0x2A, 0x35, 0x66, 0xCC, 0xC6, 0x91,  // Z}*5f...
-                /* 0408 */  0x01, 0x25, 0x64, 0x55, 0x1A, 0x96, 0x63, 0x80,  // .%dU..c.
-                /* 0410 */  0xF0, 0x47, 0x82, 0x40, 0x1C, 0xD5, 0x02, 0x20,  // .G.@... 
-                /* 0418 */  0x8B, 0xE2, 0x01, 0x88, 0x09, 0x59, 0x92, 0x40,  // .....Y.@
-                /* 0420 */  0x1C, 0xEF, 0xA8, 0x28, 0x23, 0xE7, 0x06, 0x83,  // ...(#...
-                /* 0428 */  0x08, 0xC8, 0x71, 0xD7, 0x28, 0x20, 0x87, 0x07,  // ..q.( ..
-                /* 0430 */  0x11, 0x90, 0xE3, 0xAF, 0x43, 0x40, 0x16, 0xA3,  // ....C@..
-                /* 0438 */  0x03, 0x88, 0xFD, 0xFF, 0x01                     // .....
-            })
-        }
-
-        Device (WFTE)
-        {
-            Name (_HID, "PNP0C14" /* Windows Management Instrumentation Device */)  // _HID: Hardware ID
-            Name (_UID, "TestDev")  // _UID: Unique ID
-            Name (_WDG, Buffer (0x28)
-            {
-                /* 0000 */  0x7F, 0xAB, 0x13, 0x1F, 0x20, 0x62, 0x10, 0x42,  // .... b.B
-                /* 0008 */  0x8F, 0x8E, 0x8B, 0xB5, 0xE7, 0x1E, 0xE9, 0x69,  // .......i
-                /* 0010 */  0x44, 0x45, 0x01, 0x02, 0x21, 0x12, 0x90, 0x05,  // DE..!...
-                /* 0018 */  0x66, 0xD5, 0xD1, 0x11, 0xB2, 0xF0, 0x00, 0xA0,  // f.......
-                /* 0020 */  0xC9, 0x06, 0x29, 0x10, 0x43, 0x43, 0x01, 0x00   // ..).CC..
-            })
-            Method (WMDE, 3, NotSerialized)
-            {
-                If ((Arg1 == One))
-                {
-                    PDAT = Arg2
-                    Notify (WFDE, 0xD0) // Hardware-Specific
-                    Return (PDAT) /* \_SB_.PDAT */
-                }
-            }
-
-            Name (WQCC, Buffer (0x02F1)
-            {
-                /* 0000 */  0x46, 0x4F, 0x4D, 0x42, 0x01, 0x00, 0x00, 0x00,  // FOMB....
-                /* 0008 */  0xE1, 0x02, 0x00, 0x00, 0xC2, 0x06, 0x00, 0x00,  // ........
-                /* 0010 */  0x44, 0x53, 0x00, 0x01, 0x1A, 0x7D, 0xDA, 0x54,  // DS...}.T
-                /* 0018 */  0xA8, 0x5D, 0x83, 0x00, 0x01, 0x06, 0x18, 0x42,  // .].....B
-                /* 0020 */  0x20, 0x14, 0x03, 0x89, 0xC0, 0xA2, 0x69, 0x24,  //  .....i$
-                /* 0028 */  0xC7, 0x01, 0x0C, 0x86, 0xCB, 0x72, 0x20, 0xE4,  // .....r .
-                /* 0030 */  0x82, 0x89, 0x09, 0x10, 0x01, 0x21, 0xAF, 0x02,  // .....!..
-                /* 0038 */  0x6C, 0x0A, 0x30, 0x09, 0xA2, 0xFE, 0xFD, 0x21,  // l.0....!
-                /* 0040 */  0x4A, 0x82, 0x43, 0x09, 0x81, 0x90, 0x64, 0x01,  // J.C...d.
-                /* 0048 */  0xE6, 0x05, 0xE8, 0x16, 0x60, 0x58, 0x80, 0x6D,  // ....`X.m
-                /* 0050 */  0x01, 0xA6, 0x05, 0x38, 0x86, 0xA4, 0xD2, 0xC0,  // ...8....
-                /* 0058 */  0x29, 0x81, 0xA5, 0x40, 0x48, 0xB8, 0x00, 0xE5,  // )..@H...
-                /* 0060 */  0x02, 0x7C, 0x0B, 0xD0, 0x8E, 0x28, 0xDC, 0x96,  // .|...(..
-                /* 0068 */  0x61, 0x44, 0xE0, 0x51, 0x44, 0xB6, 0x50, 0x34,  // aD.QD.P4
-                /* 0070 */  0x0A, 0x8D, 0x1D, 0x86, 0x65, 0x82, 0x69, 0x10,  // ....e.i.
-                /* 0078 */  0x87, 0x51, 0x36, 0xB2, 0x08, 0x3C, 0xA1, 0x4E,  // .Q6..<.N
-                /* 0080 */  0x05, 0xC8, 0x15, 0x20, 0x4C, 0x80, 0x78, 0x54,  // ... L.xT
-                /* 0088 */  0x61, 0x34, 0x07, 0x45, 0x20, 0x43, 0x63, 0xC4,  // a4.E Cc.
-                /* 0090 */  0x40, 0x48, 0x22, 0xAC, 0x9C, 0x63, 0x6B, 0x14,  // @H"..ck.
-                /* 0098 */  0xA7, 0x71, 0x34, 0xA5, 0x63, 0x68, 0x04, 0xC7,  // .q4.ch..
-                /* 00A0 */  0x75, 0x40, 0x06, 0xE9, 0x7D, 0x3A, 0x44, 0xD0,  // u@..}:D.
-                /* 00A8 */  0x84, 0x34, 0x8A, 0x68, 0x21, 0xA2, 0x04, 0x3D,  // .4.h!..=
-                /* 00B0 */  0x8E, 0x20, 0x81, 0x23, 0x24, 0x30, 0xCC, 0x31,  // . .#$0.1
-                /* 00B8 */  0x60, 0x64, 0x40, 0xC8, 0xB3, 0x00, 0xEB, 0x83,  // `d@.....
-                /* 00C0 */  0x23, 0x04, 0x76, 0x2F, 0xC0, 0x98, 0x00, 0x8D,  // #.v/....
-                /* 00C8 */  0x10, 0x72, 0x26, 0xC0, 0xA0, 0x00, 0x85, 0x02,  // .r&.....
-                /* 00D0 */  0xBC, 0xC1, 0xC8, 0x96, 0x00, 0x6D, 0x02, 0x94,  // .....m..
-                /* 00D8 */  0x21, 0x68, 0x4A, 0x51, 0x0E, 0x2A, 0x48, 0xB8,  // !hJQ.*H.
-                /* 00E0 */  0x28, 0x16, 0x87, 0x26, 0x88, 0x16, 0x51, 0x08,  // (..&..Q.
-                /* 00E8 */  0x68, 0x84, 0xD6, 0x60, 0x84, 0x1B, 0x2E, 0x46,  // h..`...F
-                /* 00F0 */  0x84, 0x93, 0x8B, 0x1C, 0xA2, 0xFD, 0x41, 0x90,  // ......A.
-                /* 00F8 */  0x68, 0x47, 0x01, 0x49, 0x00, 0x51, 0xA4, 0xD1,  // hG.I.Q..
-                /* 0100 */  0xA0, 0x86, 0x9F, 0xE0, 0x71, 0xC0, 0x47, 0x81,  // ....q.G.
-                /* 0108 */  0x93, 0x3B, 0xA9, 0x13, 0x33, 0xC8, 0x89, 0x1D,  // .;..3...
-                /* 0110 */  0x5D, 0x9D, 0xE7, 0x00, 0x32, 0x62, 0x86, 0x95,  // ]...2b..
-                /* 0118 */  0xE0, 0xD7, 0xC0, 0x07, 0x03, 0xBC, 0x6B, 0x40,  // ......k@
-                /* 0120 */  0xDD, 0x08, 0x9E, 0x07, 0xD8, 0x30, 0xC3, 0x61,  // .....0.a
-                /* 0128 */  0x86, 0xE8, 0xD1, 0x86, 0xFB, 0xFF, 0x9F, 0xC0,  // ........
-                /* 0130 */  0x21, 0x32, 0x40, 0x0F, 0xED, 0x51, 0x00, 0xEB,  // !2@..Q..
-                /* 0138 */  0x70, 0x32, 0x3A, 0x07, 0x94, 0x2A, 0xC0, 0xEC,  // p2:..*..
-                /* 0140 */  0x99, 0x40, 0x33, 0x4B, 0x70, 0x3C, 0x3E, 0x00,  // .@3Kp<>.
-                /* 0148 */  0x78, 0x3E, 0x27, 0x9C, 0xC0, 0xF2, 0x07, 0x81,  // x>'.....
-                /* 0150 */  0x1A, 0x99, 0xA1, 0x3D, 0xE3, 0xD3, 0x7A, 0x0F,  // ...=..z.
-                /* 0158 */  0xF0, 0xF1, 0xE0, 0xB0, 0x98, 0x58, 0x08, 0x29,  // .....X.)
-                /* 0160 */  0x80, 0xD0, 0x78, 0xC0, 0xAF, 0xF8, 0x68, 0x20,  // ..x...h 
-                /* 0168 */  0x84, 0x97, 0x05, 0xCF, 0xD7, 0x87, 0x04, 0x03,  // ........
-                /* 0170 */  0x63, 0x07, 0x64, 0xBF, 0x02, 0x10, 0x82, 0xBF,  // c.d.....
-                /* 0178 */  0x2E, 0x1C, 0xD1, 0x43, 0x43, 0x84, 0x04, 0x2F,  // ...CC../
-                /* 0180 */  0x03, 0x47, 0x50, 0x29, 0xBE, 0xB0, 0x0E, 0x21,  // .GP)...!
-                /* 0188 */  0x46, 0xA4, 0x18, 0x51, 0x82, 0xD4, 0x0A, 0xA1,  // F..Q....
-                /* 0190 */  0xE9, 0x87, 0x49, 0x50, 0xE4, 0xC9, 0x01, 0x3D,  // ..IP...=
-                /* 0198 */  0x02, 0x8E, 0x77, 0x02, 0xC7, 0x13, 0xD9, 0xE3,  // ..w.....
-                /* 01A0 */  0x89, 0x72, 0x12, 0x07, 0xE4, 0x33, 0x85, 0x11,  // .r...3..
-                /* 01A8 */  0x4E, 0xF3, 0x51, 0xE2, 0xD1, 0xC2, 0x9A, 0x67,  // N.Q....g
-                /* 01B0 */  0xA4, 0x13, 0xC3, 0x39, 0xBD, 0x0D, 0x98, 0xA0,  // ...9....
-                /* 01B8 */  0xB2, 0xE7, 0x80, 0x8E, 0x1F, 0x56, 0x05, 0x22,  // .....V."
-                /* 01C0 */  0x1B, 0x4B, 0xF5, 0x39, 0x83, 0x6A, 0x5E, 0xAE,  // .K.9.j^.
-                /* 01C8 */  0x46, 0x74, 0xCC, 0xC7, 0xEA, 0x11, 0x9C, 0xB4,  // Ft......
-                /* 01D0 */  0xA7, 0x17, 0xD9, 0x4A, 0xC1, 0x04, 0xEC, 0x61,  // ...J...a
-                /* 01D8 */  0x5B, 0x23, 0x85, 0xD4, 0xD0, 0x68, 0x3C, 0x06,  // [#...h<.
-                /* 01E0 */  0x77, 0xFE, 0x13, 0x09, 0x05, 0x31, 0xA0, 0xC3,  // w....1..
-                /* 01E8 */  0x41, 0xC8, 0xC9, 0x49, 0x00, 0xA5, 0x62, 0xBC,  // A..I..b.
-                /* 01F0 */  0xE4, 0x68, 0xC1, 0x08, 0xA6, 0x81, 0xD0, 0xDD,  // .h......
-                /* 01F8 */  0xC1, 0xF3, 0xF3, 0x3D, 0x80, 0xDF, 0x4C, 0x7C,  // ...=..L|
-                /* 0200 */  0x32, 0x30, 0xB0, 0xEF, 0x13, 0x6F, 0x1C, 0xF0,  // 20...o..
-                /* 0208 */  0xFF, 0xFF, 0x37, 0x0E, 0x36, 0x09, 0x8C, 0x9A,  // ..7.6...
-                /* 0210 */  0x23, 0x04, 0x9D, 0x02, 0xBF, 0x00, 0xBC, 0x0A,  // #.......
-                /* 0218 */  0x98, 0xC0, 0xBA, 0x2E, 0x06, 0xD0, 0x4F, 0x1D,  // ......O.
-                /* 0220 */  0x1E, 0xA8, 0xAF, 0x1C, 0x67, 0x63, 0x7D, 0x07,  // ....gc}.
-                /* 0228 */  0x03, 0x50, 0x00, 0xF9, 0x22, 0xE0, 0x93, 0xC1,  // .P.."...
-                /* 0230 */  0xC3, 0x00, 0xBB, 0x19, 0x18, 0x26, 0x9A, 0xD1,  // .....&..
-                /* 0238 */  0xB9, 0xA8, 0x69, 0xA3, 0x64, 0xC0, 0x68, 0xDA,  // ..i.d.h.
-                /* 0240 */  0x06, 0xF1, 0xB4, 0x1D, 0x71, 0xDA, 0x68, 0x68,  // ....q.hh
-                /* 0248 */  0x5F, 0x05, 0x7C, 0x11, 0x70, 0xA8, 0x61, 0xD3,  // _.|.p.a.
-                /* 0250 */  0x3B, 0x07, 0x7E, 0xAE, 0x67, 0x16, 0xD0, 0x93,  // ;.~.g...
-                /* 0258 */  0xF0, 0x91, 0xE4, 0xB8, 0xC1, 0x32, 0x0A, 0x06,  // .....2..
-                /* 0260 */  0x1E, 0x24, 0x8E, 0x47, 0xC1, 0x26, 0xCE, 0x07,  // .$.G.&..
-                /* 0268 */  0xE0, 0x89, 0xF3, 0x71, 0xF9, 0x86, 0x01, 0x7F,  // ...q....
-                /* 0270 */  0xE4, 0x58, 0x82, 0x02, 0x67, 0x0E, 0x72, 0x78,  // .X..g.rx
-                /* 0278 */  0x4C, 0xB0, 0x51, 0x51, 0x59, 0xE3, 0x42, 0x8D,  // L.QQY.B.
-                /* 0280 */  0xD2, 0x57, 0x20, 0x86, 0x7D, 0x82, 0x16, 0x3D,  // .W .}..=
-                /* 0288 */  0x48, 0x9D, 0x2F, 0x0E, 0xEA, 0x69, 0xC4, 0x63,  // H./..i.c
-                /* 0290 */  0x33, 0xAC, 0xC7, 0xFD, 0xFF, 0x0F, 0x8B, 0x41,  // 3......A
-                /* 0298 */  0x0B, 0x7B, 0xB8, 0x2F, 0x22, 0x3E, 0xC5, 0x78,  // .{./">.x
-                /* 02A0 */  0x66, 0xC6, 0x08, 0xEB, 0xB1, 0x7B, 0x40, 0x8F,  // f....{@.
-                /* 02A8 */  0x10, 0xE0, 0x01, 0x7B, 0x35, 0x39, 0xD3, 0x07,  // ...{59..
-                /* 02B0 */  0x97, 0x3F, 0x8E, 0xEA, 0x20, 0x74, 0xDF, 0xE0,  // .?.. t..
-                /* 02B8 */  0x28, 0x21, 0x1E, 0x38, 0x30, 0x04, 0x15, 0xDA,  // (!.80...
-                /* 02C0 */  0xF4, 0xA9, 0xD1, 0xA8, 0x55, 0x83, 0x32, 0x35,  // ....U.25
-                /* 02C8 */  0xCA, 0x34, 0xA8, 0xD5, 0xA7, 0x52, 0x63, 0xC6,  // .4...Rc.
-                /* 02D0 */  0x3C, 0x5C, 0x8E, 0xE8, 0x41, 0x81, 0xBC, 0x13,  // <\..A...
-                /* 02D8 */  0x34, 0x42, 0x87, 0x00, 0xA1, 0x42, 0x9E, 0x08,  // 4B...B..
-                /* 02E0 */  0x32, 0x72, 0x0F, 0x31, 0x88, 0x80, 0xAC, 0xCC,  // 2r.1....
-                /* 02E8 */  0x02, 0x10, 0xD3, 0x09, 0x22, 0x20, 0xFF, 0xFF,  // ...." ..
-                /* 02F0 */  0x01                                             // .
-            })
-        }
-
-        Method (USSV, 1, Serialized)
-        {
-            PDAT = Arg0
-        }
-
-        Method (GSSV, 0, Serialized)
-        {
-            Return (PDAT) /* \_SB_.PDAT */
-        }
-    }
-
     Scope (_SB.PCI0.GFX0)
     {
         Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
@@ -35166,318 +40258,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
             {
                 Return (Package (0x00){})
             }
-        }
-    }
-
-    If (((S0ID == One) || (OSYS >= 0x07DF)))
-    {
-        Scope (_SB.PCI0.I2C0)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.I2C1)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.I2C2)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.I2C3)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.I2C4)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.I2C5)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.SPI0)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.SPI1)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.SPI2)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.UA00)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.UA01)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.UA02)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-
-        Scope (_SB.PCI0.HECI)
-        {
-            Name (_DEP, Package (0x01)  // _DEP: Dependencies
-            {
-                PEPD
-            })
-        }
-    }
-
-    Scope (_SB.PCI0.XHC)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PCI0.HDAS)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            If ((S0ID == One))
-            {
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    If (CondRefOf (\_SB.PCI0.RP01.PXSX))
-    {
-        Scope (_SB.PCI0.RP01.PXSX)
-        {
-            Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-            {
-                If ((PAHC () || PNVM ()))
-                {
-                    If (((S0ID == One) && (OSYS == 0x07DC)))
-                    {
-                        If (((PEPC & One) == One))
-                        {
-                            Return (Package (0x01)
-                            {
-                                PEPD
-                            })
-                        }
-                    }
-
-                    If (((S0ID == One) && (OSYS >= 0x07DF)))
-                    {
-                        Return (Package (0x01)
-                        {
-                            PEPD
-                        })
-                    }
-                }
-
-                Return (Package (0x00){})
-            }
-
-            OperationRegion (PCCX, PCI_Config, 0x09, 0x04)
-            Field (PCCX, ByteAcc, NoLock, Preserve)
-            {
-                PIXX,   8, 
-                SCCX,   8, 
-                BCCX,   8
-            }
-
-            Method (PAHC, 0, Serialized)
-            {
-                If ((BCCX == One))
-                {
-                    If ((SCCX == 0x06))
-                    {
-                        If ((PIXX == One))
-                        {
-                            Return (One)
-                        }
-                    }
-                }
-
-                Return (Zero)
-            }
-
-            Method (PNVM, 0, Serialized)
-            {
-                If ((BCCX == One))
-                {
-                    If ((SCCX == 0x08))
-                    {
-                        If ((PIXX == 0x02))
-                        {
-                            Return (One)
-                        }
-                    }
-                }
-
-                Return (Zero)
-            }
-
-            Method (PRAD, 0, Serialized)
-            {
-                If ((BCCX == One))
-                {
-                    If ((SCCX == 0x04))
-                    {
-                        Return (One)
-                    }
-                }
-
-                Return (Zero)
-            }
-        }
-    }
-
-    Scope (_SB.PCI0.RP02.PXSX)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            If ((PAHC () || PNVM ()))
-            {
-                If (((S0ID == One) && (OSYS == 0x07DC)))
-                {
-                    If (((PEPC & One) == One))
-                    {
-                        Return (Package (0x01)
-                        {
-                            PEPD
-                        })
-                    }
-                }
-
-                If (((S0ID == One) && (OSYS >= 0x07DF)))
-                {
-                    Return (Package (0x01)
-                    {
-                        PEPD
-                    })
-                }
-            }
-
-            Return (Package (0x00){})
-        }
-
-        OperationRegion (PCCX, PCI_Config, 0x09, 0x04)
-        Field (PCCX, ByteAcc, NoLock, Preserve)
-        {
-            PIXX,   8, 
-            SCCX,   8, 
-            BCCX,   8
-        }
-
-        Method (PAHC, 0, Serialized)
-        {
-            If ((BCCX == One))
-            {
-                If ((SCCX == 0x06))
-                {
-                    If ((PIXX == One))
-                    {
-                        Return (One)
-                    }
-                }
-            }
-
-            Return (Zero)
-        }
-
-        Method (PNVM, 0, Serialized)
-        {
-            If ((BCCX == One))
-            {
-                If ((SCCX == 0x08))
-                {
-                    If ((PIXX == 0x02))
-                    {
-                        Return (One)
-                    }
-                }
-            }
-
-            Return (Zero)
-        }
-
-        Method (PRAD, 0, Serialized)
-        {
-            If ((BCCX == One))
-            {
-                If ((SCCX == 0x04))
-                {
-                    Return (One)
-                }
-            }
-
-            Return (Zero)
         }
     }
 
@@ -36895,3103 +41675,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
             }
 
             Return (Zero)
-        }
-    }
-
-    Scope (_SB.PR00)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR00 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR00 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR00 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR01)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR01 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR01 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR01 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR02)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR02 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR02 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR02 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR03)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR03 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR03 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR03 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR04)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR04 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR04 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR04 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR05)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR05 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR05 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR05 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR06)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR06 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR06 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR06 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR07)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR07 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR07 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR07 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR08)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR08 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR08 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR08 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR09)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR09 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR09 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR09 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR10)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR10 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR10 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR10 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR11)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR11 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR11 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR11 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR12)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR12 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR12 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR12 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR13)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR13 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR13 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR13 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR14)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR14 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR14 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR14 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR15)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR15 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR15 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR15 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR16)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR16 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR16 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR16 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR17)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR17 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR17 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR17 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR18)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR18 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR18 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR18 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB.PR19)
-    {
-        Method (_DEP, 0, NotSerialized)  // _DEP: Dependencies
-        {
-            ADBG ("PR19 DEP Call")
-            If (((S0ID == One) || (OSYS >= 0x07DF)))
-            {
-                ADBG ("PR19 DEP")
-                Return (Package (0x01)
-                {
-                    PEPD
-                })
-            }
-            Else
-            {
-                ADBG ("PR19 DEP NULL")
-                Return (Package (0x00){})
-            }
-        }
-    }
-
-    Scope (_SB)
-    {
-        Device (PEPD)
-        {
-            Name (_HID, "INT33A1" /* Intel Power Engine */)  // _HID: Hardware ID
-            Name (_CID, EisaId ("PNP0D80") /* Windows-compatible System Power Management Controller */)  // _CID: Compatible ID
-            Name (_UID, One)  // _UID: Unique ID
-            Name (PPD0, Package (0x03)
-            {
-                "\\_SB.PCI0.SAT0", 
-                Zero, 
-                Package (0x02)
-                {
-                    Zero, 
-                    Package (0x03)
-                    {
-                        0xFF, 
-                        Zero, 
-                        0x81
-                    }
-                }
-            })
-            Name (PPD3, Package (0x03)
-            {
-                "\\_SB.PCI0.SAT0", 
-                Zero, 
-                Package (0x02)
-                {
-                    Zero, 
-                    Package (0x02)
-                    {
-                        0xFF, 
-                        0x03
-                    }
-                }
-            })
-            Name (WWD3, Package (0x03)
-            {
-                "\\_SB.PCI0.RP02", 
-                Zero, 
-                Package (0x02)
-                {
-                    Zero, 
-                    Package (0x02)
-                    {
-                        0xFF, 
-                        0x03
-                    }
-                }
-            })
-            Name (DEVY, Package (0x4A)
-            {
-                Package (0x03)
-                {
-                    "\\_SB.PR00", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR01", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR02", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR03", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR04", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR05", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR06", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR07", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.GFX0", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.SAT0", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.UA00", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.UA01", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.I2C0", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.I2C1", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.XHC", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.HDAS", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.PEMC", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.PSDC", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.I2C2", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.I2C3", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.UA02", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.SPI0", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.SPI1", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP01.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP02.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP03.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP04.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP05.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP06.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP07.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP08.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP09.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP10.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP11.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP12.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP13.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP14.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP15.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP16.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP17.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP18.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP19.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP20.PXSX", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.SAT0.VOL0", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR08", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR09", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR10", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR11", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR12", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR13", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR14", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR15", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.IPU0", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.HECI", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.GLAN", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.PEG0", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "USB\\VID_8087&PID_0AC9&MI*", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x02
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.SAT0.PRT0", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.SAT0.PRT1", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.SAT0.PRT2", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.SAT0.PRT3", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.SAT0.PRT4", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.SAT0.PRT5", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "Reserved For TBT RP0", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "Reserved For TBT RP1", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR16", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR17", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR18", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PR19", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            Zero
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.I2C4", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.I2C5", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.SPI2", 
-                    One, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.CNVW", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x03)
-                        {
-                            0xFF, 
-                            Zero, 
-                            0x81
-                        }
-                    }
-                }, 
-
-                Package (0x03)
-                {
-                    "\\_SB.PCI0.RP02", 
-                    Zero, 
-                    Package (0x02)
-                    {
-                        Zero, 
-                        Package (0x02)
-                        {
-                            0xFF, 
-                            0x03
-                        }
-                    }
-                }
-            })
-            Method (_DSD, 0, NotSerialized)  // _DSD: Device-Specific Data
-            {
-                Name (PSID, ToUUID ("bf60df52-56cd-454f-9a23-cb4dcfae77f8"))
-                Name (PSEN, Package (0x02)
-                {
-                    "CecPsOnSwitchingEnabledInS0", 
-                    One
-                })
-                Name (PSDS, Package (0x02)
-                {
-                    "CecPsOnSwitchingEnabledInS0", 
-                    Zero
-                })
-                If (PSON)
-                {
-                    Return (Package (0x02)
-                    {
-                        PSID, 
-                        PSEN
-                    })
-                }
-                Else
-                {
-                    Return (Package (0x02)
-                    {
-                        PSID, 
-                        PSDS
-                    })
-                }
-            }
-
-            Method (SPDE, 0, Serialized)
-            {
-                If (!ESPC)
-                {
-                    Return (Zero)
-                }
-
-                If (^^PCI0.SAT0.PRT0.PRES ())
-                {
-                    DerefOf (DEVY [0x39]) [One] = One
-                }
-
-                If (^^PCI0.SAT0.PRT1.PRES ())
-                {
-                    DerefOf (DEVY [0x3A]) [One] = One
-                }
-
-                If (^^PCI0.SAT0.PRT2.PRES ())
-                {
-                    DerefOf (DEVY [0x3B]) [One] = One
-                }
-
-                If (^^PCI0.SAT0.PRT3.PRES ())
-                {
-                    DerefOf (DEVY [0x3C]) [One] = One
-                }
-
-                If (^^PCI0.SAT0.PRT4.PRES ())
-                {
-                    DerefOf (DEVY [0x3D]) [One] = One
-                }
-
-                If (^^PCI0.SAT0.PRT5.PRES ())
-                {
-                    DerefOf (DEVY [0x3E]) [One] = One
-                }
-            }
-
-            Name (BCCD, Package (0x19)
-            {
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.SAT0", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x3E80
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.SAT0.PRT0", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x3E80
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.SAT0.PRT1", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x3E80
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.SAT0.PRT2", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x3E80
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.SAT0.PRT3", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x3E80
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP01.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP02.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP03.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP04.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP05.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP06.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP07.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP08.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP09.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP10.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP11.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP12.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP13.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP14.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP15.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP16.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP17.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP18.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP19.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }, 
-
-                Package (0x02)
-                {
-                    "\\_SB.PCI0.RP20.PXSX", 
-                    Package (0x01)
-                    {
-                        Package (0x03)
-                        {
-                            Package (0x05)
-                            {
-                                One, 
-                                0x08, 
-                                Zero, 
-                                One, 
-                                0xB2
-                            }, 
-
-                            Package (0x03)
-                            {
-                                Zero, 
-                                0xCD, 
-                                One
-                            }, 
-
-                            0x000186A0
-                        }
-                    }
-                }
-            })
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If (((OSYS >= 0x07DF) || ((OSYS >= 0x07DC) && (
-                    S0ID == One))))
-                {
-                    Return (0x0F)
-                }
-
-                Return (Zero)
-            }
-
-            Method (_DSM, 4, Serialized)  // _DSM: Device-Specific Method
-            {
-                ADBG (Concatenate ("PEPC = ", ToHexString (PEPC)))
-                If ((Arg0 == ToUUID ("c4eb40a0-6cd2-11e2-bcfd-0800200c9a66")))
-                {
-                    If ((Arg2 == Zero))
-                    {
-                        Return (Buffer (One)
-                        {
-                             0x7F                                             // .
-                        })
-                    }
-
-                    If ((Arg2 == One))
-                    {
-                        If ((S0ID == Zero))
-                        {
-                            Return (Package (0x00){})
-                        }
-
-                        SPDE ()
-                        If (((PEPC & One) == One))
-                        {
-                            If (((PEPC & 0x03) == One))
-                            {
-                                DEVY [0x09] = PPD0 /* \_SB_.PEPD.PPD0 */
-                            }
-                            ElseIf (((PEPC & 0x03) == 0x03))
-                            {
-                                DEVY [0x09] = PPD3 /* \_SB_.PEPD.PPD3 */
-                            }
-
-                            DerefOf (DEVY [0x09]) [One] = One
-                        }
-                        ElseIf (((PEPC & 0x03) == 0x02))
-                        {
-                            DerefOf (DEVY [0x2B]) [One] = One
-                        }
-
-                        If (((PEPC & 0x10) == 0x10))
-                        {
-                            If (CondRefOf (\_SB.PCI0.RP01.PXSX))
-                            {
-                                If ((^^PCI0.RP01.PXSX.PAHC () || ^^PCI0.RP01.PXSX.PNVM ()))
-                                {
-                                    DerefOf (DEVY [0x17]) [One] = One
-                                }
-                            }
-
-                            If ((^^PCI0.RP02.PXSX.PAHC () || ^^PCI0.RP02.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x18]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP03.PXSX.PAHC () || ^^PCI0.RP03.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x19]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP04.PXSX.PAHC () || ^^PCI0.RP04.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x1A]) [One] = One
-                            }
-
-                            If (CondRefOf (\_SB.PCI0.RP05.PXSX))
-                            {
-                                If ((^^PCI0.RP05.PXSX.PAHC () || ^^PCI0.RP05.PXSX.PNVM ()))
-                                {
-                                    DerefOf (DEVY [0x1B]) [One] = One
-                                }
-                            }
-
-                            If ((^^PCI0.RP06.PXSX.PAHC () || ^^PCI0.RP06.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x1C]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP07.PXSX.PAHC () || ^^PCI0.RP07.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x1D]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP08.PXSX.PAHC () || ^^PCI0.RP08.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x1E]) [One] = One
-                            }
-
-                            If (CondRefOf (\_SB.PCI0.RP09.PXSX))
-                            {
-                                If ((^^PCI0.RP09.PXSX.PAHC () || ^^PCI0.RP09.PXSX.PNVM ()))
-                                {
-                                    DerefOf (DEVY [0x1F]) [One] = One
-                                }
-                            }
-
-                            If ((^^PCI0.RP10.PXSX.PAHC () || ^^PCI0.RP10.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x20]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP12.PXSX.PAHC () || ^^PCI0.RP12.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x22]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP13.PXSX.PAHC () || ^^PCI0.RP13.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x23]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP14.PXSX.PAHC () || ^^PCI0.RP14.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x24]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP15.PXSX.PAHC () || ^^PCI0.RP15.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x25]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP16.PXSX.PAHC () || ^^PCI0.RP16.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x26]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP17.PXSX.PAHC () || ^^PCI0.RP17.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x27]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP18.PXSX.PAHC () || ^^PCI0.RP18.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x28]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP19.PXSX.PAHC () || ^^PCI0.RP19.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x29]) [One] = One
-                            }
-
-                            If ((^^PCI0.RP20.PXSX.PAHC () || ^^PCI0.RP20.PXSX.PNVM ()))
-                            {
-                                DerefOf (DEVY [0x2A]) [One] = One
-                            }
-                        }
-
-                        If (((OSYS >= 0x07DF) && (WRTO != Zero)))
-                        {
-                            If (^^PCI0.RP02.PXSX.WWST ())
-                            {
-                                If ((WRTO == 0x03))
-                                {
-                                    WWD3 [Zero] = "\\_SB.PCI0.RP02"
-                                    DEVY [0x49] = WWD3 /* \_SB_.PEPD.WWD3 */
-                                    DerefOf (DEVY [0x49]) [One] = One
-                                }
-
-                                If ((WRTO == One))
-                                {
-                                    DerefOf (DEVY [0x38]) [One] = One
-                                }
-                            }
-
-                            If (^^PCI0.RP13.PXSX.WWST ())
-                            {
-                                If ((WRTO == 0x03))
-                                {
-                                    WWD3 [Zero] = "\\_SB.PCI0.RP13"
-                                    DEVY [0x49] = WWD3 /* \_SB_.PEPD.WWD3 */
-                                    DerefOf (DEVY [0x49]) [One] = One
-                                }
-
-                                If ((WRTO == One))
-                                {
-                                    DerefOf (DEVY [0x38]) [One] = One
-                                }
-                            }
-                        }
-
-                        If (((PEPC & 0x04) == Zero))
-                        {
-                            DerefOf (DEVY [0x0A]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x08) == Zero))
-                        {
-                            DerefOf (DEVY [0x0B]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x10) == Zero)){}
-                        If (((PEPC & 0x20) == Zero))
-                        {
-                            DerefOf (DEVY [0x0C]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x40) == Zero))
-                        {
-                            DerefOf (DEVY [0x0D]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x80) == Zero))
-                        {
-                            DerefOf (DEVY [0x0E]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x0100) == Zero))
-                        {
-                            DerefOf (DEVY [0x0F]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x0200) == Zero))
-                        {
-                            DerefOf (DEVY [0x08]) [One] = Zero
-                        }
-
-                        If ((TCNT >= One))
-                        {
-                            DerefOf (DEVY [Zero]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x02))
-                        {
-                            DerefOf (DEVY [One]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x03))
-                        {
-                            DerefOf (DEVY [0x02]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x04))
-                        {
-                            DerefOf (DEVY [0x03]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x05))
-                        {
-                            DerefOf (DEVY [0x04]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x06))
-                        {
-                            DerefOf (DEVY [0x05]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x07))
-                        {
-                            DerefOf (DEVY [0x06]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x08))
-                        {
-                            DerefOf (DEVY [0x07]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x09))
-                        {
-                            DerefOf (DEVY [0x2C]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x0A))
-                        {
-                            DerefOf (DEVY [0x2D]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x0B))
-                        {
-                            DerefOf (DEVY [0x2E]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x0C))
-                        {
-                            DerefOf (DEVY [0x2F]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x0D))
-                        {
-                            DerefOf (DEVY [0x30]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x0E))
-                        {
-                            DerefOf (DEVY [0x31]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x0F))
-                        {
-                            DerefOf (DEVY [0x32]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x10))
-                        {
-                            DerefOf (DEVY [0x33]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x11))
-                        {
-                            DerefOf (DEVY [0x41]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x12))
-                        {
-                            DerefOf (DEVY [0x42]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x13))
-                        {
-                            DerefOf (DEVY [0x43]) [One] = One
-                        }
-
-                        If ((TCNT >= 0x14))
-                        {
-                            DerefOf (DEVY [0x44]) [One] = One
-                        }
-
-                        If (((PEPC & 0x0400) == Zero))
-                        {
-                            DerefOf (DEVY [Zero]) [One] = Zero
-                            DerefOf (DEVY [One]) [One] = Zero
-                            DerefOf (DEVY [0x02]) [One] = Zero
-                            DerefOf (DEVY [0x03]) [One] = Zero
-                            DerefOf (DEVY [0x04]) [One] = Zero
-                            DerefOf (DEVY [0x05]) [One] = Zero
-                            DerefOf (DEVY [0x06]) [One] = Zero
-                            DerefOf (DEVY [0x07]) [One] = Zero
-                            DerefOf (DEVY [0x2C]) [One] = Zero
-                            DerefOf (DEVY [0x2D]) [One] = Zero
-                            DerefOf (DEVY [0x2E]) [One] = Zero
-                            DerefOf (DEVY [0x2F]) [One] = Zero
-                            DerefOf (DEVY [0x30]) [One] = Zero
-                            DerefOf (DEVY [0x31]) [One] = Zero
-                            DerefOf (DEVY [0x32]) [One] = Zero
-                            DerefOf (DEVY [0x33]) [One] = Zero
-                            DerefOf (DEVY [0x41]) [One] = Zero
-                            DerefOf (DEVY [0x42]) [One] = Zero
-                            DerefOf (DEVY [0x43]) [One] = Zero
-                            DerefOf (DEVY [0x44]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x0800) == Zero))
-                        {
-                            DerefOf (DEVY [0x10]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x1000) == Zero))
-                        {
-                            DerefOf (DEVY [0x11]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x2000) == Zero))
-                        {
-                            DerefOf (DEVY [0x12]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x4000) == Zero))
-                        {
-                            DerefOf (DEVY [0x13]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x8000) == Zero))
-                        {
-                            DerefOf (DEVY [0x45]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x00010000) == Zero))
-                        {
-                            DerefOf (DEVY [0x46]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x00020000) == Zero))
-                        {
-                            DerefOf (DEVY [0x14]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x00040000) == Zero))
-                        {
-                            DerefOf (DEVY [0x15]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x00080000) == Zero))
-                        {
-                            DerefOf (DEVY [0x16]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x00100000) == Zero))
-                        {
-                            DerefOf (DEVY [0x47]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x00200000) == Zero))
-                        {
-                            DerefOf (DEVY [0x34]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x00400000) == Zero))
-                        {
-                            DerefOf (DEVY [0x35]) [One] = Zero
-                        }
-
-                        If ((((PEPC & 0x00800000) == Zero) || (GBES == Zero)))
-                        {
-                            DerefOf (DEVY [0x36]) [One] = Zero
-                        }
-
-                        If (((PEPC & 0x01000000) != Zero))
-                        {
-                            DerefOf (DEVY [0x37]) [One] = One
-                        }
-
-                        If (((PEPC & 0x02000000) != Zero))
-                        {
-                            If (STPC (0x3F, 0x41))
-                            {
-                                ADBG ("TBT PEP Constraint is successfully SET")
-                            }
-                            Else
-                            {
-                                ADBG ("TBT PEP Constraint is Failed to SET")
-                            }
-                        }
-
-                        If ((OSYS >= 0x07DF))
-                        {
-                            If (CondRefOf (\_SB.PCI0.RP01.PXSX))
-                            {
-                                If (^^PCI0.RP01.PXSX.WIST ())
-                                {
-                                    DerefOf (DerefOf (DerefOf (DEVY [0x17]) [0x02]
-                                        ) [One]) [One] = 0x03
-                                    DerefOf (DerefOf (DerefOf (DEVY [0x17]) [0x02]
-                                        ) [One]) [0x02] = Zero
-                                    DerefOf (DEVY [0x17]) [One] = One
-                                }
-                            }
-
-                            If (^^PCI0.RP02.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x18]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x18]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x18]) [One] = One
-                            }
-
-                            If (^^PCI0.RP03.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x19]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x19]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x19]) [One] = One
-                            }
-
-                            If (^^PCI0.RP04.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x1A]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x1A]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x1A]) [One] = One
-                            }
-
-                            If (CondRefOf (\_SB.PCI0.RP05.PXSX))
-                            {
-                                If (^^PCI0.RP05.PXSX.WIST ())
-                                {
-                                    DerefOf (DerefOf (DerefOf (DEVY [0x1B]) [0x02]
-                                        ) [One]) [One] = 0x03
-                                    DerefOf (DerefOf (DerefOf (DEVY [0x1B]) [0x02]
-                                        ) [One]) [0x02] = Zero
-                                    DerefOf (DEVY [0x1B]) [One] = One
-                                }
-                            }
-
-                            If (^^PCI0.RP06.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x1C]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x1C]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x1C]) [One] = One
-                            }
-
-                            If (^^PCI0.RP07.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x1D]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x1D]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x1D]) [One] = One
-                            }
-
-                            If (^^PCI0.RP08.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x1E]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x1E]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x1E]) [One] = One
-                            }
-
-                            If (CondRefOf (\_SB.PCI0.RP09.PXSX))
-                            {
-                                If (^^PCI0.RP09.PXSX.WIST ())
-                                {
-                                    DerefOf (DerefOf (DerefOf (DEVY [0x1F]) [0x02]
-                                        ) [One]) [One] = 0x03
-                                    DerefOf (DerefOf (DerefOf (DEVY [0x1F]) [0x02]
-                                        ) [One]) [0x02] = Zero
-                                    DerefOf (DEVY [0x1F]) [One] = One
-                                }
-                            }
-
-                            If (^^PCI0.RP10.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x20]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x20]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x20]) [One] = One
-                            }
-
-                            If (^^PCI0.RP12.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x22]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x22]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x22]) [One] = One
-                            }
-
-                            If (^^PCI0.RP13.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x23]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x23]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x23]) [One] = One
-                            }
-
-                            If (^^PCI0.RP14.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x24]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x24]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x24]) [One] = One
-                            }
-
-                            If (^^PCI0.RP15.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x25]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x25]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x25]) [One] = One
-                            }
-
-                            If (^^PCI0.RP16.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x26]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x26]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x26]) [One] = One
-                            }
-
-                            If (^^PCI0.RP17.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x27]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x27]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x27]) [One] = One
-                            }
-
-                            If (^^PCI0.RP18.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x28]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x28]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x28]) [One] = One
-                            }
-
-                            If (^^PCI0.RP19.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x29]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x29]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x29]) [One] = One
-                            }
-
-                            If (^^PCI0.RP20.PXSX.WIST ())
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x2A]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x2A]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x2A]) [One] = One
-                            }
-
-                            If ((^^PCI0.CNVW.VDID != 0xFFFFFFFF))
-                            {
-                                DerefOf (DerefOf (DerefOf (DEVY [0x48]) [0x02]
-                                    ) [One]) [One] = 0x03
-                                DerefOf (DerefOf (DerefOf (DEVY [0x48]) [0x02]
-                                    ) [One]) [0x02] = Zero
-                                DerefOf (DEVY [0x48]) [One] = One
-                            }
-                        }
-
-                        Return (DEVY) /* \_SB_.PEPD.DEVY */
-                    }
-
-                    If ((Arg2 == 0x02))
-                    {
-                        Return (BCCD) /* \_SB_.PEPD.BCCD */
-                    }
-
-                    If ((Arg2 == 0x03))
-                    {
-                        If ((S0ID == One))
-                        {
-                            D8XH (Zero, 0xC5)
-                            D8XH (One, Zero)
-                            If (!^^PCI0.GFX0.PDRD ())
-                            {
-                                While (!(PBTN & 0x02))
-                                {
-                                    Sleep (0x64)
-                                }
-
-                                ^^PCI0.LPCB.EC.CSMF = One
-                            }
-                        }
-                    }
-
-                    If ((Arg2 == 0x04))
-                    {
-                        If ((S0ID == One))
-                        {
-                            D8XH (Zero, 0xC5)
-                            D8XH (One, 0xAB)
-                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP01.TBNF)))
-                            {
-                                ^^PCI0.RP01.TBNF ()
-                            }
-
-                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP05.TBNF)))
-                            {
-                                ^^PCI0.RP05.TBNF ()
-                            }
-
-                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP09.TBNF)))
-                            {
-                                ^^PCI0.RP09.TBNF ()
-                            }
-
-                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP13.TBNF)))
-                            {
-                                ^^PCI0.RP13.TBNF ()
-                            }
-
-                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP17.TBNF)))
-                            {
-                                ^^PCI0.RP17.TBNF ()
-                            }
-
-                            If (((RTBT == One) && CondRefOf (\_SB.PCI0.RP21.TBNF)))
-                            {
-                                ^^PCI0.RP21.TBNF ()
-                            }
-
-                            ^^PCI0.LPCB.EC.CSMF = Zero
-                        }
-                    }
-
-                    If ((Arg2 == 0x05))
-                    {
-                        If ((S0ID == One))
-                        {
-                            GUAM (One)
-                        }
-
-                        ^^PCI0.LPCB.EC.CSMF = 0x03
-                    }
-
-                    If ((Arg2 == 0x06))
-                    {
-                        If ((S0ID == One))
-                        {
-                            GUAM (Zero)
-                        }
-
-                        ^^PCI0.LPCB.EC.CSMF = One
-                    }
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
         }
     }
 
@@ -40837,570 +42520,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         PIRH,   8
     }
 
-    Scope (_SB)
-    {
-        Device (LNKA)
-        {
-            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
-            Name (_UID, One)  // _UID: Unique ID
-            Method (_STA, 0, Serialized)  // _STA: Status
-            {
-                Local0 = (PIRA & 0x80)
-                If (Local0)
-                {
-                    Return (0x09)
-                }
-                Else
-                {
-                    Return (0x0B)
-                }
-            }
-
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-            {
-                Name (RTLA, ResourceTemplate ()
-                {
-                    IRQ (Level, ActiveLow, Shared, )
-                        {11}
-                })
-                CreateWordField (RTLA, One, IRQ0)
-                IRQ0 = PIRA /* \PIRA */
-                Return (RTLA) /* \_SB_.LNKA._CRS.RTLA */
-            }
-
-            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
-            {
-                PIRA |= 0x80
-            }
-
-            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
-            {
-                CreateWordField (Arg0, One, IRA)
-                FindSetRightBit (IRA, Local0)
-                Local0--
-                PIRA = Local0
-            }
-
-            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
-            {
-                Return (PRSA) /* \_SB_.PRSA */
-            }
-        }
-
-        Device (LNKB)
-        {
-            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
-            Name (_UID, 0x02)  // _UID: Unique ID
-            Method (_STA, 0, Serialized)  // _STA: Status
-            {
-                Local0 = (PIRB & 0x80)
-                If (Local0)
-                {
-                    Return (0x09)
-                }
-                Else
-                {
-                    Return (0x0B)
-                }
-            }
-
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-            {
-                Name (RTLB, ResourceTemplate ()
-                {
-                    IRQ (Level, ActiveLow, Shared, )
-                        {10}
-                })
-                CreateWordField (RTLB, One, IRQ0)
-                IRQ0 = PIRB /* \PIRB */
-                Return (RTLB) /* \_SB_.LNKB._CRS.RTLB */
-            }
-
-            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
-            {
-                PIRB |= 0x80
-            }
-
-            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
-            {
-                CreateWordField (Arg0, One, IRA)
-                FindSetRightBit (IRA, Local0)
-                Local0--
-                PIRB = Local0
-            }
-
-            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
-            {
-                Return (PRSB) /* \_SB_.PRSB */
-            }
-        }
-
-        Device (LNKC)
-        {
-            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
-            Name (_UID, 0x03)  // _UID: Unique ID
-            Method (_STA, 0, Serialized)  // _STA: Status
-            {
-                Local0 = (PIRC & 0x80)
-                If (Local0)
-                {
-                    Return (0x09)
-                }
-                Else
-                {
-                    Return (0x0B)
-                }
-            }
-
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-            {
-                Name (RTLC, ResourceTemplate ()
-                {
-                    IRQ (Level, ActiveLow, Shared, )
-                        {11}
-                })
-                CreateWordField (RTLC, One, IRQ0)
-                IRQ0 = PIRC /* \PIRC */
-                Return (RTLC) /* \_SB_.LNKC._CRS.RTLC */
-            }
-
-            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
-            {
-                PIRC |= 0x80
-            }
-
-            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
-            {
-                CreateWordField (Arg0, One, IRA)
-                FindSetRightBit (IRA, Local0)
-                Local0--
-                PIRC = Local0
-            }
-
-            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
-            {
-                Return (PRSC) /* \_SB_.PRSC */
-            }
-        }
-
-        Device (LNKD)
-        {
-            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
-            Name (_UID, 0x04)  // _UID: Unique ID
-            Method (_STA, 0, Serialized)  // _STA: Status
-            {
-                Local0 = (PIRD & 0x80)
-                If (Local0)
-                {
-                    Return (0x09)
-                }
-                Else
-                {
-                    Return (0x0B)
-                }
-            }
-
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-            {
-                Name (RTLD, ResourceTemplate ()
-                {
-                    IRQ (Level, ActiveLow, Shared, )
-                        {11}
-                })
-                CreateWordField (RTLD, One, IRQ0)
-                IRQ0 = PIRD /* \PIRD */
-                Return (RTLD) /* \_SB_.LNKD._CRS.RTLD */
-            }
-
-            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
-            {
-                PIRD |= 0x80
-            }
-
-            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
-            {
-                CreateWordField (Arg0, One, IRA)
-                FindSetRightBit (IRA, Local0)
-                Local0--
-                PIRD = Local0
-            }
-
-            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
-            {
-                Return (PRSD) /* \_SB_.PRSD */
-            }
-        }
-
-        Device (LNKE)
-        {
-            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
-            Name (_UID, 0x05)  // _UID: Unique ID
-            Method (_STA, 0, Serialized)  // _STA: Status
-            {
-                Local0 = (PIRE & 0x80)
-                If (Local0)
-                {
-                    Return (0x09)
-                }
-                Else
-                {
-                    Return (0x0B)
-                }
-            }
-
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-            {
-                Name (RTLE, ResourceTemplate ()
-                {
-                    IRQ (Level, ActiveLow, Shared, )
-                        {11}
-                })
-                CreateWordField (RTLE, One, IRQ0)
-                IRQ0 = PIRE /* \PIRE */
-                Return (RTLE) /* \_SB_.LNKE._CRS.RTLE */
-            }
-
-            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
-            {
-                PIRE |= 0x80
-            }
-
-            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
-            {
-                CreateWordField (Arg0, One, IRA)
-                FindSetRightBit (IRA, Local0)
-                Local0--
-                PIRE = Local0
-            }
-
-            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
-            {
-                Return (PRSE) /* \_SB_.PRSE */
-            }
-        }
-
-        Device (LNKF)
-        {
-            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
-            Name (_UID, 0x06)  // _UID: Unique ID
-            Method (_STA, 0, Serialized)  // _STA: Status
-            {
-                Local0 = (PIRF & 0x80)
-                If (Local0)
-                {
-                    Return (0x09)
-                }
-                Else
-                {
-                    Return (0x0B)
-                }
-            }
-
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-            {
-                Name (RTLF, ResourceTemplate ()
-                {
-                    IRQ (Level, ActiveLow, Shared, )
-                        {11}
-                })
-                CreateWordField (RTLF, One, IRQ0)
-                IRQ0 = PIRF /* \PIRF */
-                Return (RTLF) /* \_SB_.LNKF._CRS.RTLF */
-            }
-
-            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
-            {
-                PIRF |= 0x80
-            }
-
-            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
-            {
-                CreateWordField (Arg0, One, IRA)
-                FindSetRightBit (IRA, Local0)
-                Local0--
-                PIRF = Local0
-            }
-
-            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
-            {
-                Return (PRSF) /* \_SB_.PRSF */
-            }
-        }
-
-        Device (LNKG)
-        {
-            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
-            Name (_UID, 0x07)  // _UID: Unique ID
-            Method (_STA, 0, Serialized)  // _STA: Status
-            {
-                Local0 = (PIRG & 0x80)
-                If (Local0)
-                {
-                    Return (0x09)
-                }
-                Else
-                {
-                    Return (0x0B)
-                }
-            }
-
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-            {
-                Name (RTLG, ResourceTemplate ()
-                {
-                    IRQ (Level, ActiveLow, Shared, )
-                        {11}
-                })
-                CreateWordField (RTLG, One, IRQ0)
-                IRQ0 = PIRG /* \PIRG */
-                Return (RTLG) /* \_SB_.LNKG._CRS.RTLG */
-            }
-
-            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
-            {
-                PIRG |= 0x80
-            }
-
-            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
-            {
-                CreateWordField (Arg0, One, IRA)
-                FindSetRightBit (IRA, Local0)
-                Local0--
-                PIRG = Local0
-            }
-
-            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
-            {
-                Return (PRSG) /* \_SB_.PRSG */
-            }
-        }
-
-        Device (LNKH)
-        {
-            Name (_HID, EisaId ("PNP0C0F") /* PCI Interrupt Link Device */)  // _HID: Hardware ID
-            Name (_UID, 0x08)  // _UID: Unique ID
-            Method (_STA, 0, Serialized)  // _STA: Status
-            {
-                Local0 = (PIRH & 0x80)
-                If (Local0)
-                {
-                    Return (0x09)
-                }
-                Else
-                {
-                    Return (0x0B)
-                }
-            }
-
-            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
-            {
-                Name (RTLH, ResourceTemplate ()
-                {
-                    IRQ (Level, ActiveLow, Shared, )
-                        {11}
-                })
-                CreateWordField (RTLH, One, IRQ0)
-                IRQ0 = PIRH /* \PIRH */
-                Return (RTLH) /* \_SB_.LNKH._CRS.RTLH */
-            }
-
-            Method (_DIS, 0, NotSerialized)  // _DIS: Disable Device
-            {
-                PIRH |= 0x80
-            }
-
-            Method (_SRS, 1, NotSerialized)  // _SRS: Set Resource Settings
-            {
-                CreateWordField (Arg0, One, IRA)
-                FindSetRightBit (IRA, Local0)
-                Local0--
-                PIRH = Local0
-            }
-
-            Method (_PRS, 0, NotSerialized)  // _PRS: Possible Resource Settings
-            {
-                Return (PRSH) /* \_SB_.PRSH */
-            }
-        }
-    }
-
-    Scope (_SB)
-    {
-        Device (AWAC)
-        {
-            Name (_HID, "ACPI000E" /* Time and Alarm Device */)  // _HID: Hardware ID
-            Name (WAST, Zero)
-            Name (WTTR, Zero)
-            Method (_PRW, 0, NotSerialized)  // _PRW: Power Resources for Wake
-            {
-                Return (GPRW (0x72, 0x04))
-            }
-
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((STAS == Zero))
-                {
-                    Return (0x0F)
-                }
-                Else
-                {
-                    Return (Zero)
-                }
-            }
-
-            Method (_GCP, 0, NotSerialized)  // _GCP: Get Capabilities
-            {
-                Return (0xB7)
-            }
-
-            OperationRegion (RTCM, SystemCMOS, Zero, 0x3F)
-            Field (RTCM, ByteAcc, Lock, Preserve)
-            {
-                SEC,    8, 
-                Offset (0x02), 
-                MIN,    8, 
-                Offset (0x04), 
-                HOR,    8, 
-                Offset (0x07), 
-                DAY,    8, 
-                MON,    8, 
-                YEAR,   8, 
-                Offset (0x32), 
-                CNTY,   8
-            }
-
-            Method (_GRT, 0, NotSerialized)  // _GRT: Get Real Time
-            {
-                Local0 = Buffer (0x10){}
-                CreateWordField (Local0, Zero, Y)
-                CreateByteField (Local0, 0x02, M)
-                CreateByteField (Local0, 0x03, D)
-                CreateByteField (Local0, 0x04, H)
-                CreateByteField (Local0, 0x05, MIN1)
-                CreateByteField (Local0, 0x06, S)
-                CreateByteField (Local0, 0x07, V)
-                CreateWordField (Local0, 0x0A, TZ)
-                CreateByteField (Local0, 0x0C, DL)
-                FromBCD (YEAR, Local5)
-                FromBCD (CNTY, Local6)
-                Y = ((Local6 * 0x64) + Local5)
-                FromBCD (MON, M) /* \_SB_.AWAC._GRT.M___ */
-                FromBCD (DAY, D) /* \_SB_.AWAC._GRT.D___ */
-                FromBCD (HOR, H) /* \_SB_.AWAC._GRT.H___ */
-                FromBCD (MIN, MIN1) /* \_SB_.AWAC._GRT.MIN1 */
-                FromBCD (SEC, S) /* \_SB_.AWAC._GRT.S___ */
-                TZ = 0x07FF
-                DL = Zero
-                V = One
-                Return (Local0)
-            }
-
-            Method (_SRT, 1, NotSerialized)  // _SRT: Set Real Time
-            {
-                CreateWordField (Arg0, Zero, Y)
-                CreateByteField (Arg0, 0x02, M)
-                CreateByteField (Arg0, 0x03, D)
-                CreateByteField (Arg0, 0x04, H)
-                CreateByteField (Arg0, 0x05, MIN1)
-                CreateByteField (Arg0, 0x06, S)
-                Divide (Y, 0x64, Local5, Local4)
-                ToBCD (Local4, CNTY) /* \_SB_.AWAC.CNTY */
-                ToBCD (Local5, YEAR) /* \_SB_.AWAC.YEAR */
-                ToBCD (M, MON) /* \_SB_.AWAC.MON_ */
-                ToBCD (D, DAY) /* \_SB_.AWAC.DAY_ */
-                ToBCD (H, HOR) /* \_SB_.AWAC.HOR_ */
-                ToBCD (MIN1, MIN) /* \_SB_.AWAC.MIN_ */
-                ToBCD (S, SEC) /* \_SB_.AWAC.SEC_ */
-                Return (Zero)
-            }
-
-            Method (_GWS, 1, Serialized)  // _GWS: Get Wake Status
-            {
-                Local0 = Zero
-                If ((Arg0 == Zero))
-                {
-                    If (((ACWA == 0xFFFFFFFF) && (One & WTTR)))
-                    {
-                        Local0 |= One
-                        WTTR ^= One /* \_SB_.AWAC.WTTR */
-                    }
-                }
-                ElseIf (((DCWA == 0xFFFFFFFF) && (0x02 & WTTR)))
-                {
-                    Local0 |= One
-                    WTTR ^= 0x02 /* \_SB_.AWAC.WTTR */
-                }
-
-                If (WAST)
-                {
-                    Local0 |= 0x02
-                    WAST = Zero
-                }
-
-                Return (Local0)
-            }
-
-            Method (_CWS, 1, NotSerialized)  // _CWS: Clear Wake Alarm Status
-            {
-                Return (Zero)
-            }
-
-            Method (_STP, 2, NotSerialized)  // _STP: Set Expired Timer Wake Policy
-            {
-                If ((Arg0 == Zero))
-                {
-                    ACET = Arg1
-                }
-                Else
-                {
-                    DCET = Arg1
-                }
-
-                Return (Zero)
-            }
-
-            Method (_STV, 2, Serialized)  // _STV: Set Timer Value
-            {
-                If ((Arg0 == Zero))
-                {
-                    ACWA = Arg1
-                    WTTR |= One /* \_SB_.AWAC.WTTR */
-                }
-                Else
-                {
-                    DCWA = Arg1
-                    WTTR |= 0x02 /* \_SB_.AWAC.WTTR */
-                }
-
-                Return (Zero)
-            }
-
-            Method (_TIP, 1, NotSerialized)  // _TIP: Expired Timer Wake Policy
-            {
-                If ((Arg0 == Zero))
-                {
-                    Return (ACET) /* \ACET */
-                }
-                Else
-                {
-                    Return (DCET) /* \DCET */
-                }
-            }
-
-            Method (_TIV, 1, NotSerialized)  // _TIV: Timer Values
-            {
-                If ((Arg0 == Zero))
-                {
-                    Return (ACWA) /* \ACWA */
-                }
-                Else
-                {
-                    Return (DCWA) /* \DCWA */
-                }
-            }
-        }
-    }
-
     If ((ECR1 == One))
     {
         Scope (_SB.PCI0)
@@ -41444,130 +42563,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                      0x00                                             // .
                 })
             }
-        }
-    }
-
-    Scope (_SB.PCI0)
-    {
-        Method (PCIC, 1, Serialized)
-        {
-            If ((ECR1 == One))
-            {
-                If ((Arg0 == PCIG))
-                {
-                    Return (One)
-                }
-            }
-
-            Return (Zero)
-        }
-
-        Method (IICB, 2, Serialized)
-        {
-            Switch (ToInteger (Arg1))
-            {
-                Case (Zero)
-                {
-                    Name (IIC0, ResourceTemplate ()
-                    {
-                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
-                            AddressingMode7Bit, "\\_SB.PCI0.I2C0",
-                            0x00, ResourceConsumer, _Y2C, Exclusive,
-                            )
-                    })
-                    CreateWordField (IIC0, \_SB.PCI0.IICB._Y2C._ADR, DAD0)  // _ADR: Address
-                    DAD0 = Arg0
-                    Return (IIC0) /* \_SB_.PCI0.IICB.IIC0 */
-                }
-                Case (One)
-                {
-                    Name (IIC1, ResourceTemplate ()
-                    {
-                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
-                            AddressingMode7Bit, "\\_SB.PCI0.I2C1",
-                            0x00, ResourceConsumer, _Y2D, Exclusive,
-                            )
-                    })
-                    CreateWordField (IIC1, \_SB.PCI0.IICB._Y2D._ADR, DAD1)  // _ADR: Address
-                    DAD1 = Arg0
-                    Return (IIC1) /* \_SB_.PCI0.IICB.IIC1 */
-                }
-                Case (0x02)
-                {
-                    Name (IIC2, ResourceTemplate ()
-                    {
-                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
-                            AddressingMode7Bit, "\\_SB.PCI0.I2C2",
-                            0x00, ResourceConsumer, _Y2E, Exclusive,
-                            )
-                    })
-                    CreateWordField (IIC2, \_SB.PCI0.IICB._Y2E._ADR, DAD2)  // _ADR: Address
-                    DAD2 = Arg0
-                    Return (IIC2) /* \_SB_.PCI0.IICB.IIC2 */
-                }
-                Case (0x03)
-                {
-                    Name (IIC3, ResourceTemplate ()
-                    {
-                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
-                            AddressingMode7Bit, "\\_SB.PCI0.I2C3",
-                            0x00, ResourceConsumer, _Y2F, Exclusive,
-                            )
-                    })
-                    CreateWordField (IIC3, \_SB.PCI0.IICB._Y2F._ADR, DAD3)  // _ADR: Address
-                    DAD3 = Arg0
-                    Return (IIC3) /* \_SB_.PCI0.IICB.IIC3 */
-                }
-                Case (0x04)
-                {
-                    Name (IIC4, ResourceTemplate ()
-                    {
-                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
-                            AddressingMode7Bit, "\\_SB.PCI0.I2C4",
-                            0x00, ResourceConsumer, _Y30, Exclusive,
-                            )
-                    })
-                    CreateWordField (IIC4, \_SB.PCI0.IICB._Y30._ADR, DAD4)  // _ADR: Address
-                    DAD4 = Arg0
-                    Return (IIC4) /* \_SB_.PCI0.IICB.IIC4 */
-                }
-                Case (0x05)
-                {
-                    Name (IIC5, ResourceTemplate ()
-                    {
-                        I2cSerialBusV2 (0x0000, ControllerInitiated, 0x00061A80,
-                            AddressingMode7Bit, "\\_SB.PCI0.I2C5",
-                            0x00, ResourceConsumer, _Y31, Exclusive,
-                            )
-                    })
-                    CreateWordField (IIC5, \_SB.PCI0.IICB._Y31._ADR, DAD5)  // _ADR: Address
-                    DAD5 = Arg0
-                    Return (IIC5) /* \_SB_.PCI0.IICB.IIC5 */
-                }
-                Default
-                {
-                    Return (Zero)
-                }
-
-            }
-        }
-
-        Method (INTB, 3, Serialized)
-        {
-            Name (INTR, ResourceTemplate ()
-            {
-                Interrupt (ResourceConsumer, Level, ActiveLow, ExclusiveAndWake, ,, _Y32)
-                {
-                    0x00000000,
-                }
-            })
-            CreateDWordField (INTR, \_SB.PCI0.INTB._Y32._INT, NUMI)  // _INT: Interrupts
-            NUMI = INUM (Arg0)
-            CreateBitField (INTR, \_SB.PCI0.INTB._Y32._HE, LEVI)  // _HE_: High-Edge
-            LEVI = Arg1
-            CreateBitField (INTR, \_SB.PCI0.INTB._Y32._LL, ACTI)  // _LL_: Low Level
-            ACTI = Arg2
-            Return (INTR) /* \_SB_.PCI0.INTB.INTR */
         }
     }
 
@@ -46420,9 +47415,101 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         }
     }
 
-    Scope (_SB.PCI0.I2C2)
+    Method (PKG1, 1, Serialized)
     {
-        Device (CAM0)
+        Name (PKG, Package (0x01)
+        {
+            Zero
+        })
+        PKG [Zero] = Arg0
+        Return (PKG) /* \PKG1.PKG_ */
+    }
+
+    Method (PKG3, 3, Serialized)
+    {
+        Name (PKG, Package (0x03)
+        {
+            Zero, 
+            Zero, 
+            Zero
+        })
+        PKG [Zero] = Arg0
+        PKG [One] = Arg1
+        PKG [0x02] = Arg2
+        Return (PKG) /* \PKG3.PKG_ */
+    }
+
+    If (USTP)
+    {
+        Scope (_SB.PCI0.I2C0)
+        {
+            Method (SSCN, 0, NotSerialized)
+            {
+                Return (PKG3 (SSH0, SSL0, SSD0))
+            }
+
+            Method (FMCN, 0, NotSerialized)
+            {
+                Return (PKG3 (FMH0, FML0, FMD0))
+            }
+
+            Method (FPCN, 0, NotSerialized)
+            {
+                Return (PKG3 (FPH0, FPL0, FPD0))
+            }
+
+            Method (HMCN, 0, NotSerialized)
+            {
+                Return (PKG3 (HMH0, HML0, HMD0))
+            }
+
+            Method (M0D3, 0, NotSerialized)
+            {
+                Return (PKG1 (M0C0))
+            }
+
+            Method (M1D3, 0, NotSerialized)
+            {
+                Return (PKG1 (M1C0))
+            }
+        }
+
+        Scope (_SB.PCI0.I2C1)
+        {
+            Method (SSCN, 0, NotSerialized)
+            {
+                Return (PKG3 (SSH1, SSL1, SSD1))
+            }
+
+            Method (FMCN, 0, NotSerialized)
+            {
+                Return (PKG3 (FMH1, FML1, FMD1))
+            }
+
+            Method (FPCN, 0, NotSerialized)
+            {
+                Return (PKG3 (FPH1, FPL1, FPD1))
+            }
+
+            Method (HMCN, 0, NotSerialized)
+            {
+                Return (PKG3 (HMH1, HML1, HMD1))
+            }
+
+            Method (M0D3, 0, NotSerialized)
+            {
+                Return (PKG1 (M0C1))
+            }
+
+            Method (M1D3, 0, NotSerialized)
+            {
+                Return (PKG1 (M1C1))
+            }
+        }
+
+        Scope (_SB.PCI0.I2C2)
+        {
+            Device (CAM0)
         {
             Name (_ADR, Zero)  // _ADR: Address
             Name (_HID, "INT3471")  // _HID: Hardware ID
@@ -46582,11 +47669,176 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 })
             }
         }
-    }
+        
+        Device (PMIC)
+        {
+            Name (_ADR, Zero)  // _ADR: Address
+            Name (_HID, "INT346F")  // _HID: Hardware ID
+            Name (_CID, "INT346F")  // _CID: Compatible ID
+            Name (_DDN, "PMIC-CRDG2")  // _DDN: DOS Device Name
+            Name (_UID, "0")  // _UID: Unique ID
+            Name (_PLD, Package (0x01)  // _PLD: Physical Location of Device
+            {
+                ToPLD (
+                    PLD_Revision           = 0x2,
+                    PLD_IgnoreColor        = 0x1,
+                    PLD_Red                = 0x0,
+                    PLD_Green              = 0x0,
+                    PLD_Blue               = 0x0,
+                    PLD_Width              = 0x0,
+                    PLD_Height             = 0x0,
+                    PLD_UserVisible        = 0x1,
+                    PLD_Dock               = 0x0,
+                    PLD_Lid                = 0x0,
+                    PLD_Panel              = "FRONT",
+                    PLD_VerticalPosition   = "UPPER",
+                    PLD_HorizontalPosition = "CENTER",
+                    PLD_Shape              = "VERTICALRECTANGLE",
+                    PLD_GroupOrientation   = 0x0,
+                    PLD_GroupToken         = 0x0,
+                    PLD_GroupPosition      = 0x0,
+                    PLD_Bay                = 0x0,
+                    PLD_Ejectable          = 0x1,
+                    PLD_EjectRequired      = 0x1,
+                    PLD_CabinetNumber      = 0x0,
+                    PLD_CardCageNumber     = 0x0,
+                    PLD_Reference          = 0x0,
+                    PLD_Rotation           = 0x0,
+                    PLD_Order              = 0x0,
+                    PLD_VerticalOffset     = 0xFFFF,
+                    PLD_HorizontalOffset   = 0xFFFF)
 
-    Scope (_SB.PCI0.I2C4)
-    {
-        Device (CAM1)
+            })
+            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+            {
+                Name (SBUF, ResourceTemplate ()
+                {
+                    I2cSerialBusV2 (0x004C, ControllerInitiated, 0x00061A80,
+                        AddressingMode7Bit, "\\_SB.PCI0.I2C2",
+                        0x00, ResourceConsumer, , Exclusive,
+                        )
+                })
+                Return (SBUF) /* \_SB_.PCI0.I2C2.PMIC._CRS.SBUF */
+            }
+
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((SCSS == One))
+                {
+                    Return (0x0F)
+                }
+                Else
+                {
+                    Return (Zero)
+                }
+            }
+
+            Method (CLDB, 0, NotSerialized)
+            {
+                Name (PAR, Buffer (0x20)
+                {
+                    /* 0000 */  0x00, 0x02, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00,  // ...P....
+                    /* 0008 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // ........
+                    /* 0010 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // ........
+                    /* 0018 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // ........
+                })
+                Return (PAR) /* \_SB_.PCI0.I2C2.PMIC.CLDB.PAR_ */
+            }
+
+            Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
+            {
+                If ((Arg0 == ToUUID ("26257549-9271-4ca4-bb43-c4899d5a4881")))
+                {
+                    If ((Arg2 == Zero))
+                    {
+                        Return (0x07)
+                    }
+
+                    If ((Arg2 == One))
+                    {
+                        Return (One)
+                    }
+
+                    If ((Arg2 == 0x02))
+                    {
+                        Return (0x02004C0B)
+                    }
+                }
+
+                Return (Buffer (One)
+                {
+                     0x00                                             // .
+                })
+            }
+        }
+        
+            Method (SSCN, 0, NotSerialized)
+            {
+                Return (PKG3 (SSH2, SSL2, SSD2))
+            }
+
+            Method (FMCN, 0, NotSerialized)
+            {
+                Return (PKG3 (FMH2, FML2, FMD2))
+            }
+
+            Method (FPCN, 0, NotSerialized)
+            {
+                Return (PKG3 (FPH2, FPL2, FPD2))
+            }
+
+            Method (HMCN, 0, NotSerialized)
+            {
+                Return (PKG3 (HMH2, HML2, HMD2))
+            }
+
+            Method (M0D3, 0, NotSerialized)
+            {
+                Return (PKG1 (M0C2))
+            }
+
+            Method (M1D3, 0, NotSerialized)
+            {
+                Return (PKG1 (M1C2))
+            }
+        }
+
+        Scope (_SB.PCI0.I2C3)
+        {
+            Method (SSCN, 0, NotSerialized)
+            {
+                Return (PKG3 (SSH3, SSL3, SSD3))
+            }
+
+            Method (FMCN, 0, NotSerialized)
+            {
+                Return (PKG3 (FMH3, FML3, FMD3))
+            }
+
+            Method (FPCN, 0, NotSerialized)
+            {
+                Return (PKG3 (FPH3, FPL3, FPD3))
+            }
+
+            Method (HMCN, 0, NotSerialized)
+            {
+                Return (PKG3 (HMH3, HML3, HMD3))
+            }
+
+            Method (M0D3, 0, NotSerialized)
+            {
+                Return (PKG1 (M0C3))
+            }
+
+            Method (M1D3, 0, NotSerialized)
+            {
+                Return (PKG1 (M1C3))
+            }
+        }
+
+        Scope (_SB.PCI0.I2C4)
+        {
+            Device (CAM1)
         {
             Name (_ADR, Zero)  // _ADR: Address
             Name (_HID, "INT3474")  // _HID: Hardware ID
@@ -46701,273 +47953,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 })
             }
         }
-    }
-
-    Scope (_SB.PCI0.I2C2)
-    {
-        Device (PMIC)
-        {
-            Name (_ADR, Zero)  // _ADR: Address
-            Name (_HID, "INT346F")  // _HID: Hardware ID
-            Name (_CID, "INT346F")  // _CID: Compatible ID
-            Name (_DDN, "PMIC-CRDG2")  // _DDN: DOS Device Name
-            Name (_UID, "0")  // _UID: Unique ID
-            Name (_PLD, Package (0x01)  // _PLD: Physical Location of Device
-            {
-                ToPLD (
-                    PLD_Revision           = 0x2,
-                    PLD_IgnoreColor        = 0x1,
-                    PLD_Red                = 0x0,
-                    PLD_Green              = 0x0,
-                    PLD_Blue               = 0x0,
-                    PLD_Width              = 0x0,
-                    PLD_Height             = 0x0,
-                    PLD_UserVisible        = 0x1,
-                    PLD_Dock               = 0x0,
-                    PLD_Lid                = 0x0,
-                    PLD_Panel              = "FRONT",
-                    PLD_VerticalPosition   = "UPPER",
-                    PLD_HorizontalPosition = "CENTER",
-                    PLD_Shape              = "VERTICALRECTANGLE",
-                    PLD_GroupOrientation   = 0x0,
-                    PLD_GroupToken         = 0x0,
-                    PLD_GroupPosition      = 0x0,
-                    PLD_Bay                = 0x0,
-                    PLD_Ejectable          = 0x1,
-                    PLD_EjectRequired      = 0x1,
-                    PLD_CabinetNumber      = 0x0,
-                    PLD_CardCageNumber     = 0x0,
-                    PLD_Reference          = 0x0,
-                    PLD_Rotation           = 0x0,
-                    PLD_Order              = 0x0,
-                    PLD_VerticalOffset     = 0xFFFF,
-                    PLD_HorizontalOffset   = 0xFFFF)
-
-            })
-            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-            {
-                Name (SBUF, ResourceTemplate ()
-                {
-                    I2cSerialBusV2 (0x004C, ControllerInitiated, 0x00061A80,
-                        AddressingMode7Bit, "\\_SB.PCI0.I2C2",
-                        0x00, ResourceConsumer, , Exclusive,
-                        )
-                })
-                Return (SBUF) /* \_SB_.PCI0.I2C2.PMIC._CRS.SBUF */
-            }
-
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((SCSS == One))
-                {
-                    Return (0x0F)
-                }
-                Else
-                {
-                    Return (Zero)
-                }
-            }
-
-            Method (CLDB, 0, NotSerialized)
-            {
-                Name (PAR, Buffer (0x20)
-                {
-                    /* 0000 */  0x00, 0x02, 0x00, 0x50, 0x00, 0x00, 0x00, 0x00,  // ...P....
-                    /* 0008 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // ........
-                    /* 0010 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // ........
-                    /* 0018 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   // ........
-                })
-                Return (PAR) /* \_SB_.PCI0.I2C2.PMIC.CLDB.PAR_ */
-            }
-
-            Method (_DSM, 4, NotSerialized)  // _DSM: Device-Specific Method
-            {
-                If ((Arg0 == ToUUID ("26257549-9271-4ca4-bb43-c4899d5a4881")))
-                {
-                    If ((Arg2 == Zero))
-                    {
-                        Return (0x07)
-                    }
-
-                    If ((Arg2 == One))
-                    {
-                        Return (One)
-                    }
-
-                    If ((Arg2 == 0x02))
-                    {
-                        Return (0x02004C0B)
-                    }
-                }
-
-                Return (Buffer (One)
-                {
-                     0x00                                             // .
-                })
-            }
-        }
-    }
-
-    Method (PKG1, 1, Serialized)
-    {
-        Name (PKG, Package (0x01)
-        {
-            Zero
-        })
-        PKG [Zero] = Arg0
-        Return (PKG) /* \PKG1.PKG_ */
-    }
-
-    Method (PKG3, 3, Serialized)
-    {
-        Name (PKG, Package (0x03)
-        {
-            Zero, 
-            Zero, 
-            Zero
-        })
-        PKG [Zero] = Arg0
-        PKG [One] = Arg1
-        PKG [0x02] = Arg2
-        Return (PKG) /* \PKG3.PKG_ */
-    }
-
-    If (USTP)
-    {
-        Scope (_SB.PCI0.I2C0)
-        {
-            Method (SSCN, 0, NotSerialized)
-            {
-                Return (PKG3 (SSH0, SSL0, SSD0))
-            }
-
-            Method (FMCN, 0, NotSerialized)
-            {
-                Return (PKG3 (FMH0, FML0, FMD0))
-            }
-
-            Method (FPCN, 0, NotSerialized)
-            {
-                Return (PKG3 (FPH0, FPL0, FPD0))
-            }
-
-            Method (HMCN, 0, NotSerialized)
-            {
-                Return (PKG3 (HMH0, HML0, HMD0))
-            }
-
-            Method (M0D3, 0, NotSerialized)
-            {
-                Return (PKG1 (M0C0))
-            }
-
-            Method (M1D3, 0, NotSerialized)
-            {
-                Return (PKG1 (M1C0))
-            }
-        }
-
-        Scope (_SB.PCI0.I2C1)
-        {
-            Method (SSCN, 0, NotSerialized)
-            {
-                Return (PKG3 (SSH1, SSL1, SSD1))
-            }
-
-            Method (FMCN, 0, NotSerialized)
-            {
-                Return (PKG3 (FMH1, FML1, FMD1))
-            }
-
-            Method (FPCN, 0, NotSerialized)
-            {
-                Return (PKG3 (FPH1, FPL1, FPD1))
-            }
-
-            Method (HMCN, 0, NotSerialized)
-            {
-                Return (PKG3 (HMH1, HML1, HMD1))
-            }
-
-            Method (M0D3, 0, NotSerialized)
-            {
-                Return (PKG1 (M0C1))
-            }
-
-            Method (M1D3, 0, NotSerialized)
-            {
-                Return (PKG1 (M1C1))
-            }
-        }
-
-        Scope (_SB.PCI0.I2C2)
-        {
-            Method (SSCN, 0, NotSerialized)
-            {
-                Return (PKG3 (SSH2, SSL2, SSD2))
-            }
-
-            Method (FMCN, 0, NotSerialized)
-            {
-                Return (PKG3 (FMH2, FML2, FMD2))
-            }
-
-            Method (FPCN, 0, NotSerialized)
-            {
-                Return (PKG3 (FPH2, FPL2, FPD2))
-            }
-
-            Method (HMCN, 0, NotSerialized)
-            {
-                Return (PKG3 (HMH2, HML2, HMD2))
-            }
-
-            Method (M0D3, 0, NotSerialized)
-            {
-                Return (PKG1 (M0C2))
-            }
-
-            Method (M1D3, 0, NotSerialized)
-            {
-                Return (PKG1 (M1C2))
-            }
-        }
-
-        Scope (_SB.PCI0.I2C3)
-        {
-            Method (SSCN, 0, NotSerialized)
-            {
-                Return (PKG3 (SSH3, SSL3, SSD3))
-            }
-
-            Method (FMCN, 0, NotSerialized)
-            {
-                Return (PKG3 (FMH3, FML3, FMD3))
-            }
-
-            Method (FPCN, 0, NotSerialized)
-            {
-                Return (PKG3 (FPH3, FPL3, FPD3))
-            }
-
-            Method (HMCN, 0, NotSerialized)
-            {
-                Return (PKG3 (HMH3, HML3, HMD3))
-            }
-
-            Method (M0D3, 0, NotSerialized)
-            {
-                Return (PKG1 (M0C3))
-            }
-
-            Method (M1D3, 0, NotSerialized)
-            {
-                Return (PKG1 (M1C3))
-            }
-        }
-
-        Scope (_SB.PCI0.I2C4)
-        {
+        
             Method (SSCN, 0, NotSerialized)
             {
                 Return (PKG3 (SSH4, SSL4, SSD4))
@@ -47111,7 +48097,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         }
     }
 
-    Scope (_SB.PCI0.HDAS.SNDW)
+    Scope (_SB.PCI0.HDEF.SNDW)
     {
         Device (SWD0)
         {
@@ -54221,7 +55207,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         }
     }
 
-    Scope (_SB.PCI0.HDAS)
+    Scope (_SB.PCI0.HDEF)
     {
         Method (PPMS, 1, Serialized)
         {
@@ -54261,53 +55247,8 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         Method (ACCG, 2, NotSerialized)
         {
             Name (GBUF, Buffer (0x10){})
-            Concatenate (Arg0, Arg1, GBUF) /* \_SB_.PCI0.HDAS.ACCG.GBUF */
-            Return (GBUF) /* \_SB_.PCI0.HDAS.ACCG.GBUF */
-        }
-    }
-
-    Scope (\)
-    {
-        PowerResource (PIN, 0x00, 0x0000)
-        {
-            Method (STA, 1, Serialized)
-            {
-                If ((\_SB.GGOV (DerefOf (Arg0 [Zero])) == DerefOf (Arg0 [One]
-                    )))
-                {
-                    Return (One)
-                }
-                Else
-                {
-                    Return (Zero)
-                }
-            }
-
-            Method (ON, 1, Serialized)
-            {
-                ADBG (Concatenate ("PINH GPIO=", ToHexString (DerefOf (Arg0 [Zero]))))
-                \_SB.SGOV (DerefOf (Arg0 [Zero]), DerefOf (Arg0 [One]))
-            }
-
-            Method (OFF, 1, Serialized)
-            {
-                ADBG (Concatenate ("PINL GPIO=", ToHexString (DerefOf (Arg0 [Zero]))))
-                \_SB.SGOV (DerefOf (Arg0 [Zero]), ~DerefOf (Arg0 [One])
-                    )
-            }
-
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                Return (Zero)
-            }
-
-            Method (_ON, 0, NotSerialized)  // _ON_: Power On
-            {
-            }
-
-            Method (_OFF, 0, NotSerialized)  // _OFF: Power Off
-            {
-            }
+            Concatenate (Arg0, Arg1, GBUF) /* \_SB_.PCI0.HDEF.ACCG.GBUF */
+            Return (GBUF) /* \_SB_.PCI0.HDEF.ACCG.GBUF */
         }
     }
 
@@ -54640,10 +55581,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                  0x00                                             // .
             })
         }
-    }
 
-    Scope (_SB.TPM)
-    {
         OperationRegion (TSMI, SystemIO, SMIA, One)
         Field (TSMI, ByteAcc, NoLock, Preserve)
         {
@@ -54926,115 +55864,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         IOB6,   8
     }
 
-    Scope (_SB)
-    {
-        Device (SCAI)
-        {
-            Name (_HID, EisaId ("SAM0427"))  // _HID: Hardware ID
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((OSYS < 0x07D9))
-                {
-                    Return (Zero)
-                }
-                Else
-                {
-                    Return (0x0F)
-                }
-            }
-
-            Name (DVLD, Zero)
-            Method (SDLS, 1, Serialized)
-            {
-                DVLD = Arg0
-            }
-
-            Name (FREV, Buffer (0x04){})
-            Method (RTN0, 1, Serialized)
-            {
-                FREV = Arg0
-                Return (FREV) /* \_SB_.SCAI.FREV */
-            }
-
-            Method (RTN1, 2, Serialized)
-            {
-                FREV = Arg0
-                ToBuffer (Arg1, Local0)
-                Concatenate (FREV, Local0, Local1)
-                Return (Local1)
-            }
-
-            Method (SETM, 1, Serialized)
-            {
-                Return (RTN0 (Zero))
-            }
-
-            Method (CSFI, 1, Serialized)
-            {
-                Return (SAWS (Arg0))
-            }
-
-            Name (GUDN, Zero)
-            Name (GUDB, Buffer (0xFA){})
-            Method (CSXI, 1, Serialized)
-            {
-                Acquire (MTX1, 0xFFFF)
-                BSAB = Arg0
-                RFLG = 0xFF
-                If (((SAFN == 0x5843) && (SASB == 0x90)))
-                {
-                    If ((GUNM == 0x80))
-                    {
-                        If ((GUDN == Zero))
-                        {
-                            ELBC ()
-                            HIPF ()
-                            EPWS ()
-                        }
-
-                        GUNM = GUDN /* \_SB_.SCAI.GUDN */
-                        GUDS = GUDB /* \_SB_.SCAI.GUDB */
-                        RFLG = 0xAA
-                    }
-
-                    Release (MTX1)
-                    Return (BSAB) /* \BSAB */
-                }
-
-                If (((SAFN == 0x5843) && (SASB == 0x91)))
-                {
-                    ELBC ()
-                    HIPF ()
-                    EPWS ()
-                    Release (MTX1)
-                    Return (BSAB) /* \BSAB */
-                }
-
-                Release (MTX1)
-                Return (SAWX (Arg0))
-            }
-        }
-
-        Method (NTCA, 1, Serialized)
-        {
-            If ((^SCAI.DVLD == One))
-            {
-                Notify (SCAI, Arg0)
-            }
-        }
-    }
-
-    Scope (_SB)
-    {
-        Method (KPTS, 1, NotSerialized)
-        {
-            GSSM (0x35, Zero)
-        }
-
-        Method (KWAK, 1, NotSerialized)
-        {
-        }
-    }
+    
 
     Device (STAD)
     {
@@ -55552,8 +56382,332 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         }
     }
 
-    Scope (_SB)
+    
+
+    Scope (_SB.PCI0.LPCB)
     {
+        Device (PS2K)
+        {
+            Name (_HID, "MSF0001")  // _HID: Hardware ID
+            Name (_CID, EisaId ("PNP0303") /* IBM Enhanced Keyboard (101/102-key, PS/2 Mouse) */)  // _CID: Compatible ID
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                Return (0x0F)
+            }
+
+            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            {
+                IO (Decode16,
+                    0x0060,             // Range Minimum
+                    0x0060,             // Range Maximum
+                    0x00,               // Alignment
+                    0x01,               // Length
+                    )
+                IO (Decode16,
+                    0x0064,             // Range Minimum
+                    0x0064,             // Range Maximum
+                    0x00,               // Alignment
+                    0x01,               // Length
+                    )
+                IRQ (Edge, ActiveHigh, Exclusive, )
+                    {1}
+            })
+            Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
+            {
+                StartDependentFn (0x00, 0x00)
+                {
+                    IO (Decode16,
+                        0x0060,             // Range Minimum
+                        0x0060,             // Range Maximum
+                        0x00,               // Alignment
+                        0x01,               // Length
+                        )
+                    IO (Decode16,
+                        0x0064,             // Range Minimum
+                        0x0064,             // Range Maximum
+                        0x00,               // Alignment
+                        0x01,               // Length
+                        )
+                    IRQNoFlags ()
+                        {1}
+                }
+                EndDependentFn ()
+            })
+            Method (_PSW, 1, NotSerialized)  // _PSW: Power State Wake
+            {
+                KBFG = Arg0
+            }
+        }
+        
+        Device (PS2M)
+        {
+            Method (_HID, 0, NotSerialized)  // _HID: Hardware ID
+            {
+                If ((TPTY == 0x03))
+                {
+                    Return (0x01262E4F)
+                }
+
+                Return (0x000B8416)
+            }
+
+            Name (_CID, Package (0x03)  // _CID: Compatible ID
+            {
+                EisaId ("PNP0F13") /* PS/2 Mouse */, 
+                EisaId ("PNP0F0E"), 
+                EisaId ("PNP0F03") /* Microsoft PS/2-style Mouse */
+            })
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((TPDF == One))
+                {
+                    Return (Zero)
+                }
+
+                If ((TPTY == One))
+                {
+                    Return (Zero)
+                }
+
+                Return (Zero)
+            }
+
+            Name (CRS1, ResourceTemplate ()
+            {
+                IRQ (Edge, ActiveHigh, Exclusive, )
+                    {12}
+            })
+            Name (CRS2, ResourceTemplate ()
+            {
+                IO (Decode16,
+                    0x0060,             // Range Minimum
+                    0x0060,             // Range Maximum
+                    0x00,               // Alignment
+                    0x01,               // Length
+                    )
+                IO (Decode16,
+                    0x0064,             // Range Minimum
+                    0x0064,             // Range Maximum
+                    0x00,               // Alignment
+                    0x01,               // Length
+                    )
+                IRQNoFlags ()
+                    {12}
+            })
+            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
+            {
+                Return (CRS1) /* \_SB_.PCI0.LPCB.PS2M.CRS1 */
+            }
+
+            Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
+            {
+                StartDependentFn (0x00, 0x00)
+                {
+                    IRQNoFlags ()
+                        {12}
+                }
+                EndDependentFn ()
+            })
+            Method (_PSW, 1, NotSerialized)  // _PSW: Power State Wake
+            {
+                MSFG = Arg0
+            }
+        }
+    }
+
+    Name (CLBS, Zero)
+    Name (CEBR, Zero)
+    Name (HDRL, 0x05)
+    
+
+    Field (SAWB, AnyAcc, Lock, Preserve)
+    {
+        SMFN,   16, 
+        SSFN,   16, 
+        SFCF,   8, 
+        SABX,   2048
+    }
+    
+    
+
+    
+
+    
+
+    Method (GOST, 0, NotSerialized)
+    {
+        Local0 = 0x07D0
+        If (CondRefOf (\_OSI, Local1))
+        {
+            If (_OSI ("Linux"))
+            {
+                Local0 = 0x03E8
+            }
+
+            If (_OSI ("Windows 2001"))
+            {
+                Local0 = 0x07D1
+            }
+
+            If (_OSI ("Windows 2001 SP1"))
+            {
+                Local0 = 0x07D1
+            }
+
+            If (_OSI ("Windows 2001 SP2"))
+            {
+                Local0 = 0x07D1
+            }
+
+            If (_OSI ("Windows 2001 SP3"))
+            {
+                Local0 = 0x07D1
+            }
+
+            If (_OSI ("Windows 2006"))
+            {
+                Local0 = 0x07D6
+            }
+
+            If (_OSI ("Windows 2009"))
+            {
+                Local0 = 0x07D9
+            }
+
+            If (_OSI ("Windows 2012"))
+            {
+                Local0 = 0x07DC
+            }
+
+            If (_OSI ("Windows 2013"))
+            {
+                Local0 = 0x07DD
+            }
+
+            If (_OSI ("Windows 2015"))
+            {
+                Local0 = 0x07DF
+            }
+
+            If (_OSI ("Windows 2016"))
+            {
+                Local0 = 0x07E0
+            }
+
+            If (_OSI ("Windows 2017"))
+            {
+                Local0 = 0x07E1
+            }
+        }
+
+        OSTP = Local0
+        GSSM (One, Local0)
+    }Scope (_SB)
+    {
+        Device (SCAI)
+        {
+            Name (_HID, EisaId ("SAM0427"))  // _HID: Hardware ID
+            Method (_STA, 0, NotSerialized)  // _STA: Status
+            {
+                If ((OSYS < 0x07D9))
+                {
+                    Return (Zero)
+                }
+                Else
+                {
+                    Return (0x0F)
+                }
+            }
+
+            Name (DVLD, Zero)
+            Method (SDLS, 1, Serialized)
+            {
+                DVLD = Arg0
+            }
+
+            Name (FREV, Buffer (0x04){})
+            Method (RTN0, 1, Serialized)
+            {
+                FREV = Arg0
+                Return (FREV) /* \_SB_.SCAI.FREV */
+            }
+
+            Method (RTN1, 2, Serialized)
+            {
+                FREV = Arg0
+                ToBuffer (Arg1, Local0)
+                Concatenate (FREV, Local0, Local1)
+                Return (Local1)
+            }
+
+            Method (SETM, 1, Serialized)
+            {
+                Return (RTN0 (Zero))
+            }
+
+            Method (CSFI, 1, Serialized)
+            {
+                Return (SAWS (Arg0))
+            }
+
+            Name (GUDN, Zero)
+            Name (GUDB, Buffer (0xFA){})
+            Method (CSXI, 1, Serialized)
+            {
+                Acquire (MTX1, 0xFFFF)
+                BSAB = Arg0
+                RFLG = 0xFF
+                If (((SAFN == 0x5843) && (SASB == 0x90)))
+                {
+                    If ((GUNM == 0x80))
+                    {
+                        If ((GUDN == Zero))
+                        {
+                            ELBC ()
+                            HIPF ()
+                            EPWS ()
+                        }
+
+                        GUNM = GUDN /* \_SB_.SCAI.GUDN */
+                        GUDS = GUDB /* \_SB_.SCAI.GUDB */
+                        RFLG = 0xAA
+                    }
+
+                    Release (MTX1)
+                    Return (BSAB) /* \BSAB */
+                }
+
+                If (((SAFN == 0x5843) && (SASB == 0x91)))
+                {
+                    ELBC ()
+                    HIPF ()
+                    EPWS ()
+                    Release (MTX1)
+                    Return (BSAB) /* \BSAB */
+                }
+
+                Release (MTX1)
+                Return (SAWX (Arg0))
+            }
+        }
+
+        Method (NTCA, 1, Serialized)
+        {
+            If ((^SCAI.DVLD == One))
+            {
+                Notify (SCAI, Arg0)
+            }
+        }
+
+        Method (KPTS, 1, NotSerialized)
+        {
+            GSSM (0x35, Zero)
+        }
+
+        Method (KWAK, 1, NotSerialized)
+        {
+        }
+
         Device (UBTC)
         {
             Name (_HID, EisaId ("USBC000"))  // _HID: Hardware ID
@@ -55839,10 +56993,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 Return (Zero)
             }
         }
-    }
 
-    Scope (_SB)
-    {
         Method (UPTS, 1, NotSerialized)
         {
             Local0 = GSSD (0x32, Arg0)
@@ -55852,277 +57003,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         {
             GSSM (0x33, Arg0)
         }
-    }
 
-    Scope (_SB.PCI0.LPCB)
-    {
-        Device (PS2K)
-        {
-            Name (_HID, "MSF0001")  // _HID: Hardware ID
-            Name (_CID, EisaId ("PNP0303") /* IBM Enhanced Keyboard (101/102-key, PS/2 Mouse) */)  // _CID: Compatible ID
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                Return (0x0F)
-            }
-
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-            {
-                IO (Decode16,
-                    0x0060,             // Range Minimum
-                    0x0060,             // Range Maximum
-                    0x00,               // Alignment
-                    0x01,               // Length
-                    )
-                IO (Decode16,
-                    0x0064,             // Range Minimum
-                    0x0064,             // Range Maximum
-                    0x00,               // Alignment
-                    0x01,               // Length
-                    )
-                IRQ (Edge, ActiveHigh, Exclusive, )
-                    {1}
-            })
-            Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
-            {
-                StartDependentFn (0x00, 0x00)
-                {
-                    IO (Decode16,
-                        0x0060,             // Range Minimum
-                        0x0060,             // Range Maximum
-                        0x00,               // Alignment
-                        0x01,               // Length
-                        )
-                    IO (Decode16,
-                        0x0064,             // Range Minimum
-                        0x0064,             // Range Maximum
-                        0x00,               // Alignment
-                        0x01,               // Length
-                        )
-                    IRQNoFlags ()
-                        {1}
-                }
-                EndDependentFn ()
-            })
-            Method (_PSW, 1, NotSerialized)  // _PSW: Power State Wake
-            {
-                KBFG = Arg0
-            }
-        }
-    }
-
-    Scope (\)
-    {
-        Name (KBFG, One)
-    }
-
-    Scope (_SB.PCI0.LPCB)
-    {
-        Device (PS2M)
-        {
-            Method (_HID, 0, NotSerialized)  // _HID: Hardware ID
-            {
-                If ((TPTY == 0x03))
-                {
-                    Return (0x01262E4F)
-                }
-
-                Return (0x000B8416)
-            }
-
-            Name (_CID, Package (0x03)  // _CID: Compatible ID
-            {
-                EisaId ("PNP0F13") /* PS/2 Mouse */, 
-                EisaId ("PNP0F0E"), 
-                EisaId ("PNP0F03") /* Microsoft PS/2-style Mouse */
-            })
-            Method (_STA, 0, NotSerialized)  // _STA: Status
-            {
-                If ((TPDF == One))
-                {
-                    Return (Zero)
-                }
-
-                If ((TPTY == One))
-                {
-                    Return (Zero)
-                }
-
-                Return (Zero)
-            }
-
-            Name (CRS1, ResourceTemplate ()
-            {
-                IRQ (Edge, ActiveHigh, Exclusive, )
-                    {12}
-            })
-            Name (CRS2, ResourceTemplate ()
-            {
-                IO (Decode16,
-                    0x0060,             // Range Minimum
-                    0x0060,             // Range Maximum
-                    0x00,               // Alignment
-                    0x01,               // Length
-                    )
-                IO (Decode16,
-                    0x0064,             // Range Minimum
-                    0x0064,             // Range Maximum
-                    0x00,               // Alignment
-                    0x01,               // Length
-                    )
-                IRQNoFlags ()
-                    {12}
-            })
-            Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-            {
-                Return (CRS1) /* \_SB_.PCI0.LPCB.PS2M.CRS1 */
-            }
-
-            Name (_PRS, ResourceTemplate ()  // _PRS: Possible Resource Settings
-            {
-                StartDependentFn (0x00, 0x00)
-                {
-                    IRQNoFlags ()
-                        {12}
-                }
-                EndDependentFn ()
-            })
-            Method (_PSW, 1, NotSerialized)  // _PSW: Power State Wake
-            {
-                MSFG = Arg0
-            }
-        }
-    }
-
-    Scope (\)
-    {
-        Name (MSFG, One)
-    }
-
-    Name (CLBS, Zero)
-    Name (CEBR, Zero)
-    Name (HDRL, 0x05)
-    Scope (_SB.SCAI)
-    {
-        Method (ELBC, 0, Serialized)
-        {
-            Name (EBUF, Buffer (0x1E){})
-            If ((SASB == 0x90))
-            {
-                Local0 = (GUDN * 0x80)
-                CreateField (GUDB, Local0, 0x80, GUD1)
-                GUD1 = ToUUID ("6c8d0057-b01a-44d5-aceb-8a1a8c760457")
-                GUDN++
-            }
-
-            If ((SASB == 0x91))
-            {
-                If ((CAID == ToUUID ("6c8d0057-b01a-44d5-aceb-8a1a8c760457")))
-                {
-                    If ((FNCN == 0x50))
-                    {
-                        Switch (SUBN)
-                        {
-                            Case (Zero)
-                            {
-                                IOB0 = One
-                                EBUF [Zero] = 0x21
-                                EBUF [One] = 0x03
-                                EBUF = CDRD (0xA6, 0x02, One, EBUF)
-                                Local0 = DerefOf (EBUF [Zero])
-                                If ((Local0 == 0xAA))
-                                {
-                                    IOB1 = One
-                                    IOB2 = One
-                                    IOB3 = One
-                                    IOB4 = One
-                                    IOB5 = One
-                                    IOB6 = One
-                                    RFLG = 0xAA
-                                }
-                                Else
-                                {
-                                    IOB1 = Zero
-                                    IOB2 = Zero
-                                    IOB3 = Zero
-                                    IOB4 = Zero
-                                    IOB5 = Zero
-                                    IOB6 = Zero
-                                    RFLG = 0xAA
-                                }
-                            }
-                            Case (One)
-                            {
-                                EBUF [Zero] = 0x21
-                                EBUF [One] = 0x02
-                                EBUF = CDRD (0xA6, 0x02, One, EBUF)
-                                IOB0 = DerefOf (EBUF [Zero])
-                                CLBS = IOB0 /* \IOB0 */
-                                RFLG = 0xAA
-                            }
-                            Case (0x02)
-                            {
-                                EBUF [Zero] = 0x21
-                                EBUF [One] = IOB0 /* \IOB0 */
-                                CLBS = IOB0 /* \IOB0 */
-                                CMDD (0xA6, 0x02, EBUF)
-                                If (CLBS)
-                                {
-                                    ^^PCI0.GFX0.LBTU (0x03)
-                                }
-                                Else
-                                {
-                                    ^^PCI0.GFX0.LBTU (Zero)
-                                }
-
-                                RFLG = 0xAA
-                            }
-                            Case (0x03)
-                            {
-                                IOB0 = CEBR /* \CEBR */
-                                RFLG = 0xAA
-                            }
-                            Case (0x04)
-                            {
-                                CEBR = IOB0 /* \IOB0 */
-                                If ((CEBR == 0x02))
-                                {
-                                    ^^PCI0.LPCB.EC.CEBL = 0x0A
-                                }
-
-                                If ((CEBR == Zero))
-                                {
-                                    ^^PCI0.LPCB.EC.CEBL = Zero
-                                }
-
-                                RFLG = 0xAA
-                            }
-                            Case (0x05)
-                            {
-                                If ((CEBR == One))
-                                {
-                                    IOB0 = ^^PCI0.LPCB.EC.CEBL /* \_SB_.PCI0.LPCB.EC__.CEBL */
-                                    RFLG = 0xAA
-                                }
-                            }
-                            Case (0x06)
-                            {
-                                If ((CEBR == One))
-                                {
-                                    HDRL = IOB0 /* \IOB0 */
-                                    ^^PCI0.LPCB.EC.CEBL = IOB0 /* \IOB0 */
-                                    RFLG = 0xAA
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    Scope (_SB)
-    {
         Method (EBCU, 0, Serialized)
         {
             If (((CEBR == One) || (CEBR == 0x02)))
@@ -56160,18 +57041,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
 
             Return (Zero)
         }
-    }
 
-    Field (SAWB, AnyAcc, Lock, Preserve)
-    {
-        SMFN,   16, 
-        SSFN,   16, 
-        SFCF,   8, 
-        SABX,   2048
-    }
-
-    Scope (_SB)
-    {
         Device (SWSD)
         {
             Name (_HID, "PNP0C14" /* Windows Management Instrumentation Device */)  // _HID: Hardware ID
@@ -56401,10 +57271,7 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 /* 0550 */  0x59, 0xF9, 0xFF, 0x03, 0xB1, 0xFF, 0x3F         // Y.....?
             })
         }
-    }
 
-    Scope (_SB)
-    {
         Method (WAK2, 1, NotSerialized)
         {
             If ((PWRS == One))
@@ -56428,10 +57295,125 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 GSSM (0xF5, Zero)
             }
         }
-    }
-
-    Scope (_SB.SCAI)
+    }Scope (_SB.SCAI)
     {
+        Method (ELBC, 0, Serialized)
+        {
+            Name (EBUF, Buffer (0x1E){})
+            If ((SASB == 0x90))
+            {
+                Local0 = (GUDN * 0x80)
+                CreateField (GUDB, Local0, 0x80, GUD1)
+                GUD1 = ToUUID ("6c8d0057-b01a-44d5-aceb-8a1a8c760457")
+                GUDN++
+            }
+
+            If ((SASB == 0x91))
+            {
+                If ((CAID == ToUUID ("6c8d0057-b01a-44d5-aceb-8a1a8c760457")))
+                {
+                    If ((FNCN == 0x50))
+                    {
+                        Switch (SUBN)
+                        {
+                            Case (Zero)
+                            {
+                                IOB0 = One
+                                EBUF [Zero] = 0x21
+                                EBUF [One] = 0x03
+                                EBUF = CDRD (0xA6, 0x02, One, EBUF)
+                                Local0 = DerefOf (EBUF [Zero])
+                                If ((Local0 == 0xAA))
+                                {
+                                    IOB1 = One
+                                    IOB2 = One
+                                    IOB3 = One
+                                    IOB4 = One
+                                    IOB5 = One
+                                    IOB6 = One
+                                    RFLG = 0xAA
+                                }
+                                Else
+                                {
+                                    IOB1 = Zero
+                                    IOB2 = Zero
+                                    IOB3 = Zero
+                                    IOB4 = Zero
+                                    IOB5 = Zero
+                                    IOB6 = Zero
+                                    RFLG = 0xAA
+                                }
+                            }
+                            Case (One)
+                            {
+                                EBUF [Zero] = 0x21
+                                EBUF [One] = 0x02
+                                EBUF = CDRD (0xA6, 0x02, One, EBUF)
+                                IOB0 = DerefOf (EBUF [Zero])
+                                CLBS = IOB0 /* \IOB0 */
+                                RFLG = 0xAA
+                            }
+                            Case (0x02)
+                            {
+                                EBUF [Zero] = 0x21
+                                EBUF [One] = IOB0 /* \IOB0 */
+                                CLBS = IOB0 /* \IOB0 */
+                                CMDD (0xA6, 0x02, EBUF)
+                                If (CLBS)
+                                {
+                                    ^^PCI0.GFX0.LBTU (0x03)
+                                }
+                                Else
+                                {
+                                    ^^PCI0.GFX0.LBTU (Zero)
+                                }
+
+                                RFLG = 0xAA
+                            }
+                            Case (0x03)
+                            {
+                                IOB0 = CEBR /* \CEBR */
+                                RFLG = 0xAA
+                            }
+                            Case (0x04)
+                            {
+                                CEBR = IOB0 /* \IOB0 */
+                                If ((CEBR == 0x02))
+                                {
+                                    ^^PCI0.LPCB.EC.CEBL = 0x0A
+                                }
+
+                                If ((CEBR == Zero))
+                                {
+                                    ^^PCI0.LPCB.EC.CEBL = Zero
+                                }
+
+                                RFLG = 0xAA
+                            }
+                            Case (0x05)
+                            {
+                                If ((CEBR == One))
+                                {
+                                    IOB0 = ^^PCI0.LPCB.EC.CEBL /* \_SB_.PCI0.LPCB.EC__.CEBL */
+                                    RFLG = 0xAA
+                                }
+                            }
+                            Case (0x06)
+                            {
+                                If ((CEBR == One))
+                                {
+                                    HDRL = IOB0 /* \IOB0 */
+                                    ^^PCI0.LPCB.EC.CEBL = IOB0 /* \IOB0 */
+                                    RFLG = 0xAA
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
         Method (HIPF, 0, Serialized)
         {
             If ((SASB == 0x90))
@@ -56510,127 +57492,61 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
                 }
             }
         }
-    }
 
-    Scope (_SB)
-    {
-        Method (CHOV, 2, Serialized)
+        Name (EXPS, Zero)
+        Method (EPWS, 0, Serialized)
         {
-            Switch (ToInteger (Arg0))
+            If ((SASB == 0x90))
             {
-                Case (Zero)
+                Local0 = (GUDN * 0x80)
+                CreateField (GUDB, Local0, 0x80, GUD1)
+                GUD1 = ToUUID ("415784c7-8236-45ac-ba08-8d5dfa86d094")
+                GUDN++
+            }
+
+            If ((SASB == 0x91))
+            {
+                If ((CAID == ToUUID ("415784c7-8236-45ac-ba08-8d5dfa86d094")))
                 {
-                    ODV0 = Arg1
+                    If ((FNCN == 0x50))
+                    {
+                        Switch (SUBN)
+                        {
+                            Case (Zero)
+                            {
+                                IOB0 = One
+                                IOB1 = One
+                                IOB2 = One
+                                IOB3 = One
+                                RFLG = 0xAA
+                            }
+                            Case (One)
+                            {
+                                EXPS = One
+                                ^^PCI0.GFX0.LBTU (One)
+                                RFLG = 0xAA
+                            }
+                            Case (0x02)
+                            {
+                                EXPS = Zero
+                                ^^PCI0.GFX0.LBTU (Zero)
+                                RFLG = 0xAA
+                            }
+                            Case (0x03)
+                            {
+                                IOB0 = Zero
+                                If ((EXPS == One))
+                                {
+                                    IOB0 = One
+                                }
+
+                                RFLG = 0xAA
+                            }
+
+                        }
+                    }
                 }
-                Case (One)
-                {
-                    ODV1 = Arg1
-                }
-                Case (0x02)
-                {
-                    ODV2 = Arg1
-                }
-                Case (0x03)
-                {
-                    ODV3 = Arg1
-                }
-                Case (0x04)
-                {
-                    ODV4 = Arg1
-                }
-                Case (0x05)
-                {
-                    ODV5 = Arg1
-                }
-
             }
-
-            Notify (IETM, 0x88) // Device-Specific
-        }
-    }
-
-    Method (GOST, 0, NotSerialized)
-    {
-        Local0 = 0x07D0
-        If (CondRefOf (\_OSI, Local1))
-        {
-            If (_OSI ("Linux"))
-            {
-                Local0 = 0x03E8
-            }
-
-            If (_OSI ("Windows 2001"))
-            {
-                Local0 = 0x07D1
-            }
-
-            If (_OSI ("Windows 2001 SP1"))
-            {
-                Local0 = 0x07D1
-            }
-
-            If (_OSI ("Windows 2001 SP2"))
-            {
-                Local0 = 0x07D1
-            }
-
-            If (_OSI ("Windows 2001 SP3"))
-            {
-                Local0 = 0x07D1
-            }
-
-            If (_OSI ("Windows 2006"))
-            {
-                Local0 = 0x07D6
-            }
-
-            If (_OSI ("Windows 2009"))
-            {
-                Local0 = 0x07D9
-            }
-
-            If (_OSI ("Windows 2012"))
-            {
-                Local0 = 0x07DC
-            }
-
-            If (_OSI ("Windows 2013"))
-            {
-                Local0 = 0x07DD
-            }
-
-            If (_OSI ("Windows 2015"))
-            {
-                Local0 = 0x07DF
-            }
-
-            If (_OSI ("Windows 2016"))
-            {
-                Local0 = 0x07E0
-            }
-
-            If (_OSI ("Windows 2017"))
-            {
-                Local0 = 0x07E1
-            }
-        }
-
-        OSTP = Local0
-        GSSM (One, Local0)
-    }
-
-    Scope (_SB)
-    {
-        Method (GWAK, 1, NotSerialized)
-        {
-            If ((Arg0 == 0x04))
-            {
-                GOST ()
-            }
-        }
-
-        Method (GPTS, 1, NotSerialized)
-        {
         }
     }
 
@@ -56882,226 +57798,6 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
         }
     }
 
-    Scope (_SB)
-    {
-        Device (LID0)
-        {
-            Name (_HID, EisaId ("PNP0C0D") /* Lid Device */)  // _HID: Hardware ID
-            Method (_LID, 0, NotSerialized)  // _LID: Lid Status
-            {
-                Return (LIDS) /* External reference */
-            }
-        }
-
-        Device (PWRB)
-        {
-            Name (_HID, EisaId ("PNP0C0C") /* Power Button Device */)  // _HID: Hardware ID
-            Method (_PRW, 0, NotSerialized)  // _PRW: Power Resources for Wake
-            {
-                Name (PRWS, Package (0x02)
-                {
-                    Zero, 
-                    0x05
-                })
-                Local0 = GGPE (0x04010010)
-                PRWS [Zero] = Local0
-                Return (PRWS) /* \_SB_.PWRB._PRW.PRWS */
-            }
-        }
-    }
-
-    Scope (_SB)
-    {
-        OperationRegion (ECMB, SystemIO, 0x0A00, 0x08)
-        Field (ECMB, ByteAcc, NoLock, Preserve)
-        {
-            ECM0,   8, 
-            ECM1,   8, 
-            ECM2,   8, 
-            ECM3,   8
-        }
-
-        Name (MBUF, Buffer (0x1E)
-        {
-            /* 0000 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // ........
-            /* 0008 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // ........
-            /* 0010 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,  // ........
-            /* 0018 */  0x00, 0x00, 0x00, 0x00, 0x00, 0x00               // ......
-        })
-        Method (RDMX, 1, NotSerialized)
-        {
-            Local0 = (Arg0 & 0xFF00)
-            Local0 >>= 0x08
-            ECM1 = Local0
-            Local0 = (Arg0 & 0xFF)
-            ECM2 = Local0
-            Local0 = ECM3 /* \_SB_.ECM3 */
-            Return (Local0)
-        }
-
-        Method (WTMX, 2, NotSerialized)
-        {
-            Local0 = (Arg0 & 0xFF00)
-            Local0 >>= 0x08
-            ECM1 = Local0
-            Local0 = (Arg0 & 0xFF)
-            ECM2 = Local0
-            ECM3 = Arg1
-        }
-
-        Method (CKID, 0, NotSerialized)
-        {
-            Local0 = Zero
-            While (One)
-            {
-                If ((RDMX (0xFF10) == Zero))
-                {
-                    Break
-                }
-
-                Stall (0x0A)
-                Local0++
-                If ((Local0 > 0x7530))
-                {
-                    Return (Zero)
-                }
-            }
-
-            Return (One)
-        }
-
-        Method (SNDA, 1, NotSerialized)
-        {
-            Local0 = Zero
-            Local1 = 0xF480
-            While ((Local0 < 0x1E))
-            {
-                If ((Local0 >= Arg0))
-                {
-                    Break
-                }
-
-                WTMX (Local1, DerefOf (MBUF [Local0]))
-                Local0++
-                Local1++
-            }
-        }
-
-        Method (RDDA, 1, NotSerialized)
-        {
-            Local0 = Zero
-            Local1 = 0xF480
-            While ((Local0 < 0x1E))
-            {
-                If ((Local0 >= Arg0))
-                {
-                    Break
-                }
-
-                MBUF [Local0] = RDMX (Local1)
-                Local0++
-                Local1++
-            }
-        }
-
-        Method (MCMD, 1, NotSerialized)
-        {
-            Local0 = Acquire (MSEC, 0x1388)
-            If ((Local0 == Zero))
-            {
-                If (ECON)
-                {
-                    If ((CKID () == Zero))
-                    {
-                        Release (MSEC)
-                        Return (Zero)
-                    }
-
-                    WTMX (0xFF10, Arg0)
-                    Release (MSEC)
-                    Return (One)
-                }
-                Else
-                {
-                    Release (MSEC)
-                }
-            }
-
-            Return (Zero)
-        }
-
-        Method (CMDD, 3, Serialized)
-        {
-            Local0 = Acquire (MSEC, 0x1388)
-            If ((Local0 == Zero))
-            {
-                If (ECON)
-                {
-                    If ((CKID () == Zero))
-                    {
-                        Release (MSEC)
-                        Return (Zero)
-                    }
-
-                    MBUF = Arg2
-                    SNDA (Arg1)
-                    WTMX (0xFF10, Arg0)
-                    Release (MSEC)
-                    Return (One)
-                }
-                Else
-                {
-                    Release (MSEC)
-                }
-            }
-
-            Return (Zero)
-        }
-
-        Method (CDRD, 4, Serialized)
-        {
-            Local0 = Acquire (MSEC, 0x1388)
-            If ((Local0 == Zero))
-            {
-                If (ECON)
-                {
-                    If ((CKID () == Zero))
-                    {
-                        Release (MSEC)
-                        Return (Buffer (One)
-                        {
-                             0x00                                             // .
-                        })
-                    }
-
-                    MBUF = Arg3
-                    SNDA (Arg1)
-                    WTMX (0xFF10, Arg0)
-                    If ((CKID () == Zero))
-                    {
-                        Release (MSEC)
-                        Return (Buffer (One)
-                        {
-                             0x00                                             // .
-                        })
-                    }
-
-                    MBUF = Zero
-                    RDDA (Arg2)
-                    Local0 = MBUF /* \_SB_.MBUF */
-                    Release (MSEC)
-                    Return (Local0)
-                }
-                Else
-                {
-                    Release (MSEC)
-                }
-            }
-
-            Return (Zero)
-        }
-    }
-
     Scope (_SB.PCI0.LPCB.EC)
     {
         OperationRegion (ECR, EmbeddedControl, Zero, 0xFF)
@@ -57255,13 +57951,10 @@ DefinitionBlock ("", "DSDT", 2, "SECCSD", "LH43STAR", 0x01072009)
             Offset (0xD0), 
             YLC0,8,YLC1,8//CYLC,   16
         }
-    }
 
-    Scope (_SB.PCI0.LPCB.EC)
-    {
         Method (_Q51, 0, Serialized)  // _Qxx: EC Query, xx=0x00-0xFF
         {
-P8XH (Zero, 0x51)
+            P8XH (Zero, 0x51)
             PWRS = One
             If ((ACDC == One))
             {
@@ -57515,10 +58208,7 @@ D8XH (Zero, 0x54)
             D8XH (Zero, 0x7F)
 
         }
-    }
 
-    Scope (_SB.PCI0.LPCB.EC)
-    {
         Name (CURD, One)
         Method (DNTF, 1, Serialized)
         {
@@ -57593,42 +58283,6 @@ D8XH (Zero, 0x54)
                 {
                     BTPR
                 })
-            }
-        }
-    }
-
-    Scope (_SB)
-    {
-        Device (ADP1)
-        {
-            Name (_HID, "ACPI0003" /* Power Source Device */)  // _HID: Hardware ID
-            Method (_PSR, 0, NotSerialized)  // _PSR: Power Source
-            {
-                Local0 = PWRS /* \PWRS */
-                Return (Local0)
-            }
-
-            Method (_PCL, 0, NotSerialized)  // _PCL: Power Consumer List
-            {
-                Return (_SB) /* \_SB_ */
-            }
-
-            Method (_STA, 0, Serialized)  // _STA: Status
-            {
-                If ((ECON == Zero))
-                {
-                    Local0 = 0x0F
-                }
-                ElseIf ((PWRS == Zero))
-                {
-                    Local0 = 0x1F
-                }
-                Else
-                {
-                    Local0 = 0x0F
-                }
-
-                Return (Local0)
             }
         }
     }
@@ -59764,222 +60418,7 @@ D8XH (Zero, 0x54)
         }
     }
 
-    Scope (_SB.SCAI)
-    {
-        Name (EXPS, Zero)
-        Method (EPWS, 0, Serialized)
-        {
-            If ((SASB == 0x90))
-            {
-                Local0 = (GUDN * 0x80)
-                CreateField (GUDB, Local0, 0x80, GUD1)
-                GUD1 = ToUUID ("415784c7-8236-45ac-ba08-8d5dfa86d094")
-                GUDN++
-            }
-
-            If ((SASB == 0x91))
-            {
-                If ((CAID == ToUUID ("415784c7-8236-45ac-ba08-8d5dfa86d094")))
-                {
-                    If ((FNCN == 0x50))
-                    {
-                        Switch (SUBN)
-                        {
-                            Case (Zero)
-                            {
-                                IOB0 = One
-                                IOB1 = One
-                                IOB2 = One
-                                IOB3 = One
-                                RFLG = 0xAA
-                            }
-                            Case (One)
-                            {
-                                EXPS = One
-                                ^^PCI0.GFX0.LBTU (One)
-                                RFLG = 0xAA
-                            }
-                            Case (0x02)
-                            {
-                                EXPS = Zero
-                                ^^PCI0.GFX0.LBTU (Zero)
-                                RFLG = 0xAA
-                            }
-                            Case (0x03)
-                            {
-                                IOB0 = Zero
-                                If ((EXPS == One))
-                                {
-                                    IOB0 = One
-                                }
-
-                                RFLG = 0xAA
-                            }
-
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    Scope (_SB)
-    {
-        OperationRegion (PBTL, SystemMemory, PWRM, 0x1E30)
-        Field (PBTL, DWordAcc, NoLock, Preserve)
-        {
-            Offset (0x1024), 
-            Offset (0x1025), 
-            PBTN,   8
-        }
-
-        Method (QPTS, 1, NotSerialized)
-        {
-            D8XH (Zero, Arg0)
-            If ((Arg0 == 0x03)){}
-            If ((Arg0 == 0x04)){}
-            If ((Arg0 == 0x05))
-            {
-                ^PCI0.LPCB.EC.BISF |= One
-            }
-
-            If (((Arg0 == 0x03) || (Arg0 == 0x04)))
-            {
-                Local0 = B1B4(^PCI0.LPCB.EC.BAF0,^PCI0.LPCB.EC.BAF1,^PCI0.LPCB.EC.BAF2,^PCI0.LPCB.EC.BAF3)//^PCI0.LPCB.EC.B1AF /* \_SB_.PCI0.LPCB.EC__.B1AF */
-                Local0 >>= 0x10
-                Local0 &= 0xFFFF
-                BFCC = Local0
-                
-            }
-
-            ^PCI0.LPCB.EC.CSMF = Zero
-            NVGF = Zero
-            SDCK = ^PCI0.LPCB.EC.DCBE /* \_SB_.PCI0.LPCB.EC__.DCBE */
-            Name (EBUF, Buffer (0x1E){})
-            If (((Arg0 == 0x04) || (Arg0 == 0x05)))
-            {
-                EBUF [Zero] = 0xE1
-                If ((Arg0 == 0x05))
-                {
-                    EBUF [One] = 0xBC
-                }
-                Else
-                {
-                    EBUF [One] = 0xF8
-                }
-
-                CMDD (0x9F, 0x02, EBUF)
-            }
-
-            While (!(PBTN & 0x02))
-            {
-                Sleep (0x64)
-            }
-        }
-
-        Method (QWAK, 1, NotSerialized)
-        {
-            If ((Arg0 == 0x03))
-            {
-                If ((RELT == 0xBA))
-                {
-                    Notify (PWRB, 0x02) // Device Wake
-                }
-            }
-
-            If ((Arg0 == 0x04))
-            {
-                Notify (PWRB, 0x02) // Device Wake
-            }
-
-            If ((^PCI0.LPCB.EC.ACEX != PWRS))
-            {
-                PWRS = ^PCI0.LPCB.EC.ACEX /* \_SB_.PCI0.LPCB.EC__.ACEX */
-                CCRN ()
-            }
-
-            If (((Arg0 == 0x03) || (Arg0 == 0x04)))
-            {
-                Local0 = One
-            }
-
-            If ((Local0 != LIDS))
-            {
-                LIDS = Local0
-                If (IGDS)
-                {
-                    If ((LIDS == Zero))
-                    {
-                        ^PCI0.GFX0.CLID = 0x80000000
-                    }
-
-                    If ((LIDS == One))
-                    {
-                        ^PCI0.GFX0.CLID = 0x80000003
-                    }
-                }
-
-                Notify (LID0, 0x80) // Status Change
-            }
-
-            Local0 = B1B4(^PCI0.LPCB.EC.BAF0,^PCI0.LPCB.EC.BAF1,^PCI0.LPCB.EC.BAF2,^PCI0.LPCB.EC.BAF3)//^PCI0.LPCB.EC.B1AF /* \_SB_.PCI0.LPCB.EC__.B1AF */
-            Local0 >>= 0x10
-            Local0 &= 0xFFFF
-            If ((Local0 != BFCC))
-            {
-                Notify (^PCI0.LPCB.EC.BAT1, One) // Device Check
-                Notify (^PCI0.LPCB.EC.BAT1, 0x81) // Information Change
-            }
-
-            If ((SDCK != ^PCI0.LPCB.EC.DCBE))
-            {
-                SDCK = ^PCI0.LPCB.EC.DCBE /* \_SB_.PCI0.LPCB.EC__.DCBE */
-            }
-
-            ^PCI0.LPCB.EC.TUBI = Zero
-            ^PCI0.LPCB.EC.TZCH (^PCI0.LPCB.EC.TIST)
-            Local0 = GPC0 (0x04010004)
-            Local1 = (Local0 & 0xFFFFFEFE)
-            SPC0 (0x04010004, Local1)
-            Sleep (0x32)
-            SPC0 (0x04010004, Local0)
-            D8XH (Zero, 0xAC)
-        }
-    }
-
-    Scope (_SB)
-    {
-        Method (SPTS, 1, Serialized)
-        {
-            KPTS (Arg0)
-            UPTS (Arg0)
-            PTS2 (Arg0)
-            GPTS (Arg0)
-            QPTS (Arg0)
-        }
-
-        Method (SWAK, 1, Serialized)
-        {
-            KWAK (Arg0)
-            UWAK (Arg0)
-            WAK2 (Arg0)
-            GWAK (Arg0)
-            QWAK (Arg0)
-        }
-    }
-
-    Scope (_SB)
-    {
-        Method (WAK1, 1, NotSerialized)
-        {
-            PWRS = ^PCI0.LPCB.EC.ACEX /* \_SB_.PCI0.LPCB.EC__.ACEX */
-            GSSM (0x9A, PWRS)
-        }
-
-        Method (PTS1, 1, NotSerialized)
-        {
-        }
-    }
+    
     Method (B1B2, 2, NotSerialized) { Return(Or(Arg0, ShiftLeft(Arg1, 8))) }
     Method (B1B4, 4, NotSerialized)
     {
