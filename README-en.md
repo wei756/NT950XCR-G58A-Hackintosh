@@ -87,7 +87,7 @@ If you click compile button after fixing 5 errors, you will get many warnings an
 
 Look at this error.
 
-![5-stupid complier](./screenshots/5-stupid complier.png)
+![5-stupid complier](./screenshots/5-stupid-complier.png)
 
 That If statement means that if '_SB.PCI0.RP11.PXSX' exists, execute scope below.
 
@@ -105,7 +105,7 @@ Anyway, you have two choices to fix errors.
 
 These codes is never executed because PXSX doesn't exist, so you can delete all error lines.
 
-![6-remove code](./screenshots/6-1-remove code.png)
+![6-remove code](./screenshots/6-remove-code.png)
 
 
 

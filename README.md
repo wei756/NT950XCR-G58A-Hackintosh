@@ -97,7 +97,7 @@ Zero 만 있는 줄을 모두 제거하면 오류가 사라집니다.
 
 에러가 난 곳을 확인해 봅시다.
 
-![5-stupid complier](./screenshots/5-stupid complier.png)
+![5-stupid complier](./screenshots/5-stupid-complier.png)
 
 오류가 난 곳을 감싸고 있는 IF문의 의미는 \_SB.PCI0.RP11.PXSX가 존재한다면 다음 코드를 실행해라. 라는 뜻입니다.
 
@@ -111,7 +111,7 @@ Zero 만 있는 줄을 모두 제거하면 오류가 사라집니다.
 
 따라서 이 블록들을 모두 삭제해도 좋습니다.
 
-![6-remove code](./screenshots/6-remove code.png)
+![6-remove code](./screenshots/6-remove-code.png)
 
 
 
