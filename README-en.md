@@ -99,31 +99,13 @@ But the complier says, where is PXSX? ur trying to access wrong device!!! get th
 
 
 
-Anyway, you have two choices to fix errors.
+Anyway, you have to follow below steps to fix errors.
 
-##### Method 1: Remove all error blocks
+##### Remove all error blocks
 
 These codes is never executed because PXSX doesn't exist, so you can delete all error lines.
 
 ![6-remove code](./screenshots/6-remove-code.png)
-
-
-
-##### Method 2: Add a virtual device
-
-Just put 'Device (PXSX) { }' in first _SB.PCI0.RP11 scope.
-
-This is easier than first method. But I don't know this is safe :)
-
-![6-2-add device](./screenshots/6-2-add device.png)
-
-
-
-If put correctly, you can find PXSX on device tree.
-
-![6-3-tree](./screenshots/6-3-tree.png)
-
-
 
 
 
