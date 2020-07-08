@@ -91,7 +91,7 @@ Look at this error.
 
 That If statement means that if '_SB.PCI0.RP11.PXSX' exists, execute scope below.
 
-On the other hand, if PXSX not exist, it never run these codes.
+In other words, if PXSX not exist, it never run these codes.
 
 
 
