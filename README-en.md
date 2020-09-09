@@ -5,7 +5,7 @@
 
 OpenCore EFI for Samsung GalaxyBook Ion(NT950XCR-G58A)
 
-OC Version: v0.5.9
+OC Version: v0.6.1
 
 ### Kexts
 
