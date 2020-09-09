@@ -221,6 +221,8 @@
 				<data>AAAwAQ==</data>
 				<key>hda-gfx</key>
 				<string>onboard-1</string>
+				<key>model</key>
+				<string>Intel UHD Graphics 620 (Mobile)</string>
 			</dict>
 		</dict>
 		<key>Delete</key>
