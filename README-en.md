@@ -9,20 +9,22 @@ OC Version: v0.5.9
 
 ### Kexts
 
-- AppleALC v1.5.0 : audio fix (not working)
-- IntelBluetoothFirmware v1.1.1 : bluetooth fix
-- IntelBluetoothInjector v1.1.1 : bluetooth fix
-- Lilu v1.4.5
-- NVMeFix v1.0.2 : pm981a fix
-- SMCBatteryManager v1.1.4
-- SMCLightSensor v1.1.4
-- SMCProcessor v1.1.4
-- SMCSuperIO v1.1.4
-- VirtualSMC v1.1.4
-- VoodooI2C v2.4.3
-- VoodooI2CHID v2.4.3
-- VoodooPS2Controller v2.1.5 : internal keyboard fix
-- WhateverGreen v1.4.0
+- AppleALC v1.5.2 : audio fix
+- CodecCommander v2018-1003 : eapd fix
+- IntelBluetoothFirmware v1.1.2 : bluetooth fix
+- IntelBluetoothInjector v1.1.2 : bluetooth fix
+- Itlwmx v1.0.0 : ax201 fix
+- Lilu v1.4.7
+- NVMeFix v1.0.3 : pm981a fix
+- SMCBatteryManager v1.1.6
+- SMCLightSensor v1.1.6
+- SMCProcessor v1.1.6
+- SMCSuperIO v1.1.6
+- VirtualSMC v1.1.6
+- VoodooI2C v2.4.4
+- VoodooI2CHID v2.4.4
+- VoodooPS2Controller v2.1.6 : internal keyboard fix
+- WhateverGreen v1.4.2
 
 ### EFI
 
@@ -109,6 +111,16 @@ These codes is never executed because PXSX doesn't exist, so you can delete all 
 
 
 
+### EAPD Fix
+
+(thx to K맑은삶)
+
+1. Download CodecCommander [here](https://bitbucket.org/RehabMan/os-x-eapd-codec-commander/downloads/).
+
+2. Put a command below into terminal.
+
+`sudo ./hda-verb 0x1a SET_PIN_WIDGET_CONTROL 0xc5`
+
 
 
 ## Spec
@@ -120,7 +132,7 @@ These codes is never executed because PXSX doesn't exist, so you can delete all 
 - 1 x Samsung 8GB DDR4 ????MHz (onboard)
 - 1 x Samsung pm981a NVMe M.2 SSD 256 GB (for win10)
 - 1 x Toshiba BG3 NVMe M.2 SSD 128 GB (for macOS)
-- iptime n100 mini (USB WiFi adapter)
+- Intel AX201
 
 
 ## It Works
@@ -137,13 +149,14 @@ These codes is never executed because PXSX doesn't exist, so you can delete all 
 - QE/CI
 - Sleep
 - HDMI output
-- ThunderBolt 3 Port
+- Earphone jack
+- WiFi
 
 
 ## It doesn't work
 
-- Sound/Microphone
-- WiFi
+- Sleep on closing display cover
+- Internal speaker/mic
 - Fingerprint sensor
 - Wireless charging on trackpad
 
@@ -152,6 +165,7 @@ These codes is never executed because PXSX doesn't exist, so you can delete all 
 
 - USB PD
 - Brightness sensor
+- ThunderBolt 3
 
 
 ## BIOS settings
@@ -167,3 +181,4 @@ These codes is never executed because PXSX doesn't exist, so you can delete all 
 - https://www.tonymacx86.com/threads/guide-how-to-patch-dsdt-for-working-battery-status.116102/
 - https://www.insanelymac.com/forum/topic/305030-guide-how-to-fix-brightness-hotkeys-in-dsdt/
 - https://github.com/daliansky/XiaoXinPro-13-hackintosh
+- https://x86.co.kr/tip/5155874

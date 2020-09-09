@@ -9,26 +9,24 @@
 
 오픈코어(OpenCore) v0.5.9을 사용합니다.
 
-### 특이사항
-
-- 무슨 짓을 해도 사운드 안 잡힘(AppleALC, VoodooHDA, AppleHDA patch 등 관련 패치 전부 작동 안 함) (+ VoodooHDA 사용 시 Ubuntu에서 생기는 문제와 동일한 문제 발생)
-
 ### Kexts
 
-- AppleALC v1.5.0 : audio fix (not working)
-- IntelBluetoothFirmware v1.1.1 : bluetooth fix
-- IntelBluetoothInjector v1.1.1 : bluetooth fix
-- Lilu v1.4.5
-- NVMeFix v1.0.2 : pm981a fix
-- SMCBatteryManager v1.1.4
-- SMCLightSensor v1.1.4
-- SMCProcessor v1.1.4
-- SMCSuperIO v1.1.4
-- VirtualSMC v1.1.4
-- VoodooI2C v2.4.3
-- VoodooI2CHID v2.4.3
-- VoodooPS2Controller v2.1.5 : internal keyboard fix
-- WhateverGreen v1.4.0
+- AppleALC v1.5.2 : audio fix
+- CodecCommander v2018-1003 : eapd fix
+- IntelBluetoothFirmware v1.1.2 : bluetooth fix
+- IntelBluetoothInjector v1.1.2 : bluetooth fix
+- Itlwmx v1.0.0 : ax201 fix
+- Lilu v1.4.7
+- NVMeFix v1.0.3 : pm981a fix
+- SMCBatteryManager v1.1.6
+- SMCLightSensor v1.1.6
+- SMCProcessor v1.1.6
+- SMCSuperIO v1.1.6
+- VirtualSMC v1.1.6
+- VoodooI2C v2.4.4
+- VoodooI2CHID v2.4.4
+- VoodooPS2Controller v2.1.6 : internal keyboard fix
+- WhateverGreen v1.4.2
 
 ### EFI
 
@@ -115,6 +113,22 @@ Zero 만 있는 줄을 모두 제거하면 오류가 사라집니다.
 
 
 
+### 이어폰 잭 픽스
+
+(x86의 K맑은삶님 감사합니다)
+
+먼저 [여기](https://bitbucket.org/RehabMan/os-x-eapd-codec-commander/downloads/)서 CodecCommander를 받습니다.
+
+터미널을 열고 다운로드 받은 파일 중 hda-verb가 있는 경로로 이동한 뒤 다음 명령어를 입력합니다.
+
+`sudo ./hda-verb 0x1a SET_PIN_WIDGET_CONTROL 0xc5`
+
+
+
+재부팅 시 적용이 풀리므로 스크립트화하여 로그인 시 실행항목에 등록하는 걸 추천합니다.
+
+
+
 
 ## 사양
 
@@ -125,7 +139,7 @@ Zero 만 있는 줄을 모두 제거하면 오류가 사라집니다.
 - 1 x Samsung 8GB DDR4 ????MHz (온보드)
 - 1 x Samsung pm981a NVMe M.2 SSD 256 GB (윈도우용)
 - 1 x Toshiba BG3 NVMe M.2 SSD 128 GB (맥 설치용)
-- iptime n100 mini (USB로 추가 장착)
+- Intel AX201
 
 
 
@@ -143,23 +157,21 @@ Zero 만 있는 줄을 모두 제거하면 오류가 사라집니다.
 - QE/CI
 - 잠자기
 - HDMI 출력
-- 썬더볼트3 단자
-
-
+- 이어폰 잭
+- WiFi
 
 ## 안 되는 것
 
-- 소리
-- WiFi
+- 화면 덮기 시 잠자기
+- 내장 스피커/마이크
 - 지문인식
 - 트랙패드 무선충전
-
-
 
 ## 확인되지 않은 것
 
 - USB PD
 - 조도 센서
+- 썬더볼트3 단자
 
 
 
@@ -178,3 +190,4 @@ Zero 만 있는 줄을 모두 제거하면 오류가 사라집니다.
 - https://www.tonymacx86.com/threads/guide-how-to-patch-dsdt-for-working-battery-status.116102/
 - https://www.insanelymac.com/forum/topic/305030-guide-how-to-fix-brightness-hotkeys-in-dsdt/
 - https://github.com/daliansky/XiaoXinPro-13-hackintosh
+- https://x86.co.kr/tip/5155874
