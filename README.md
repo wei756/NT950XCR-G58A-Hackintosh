@@ -12,7 +12,7 @@
 ## 설치하는 법
 
 1. Opencore guide를 따라 macOS 설치 USB를 만든 다음 EFI 폴더를 USB의 EFI 파티션에 넣습니다.
-2. [내장 사운드 픽스 가이드](./Audio patch/README.md)를 참고하여 내장 사운드 기능을 픽스하세요.
+2. [내장 사운드 픽스 가이드](./Audio%20patch)를 참고하여 내장 사운드 기능을 픽스하세요.
 
 
 
