@@ -1,3 +1,6 @@
+# This is legacy patch
+# Please use SSDT-FNBL.aml
+#
 # Fn hotkey fix
 # Source: https://www.insanelymac.com/forum/topic/305030-guide-how-to-fix-brightness-hotkeys-in-dsdt/
 
