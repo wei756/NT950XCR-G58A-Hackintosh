@@ -9,6 +9,62 @@
 
 오픈코어(OpenCore) v0.6.1을 사용합니다.
 
+## 설치하는 법
+
+1. Opencore guide를 따라 macOS 설치 USB를 만든 다음 EFI 폴더를 USB의 EFI 파티션에 넣습니다.
+2. [내장 사운드 픽스 가이드](./Audio patch/README.md)를 참고하여 내장 사운드 기능을 픽스하세요.
+
+
+
+## 사양
+
+- NT950XCR-G58A
+- Intel Core i5-10210u
+- Intel UHD Graphics 620
+- NVIDIA Geforce MX250 (비활성화)
+- 1 x Samsung 8GB DDR4 2667MHz
+- 1 x Samsung pm981a NVMe M.2 SSD 256 GB (윈도우용)
+- 1 x Toshiba BG3 NVMe M.2 SSD 128 GB (맥 설치용)
+- Intel AX201
+- Realtek ALC298
+
+
+
+## 작동하는 것
+
+- 키보드 / 트랙패드
+- 내장 스피커/이어폰 잭
+- WiFi
+- 블루투스
+- 잠자기
+- USB 포트
+- 배터리 상태 확인
+- 화면 밝기 조절
+- 화면 커버 인식
+- 전면 카메라
+- 밝기 조절/볼륨 핫키
+- SD/UFS 슬롯
+- QE/CI
+- HDMI 출력
+
+## 안 되는 것
+
+- 내장 마이크
+- 지문인식
+- 트랙패드 무선충전
+- Thunderbolt 3
+
+## BIOS 설정
+
+- TPM Device: Off
+- Secure Boot Control: Off
+- Fast BIOS Mode: Off
+- USB LAN PXE OPROM: Off
+
+
+
+## EFI 구성
+
 ### Kexts
 
 - [ACPIPoller](https://github.com/RehabMan/OS-X-ACPI-Poller) : lid fix
@@ -55,60 +111,6 @@
 - SSDT-PNLF-CFL : backlight fix
 - SSDT-RMNE : nullethernet patch
 - SSDT-SBUS-MCHC
-
-## 설치하는 법
-
-1. Opencore guide를 따라 macOS 설치 USB를 만든 다음 EFI 폴더를 USB의 EFI 파티션에 넣습니다.
-2. [내장 사운드 픽스 가이드](./Audio patch/README.md)를 참고하여 내장 사운드 기능을 픽스하세요.
-
-
-
-## 사양
-
-- NT950XCR-G58A
-- Intel Core i5-10210u
-- Intel UHD Graphics 620
-- NVIDIA Geforce MX250 (비활성화)
-- 1 x Samsung 8GB DDR4 2667MHz
-- 1 x Samsung pm981a NVMe M.2 SSD 256 GB (윈도우용)
-- 1 x Toshiba BG3 NVMe M.2 SSD 128 GB (맥 설치용)
-- Intel AX201
-- Realtek ALC298
-
-
-
-## 작동하는 것
-
-- 키보드 / 트랙패드
-- 내장 스피커/이어폰 잭
-- WiFi
-- 블루투스
-- 잠자기
-- USB 포트
-- 배터리 상태 확인
-- 화면 밝기 조절
-- 화면 커버 인식
-- 전면 카메라
-- 밝기 조절/볼륨 핫키
-- SD/UFS 슬롯
-- QE/CI
-- HDMI 출력
-
-## 안 되는 것
-
-- 내장 마이크
-- 지문인식
-- 트랙패드 무선충전
-- Thunderbolt 3
-
-
-
-## BIOS 설정
-
-- TPM Device: Off
-- Secure Boot Control: Off
-- Fast BIOS Mode: Off
-- USB LAN PXE OPROM: Off
 
 
 
