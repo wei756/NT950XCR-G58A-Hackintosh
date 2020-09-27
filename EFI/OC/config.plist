@@ -110,6 +110,22 @@
 				<key>Enabled</key>
 				<true/>
 			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>SSDT-GPRW</string>
+				<key>Path</key>
+				<string>SSDT-GPRW.aml</string>
+				<key>Enabled</key>
+				<true/>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>SSDT-LIDP</string>
+				<key>Path</key>
+				<string>SSDT-LIDP.aml</string>
+				<key>Enabled</key>
+				<true/>
+			</dict>
 		</array>
 		<key>Delete</key>
 		<array>
@@ -401,6 +417,32 @@
 				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>AAAAAA==</data>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>change Method(GPRW,2,N) to XPRW, pair with SSDT-GPRW.aml</string>
+				<key>Count</key>
+				<integer>0</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>R1BSVwI=</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data></data>
+				<key>OemTableId</key>
+				<data></data>
+				<key>Replace</key>
+				<data>WFBSVwI=</data>
+				<key>ReplaceMask</key>
+				<data></data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>0</integer>
+				<key>TableSignature</key>
+				<data></data>
 			</dict>
 		</array>
 		<key>Quirks</key>
@@ -728,22 +770,6 @@
 				<key>PlistPath</key>
 				<string>Contents/Info.plist</string>
 				<key>Enabled</key>
-				<false/>
-				<key>MinKernel</key>
-				<string></string>
-				<key>ExecutablePath</key>
-				<string>Contents/MacOS/VoodooInput</string>
-				<key>BundlePath</key>
-				<string>VoodooI2C.kext/Contents/PlugIns/VoodooInput.kext</string>
-			</dict>
-			<dict>
-				<key>Comment</key>
-				<string></string>
-				<key>MaxKernel</key>
-				<string></string>
-				<key>PlistPath</key>
-				<string>Contents/Info.plist</string>
-				<key>Enabled</key>
 				<true/>
 				<key>MinKernel</key>
 				<string></string>
@@ -751,22 +777,6 @@
 				<string>Contents/MacOS/VoodooPS2Controller</string>
 				<key>BundlePath</key>
 				<string>VoodooPS2Controller.kext</string>
-			</dict>
-			<dict>
-				<key>Comment</key>
-				<string></string>
-				<key>MaxKernel</key>
-				<string></string>
-				<key>PlistPath</key>
-				<string>Contents/Info.plist</string>
-				<key>Enabled</key>
-				<false/>
-				<key>MinKernel</key>
-				<string></string>
-				<key>ExecutablePath</key>
-				<string>Contents/MacOS/VoodooInput</string>
-				<key>BundlePath</key>
-				<string>VoodooPS2Controller.kext/Contents/PlugIns/VoodooInput.kext</string>
 			</dict>
 			<dict>
 				<key>Comment</key>
@@ -844,20 +854,6 @@
 				<key>MinKernel</key>
 				<string></string>
 				<key>BundlePath</key>
-				<string>USBPorts.kext</string>
-			</dict>
-			<dict>
-				<key>Comment</key>
-				<string></string>
-				<key>MaxKernel</key>
-				<string></string>
-				<key>PlistPath</key>
-				<string>Contents/Info.plist</string>
-				<key>Enabled</key>
-				<true/>
-				<key>MinKernel</key>
-				<string></string>
-				<key>BundlePath</key>
 				<string>IntelBluetoothInjector.kext</string>
 			</dict>
 			<dict>
@@ -904,9 +900,9 @@
 				<key>MinKernel</key>
 				<string></string>
 				<key>ExecutablePath</key>
-				<string>Contents/MacOS/itlwmx</string>
+				<string>Contents/MacOS/AirportItlwm</string>
 				<key>BundlePath</key>
-				<string>itlwmx.kext</string>
+				<string>AirportItlwm.kext</string>
 			</dict>
 			<dict>
 				<key>Comment</key>
@@ -939,6 +935,38 @@
 				<string>Contents/MacOS/VoodooInput</string>
 				<key>BundlePath</key>
 				<string>VoodooInput.kext</string>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string></string>
+				<key>MaxKernel</key>
+				<string></string>
+				<key>PlistPath</key>
+				<string>Contents/Info.plist</string>
+				<key>Enabled</key>
+				<true/>
+				<key>MinKernel</key>
+				<string></string>
+				<key>ExecutablePath</key>
+				<string>Contents/MacOS/ACPIPoller</string>
+				<key>BundlePath</key>
+				<string>ACPIPoller.kext</string>
+			</dict>
+			<dict>
+				<key>Comment</key>
+				<string></string>
+				<key>MaxKernel</key>
+				<string></string>
+				<key>PlistPath</key>
+				<string>Contents/Info.plist</string>
+				<key>Enabled</key>
+				<true/>
+				<key>MinKernel</key>
+				<string></string>
+				<key>ExecutablePath</key>
+				<string>Contents/MacOS/EnableLidWake</string>
+				<key>BundlePath</key>
+				<string>EnableLidWake.kext</string>
 			</dict>
 		</array>
 		<key>Block</key>
