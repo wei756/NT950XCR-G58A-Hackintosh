@@ -57,7 +57,7 @@ OC Version: v0.6.1
 ## How to Use
 
 1. Copy EFI folder to your macOS Install USB
-2. Following this [guide](./Audio patch/README.md), fix internal speaker/headphone jack.
+2. Following this [guide](./Audio%20patch), fix internal speaker/headphone jack.
 3. Let's enjoy!
 
 
